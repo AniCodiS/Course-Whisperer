@@ -20,9 +20,8 @@ public class UserScore {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true, nullable = false, foreignKey = @ForeignKey(name = "fk_user_scores_user"))
-    private User user;
+    @Column(name = "score")
+    private Long userId;
 
     @Column(name = "score")
     private int score;
