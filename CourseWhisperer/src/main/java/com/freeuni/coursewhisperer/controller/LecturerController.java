@@ -1,6 +1,6 @@
 package com.freeuni.coursewhisperer.controller;
 
-import com.freeuni.coursewhisperer.model.Lecturer;
+import com.freeuni.coursewhisperer.model.db.Lecturer;
 import com.freeuni.coursewhisperer.service.LecturerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;

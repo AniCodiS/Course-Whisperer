@@ -1,6 +1,6 @@
 package com.freeuni.coursewhisperer.service;
 
-import com.freeuni.coursewhisperer.model.StudyGroup;
+import com.freeuni.coursewhisperer.model.db.StudyGroup;
 import com.freeuni.coursewhisperer.repository.StudyGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

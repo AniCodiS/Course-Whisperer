@@ -1,6 +1,6 @@
 package com.freeuni.coursewhisperer.service;
 
-import com.freeuni.coursewhisperer.model.Prerequisite;
+import com.freeuni.coursewhisperer.model.db.Prerequisite;
 import com.freeuni.coursewhisperer.repository.PrerequisiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

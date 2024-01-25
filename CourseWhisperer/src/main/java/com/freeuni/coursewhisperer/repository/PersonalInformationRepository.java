@@ -1,6 +1,6 @@
 package com.freeuni.coursewhisperer.repository;
 
-import com.freeuni.coursewhisperer.model.PersonalInformation;
+import com.freeuni.coursewhisperer.model.db.PersonalInformation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

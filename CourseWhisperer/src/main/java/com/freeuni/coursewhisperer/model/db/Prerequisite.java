@@ -1,6 +1,5 @@
-package com.freeuni.coursewhisperer.model;
+package com.freeuni.coursewhisperer.model.db;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;

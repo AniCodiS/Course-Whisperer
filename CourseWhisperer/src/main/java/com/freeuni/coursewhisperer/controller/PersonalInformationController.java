@@ -1,6 +1,6 @@
 package com.freeuni.coursewhisperer.controller;
 
-import com.freeuni.coursewhisperer.model.PersonalInformation;
+import com.freeuni.coursewhisperer.model.db.PersonalInformation;
 import com.freeuni.coursewhisperer.service.PersonalInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
