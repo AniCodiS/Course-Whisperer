@@ -1,4 +1,4 @@
-package com.freeuni.coursewhisperer.model.db;
+package com.freeuni.coursewhisperer.data.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;

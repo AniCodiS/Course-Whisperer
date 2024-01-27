@@ -1,9 +1,10 @@
 package com.freeuni.coursewhisperer.controller;
 
-import com.freeuni.coursewhisperer.model.db.StudyGroup;
+import com.freeuni.coursewhisperer.data.api.dto.StudyGroupDTO;
+import com.freeuni.coursewhisperer.data.entity.StudyGroup;
 import com.freeuni.coursewhisperer.service.StudyGroupService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -12,33 +13,32 @@ public class StudyGroupController {
 
     private final StudyGroupService studyGroupService;
 
-    @Autowired
     public StudyGroupController(StudyGroupService studyGroupService) {
         this.studyGroupService = studyGroupService;
     }
 
     @GetMapping
-    public List<StudyGroup> getAllStudyGroups() {
+    public List<StudyGroupDTO> getAllStudyGroups() {
         return studyGroupService.getAllStudyGroups();
     }
 
-    @GetMapping("/{id}")
-    public StudyGroup getStudyGroupById(@PathVariable Long id) {
-        return studyGroupService.getStudyGroupById(id);
+    @GetMapping("/{groupName}")
+    public StudyGroupDTO getStudyGroupById(@PathVariable String groupName) {
+        return studyGroupService.getStudyGroupByGroupName(groupName);
     }
 
     @PostMapping
-    public StudyGroup createStudyGroup(@RequestBody StudyGroup studyGroup) {
-        return studyGroupService.createStudyGroup(studyGroup);
+    public StudyGroupDTO createStudyGroup(@RequestBody StudyGroupDTO studyGroupDTO) {
+        return studyGroupService.createStudyGroup(studyGroupDTO);
     }
 
-    @PutMapping("/{id}")
-    public StudyGroup updateStudyGroup(@PathVariable Long id, @RequestBody StudyGroup studyGroup) {
-        return studyGroupService.updateStudyGroup(id, studyGroup);
+    @PutMapping("/{groupName}")
+    public StudyGroupDTO updateStudyGroup(@PathVariable String groupName, @RequestBody StudyGroupDTO studyGroupDTO) {
+        return studyGroupService.updateStudyGroup(groupName, studyGroupDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteStudyGroup(@PathVariable Long id) {
-        studyGroupService.deleteStudyGroup(id);
+    @DeleteMapping("/{groupName}")
+    public void deleteStudyGroup(@PathVariable String groupName) {
+        studyGroupService.deleteStudyGroup(groupName);
     }
 }

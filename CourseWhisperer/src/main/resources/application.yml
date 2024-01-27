@@ -3,3 +3,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/mydatabase
     username: myuser
     password: mypassword
+
+  flyway:
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    user: myuser
+    password: mypassword
+    enabled: true

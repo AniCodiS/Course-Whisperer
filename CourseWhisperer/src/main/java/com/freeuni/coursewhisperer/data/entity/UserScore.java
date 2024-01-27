@@ -1,4 +1,4 @@
-package com.freeuni.coursewhisperer.model.db;
+package com.freeuni.coursewhisperer.data.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,20 +10,17 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "lecturers")
-public class Lecturer {
+@Table(name = "user_scores")
+public class UserScore {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "lecturer_name", nullable = false)
-    private String lecturerName;
+    @Column(name = "username")
+    private String username;
 
-    @Column(name = "department")
-    private String department;
-
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "score")
+    private int score;
 
 }

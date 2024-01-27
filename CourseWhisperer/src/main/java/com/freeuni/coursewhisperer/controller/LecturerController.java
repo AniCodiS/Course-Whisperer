@@ -1,8 +1,8 @@
 package com.freeuni.coursewhisperer.controller;
 
-import com.freeuni.coursewhisperer.model.db.Lecturer;
+import com.freeuni.coursewhisperer.data.api.dto.CreatedLecturerDTO;
+import com.freeuni.coursewhisperer.data.api.dto.LecturerDTO;
 import com.freeuni.coursewhisperer.service.LecturerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,29 +20,28 @@ public class LecturerController {
 
     private final LecturerService lecturerService;
 
-    @Autowired
     public LecturerController(LecturerService lecturerService) {
         this.lecturerService = lecturerService;
     }
 
     @GetMapping
-    public List<Lecturer> getAllLecturers() {
+    public List<LecturerDTO> getAllLecturers() {
         return lecturerService.getAllLecturers();
     }
 
     @GetMapping("/{id}")
-    public Lecturer getLecturerById(@PathVariable Long id) {
+    public LecturerDTO getLecturerById(@PathVariable Long id) {
         return lecturerService.getLecturerById(id);
     }
 
     @PostMapping
-    public Lecturer createLecturer(@RequestBody Lecturer lecturer) {
+    public CreatedLecturerDTO createLecturer(@RequestBody LecturerDTO lecturer) {
         return lecturerService.createLecturer(lecturer);
     }
 
-    @PutMapping("/{id}")
-    public Lecturer updateLecturer(@PathVariable Long id, @RequestBody Lecturer lecturer) {
-        return lecturerService.updateLecturer(id, lecturer);
+    @PutMapping("/{email}")
+    public LecturerDTO updateLecturer(@PathVariable String email, @RequestBody LecturerDTO lecturer) {
+        return lecturerService.updateLecturer(email, lecturer);
     }
 
     @DeleteMapping("/{id}")

@@ -1,9 +1,12 @@
 package com.freeuni.coursewhisperer.service;
 
-import com.freeuni.coursewhisperer.model.db.Prerequisite;
+import com.freeuni.coursewhisperer.data.api.dto.PrerequisiteDTO;
+import com.freeuni.coursewhisperer.data.entity.Prerequisite;
+import com.freeuni.coursewhisperer.data.mapper.PrerequisiteMapper;
 import com.freeuni.coursewhisperer.repository.PrerequisiteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -11,32 +14,40 @@ public class PrerequisiteService {
 
     private final PrerequisiteRepository prerequisiteRepository;
 
-    @Autowired
-    public PrerequisiteService(PrerequisiteRepository prerequisiteRepository) {
+    private final PrerequisiteMapper mapper;
+
+    public PrerequisiteService(PrerequisiteRepository prerequisiteRepository, PrerequisiteMapper mapper) {
         this.prerequisiteRepository = prerequisiteRepository;
+        this.mapper = mapper;
     }
 
-    public List<Prerequisite> getAllPrerequisites() {
-        return prerequisiteRepository.findAll();
+    public List<PrerequisiteDTO> getAllPrerequisites() {
+        List<Prerequisite> prerequisites = prerequisiteRepository.findAll();
+        List<PrerequisiteDTO> prerequisiteDTOs = new ArrayList<>();
+        for (Prerequisite prerequisite : prerequisites) {
+            prerequisiteDTOs.add(mapper.modelToDto(prerequisite));
+        }
+        return prerequisiteDTOs;
     }
 
-    public Prerequisite getPrerequisiteById(Long id) {
-        return prerequisiteRepository.findById(id).orElse(null);
+    public PrerequisiteDTO getPrerequisiteBySubjectName(String subjectName) {
+        return mapper.modelToDto(prerequisiteRepository.findBySubjectName(subjectName));
     }
 
-    public Prerequisite createPrerequisite(Prerequisite prerequisite) {
-        return prerequisiteRepository.save(prerequisite);
+    public PrerequisiteDTO createPrerequisite(PrerequisiteDTO prerequisite) {
+        return mapper.modelToDto(prerequisiteRepository.save(mapper.dtoToModel(prerequisite)));
     }
 
-    public Prerequisite updatePrerequisite(Long id, Prerequisite prerequisite) {
-        if (prerequisiteRepository.existsById(id)) {
-            prerequisite.setId(id);
-            return prerequisiteRepository.save(prerequisite);
+    public PrerequisiteDTO updatePrerequisite(String subjectName, PrerequisiteDTO prerequisiteDTO) {
+        if (prerequisiteRepository.existsBySubjectName(subjectName)) {
+            Prerequisite prerequisite = mapper.dtoToModel(prerequisiteDTO);
+            prerequisite.setId(prerequisiteRepository.findBySubjectName(subjectName).getId());
+            return mapper.modelToDto(prerequisiteRepository.save(prerequisite));
         }
         return null;
     }
 
-    public void deletePrerequisite(Long id) {
-        prerequisiteRepository.deleteById(id);
+    public void deletePrerequisite(String subjectName) {
+        prerequisiteRepository.deleteBySubjectName(subjectName);
     }
 }

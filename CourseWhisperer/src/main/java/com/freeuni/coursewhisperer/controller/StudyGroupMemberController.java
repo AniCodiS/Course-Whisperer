@@ -1,9 +1,11 @@
 package com.freeuni.coursewhisperer.controller;
 
-import com.freeuni.coursewhisperer.model.db.StudyGroupMember;
+import com.freeuni.coursewhisperer.data.api.dto.StudyGroupMemberDTO;
+import com.freeuni.coursewhisperer.data.entity.StudyGroupMember;
 import com.freeuni.coursewhisperer.service.StudyGroupMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -18,7 +20,7 @@ public class StudyGroupMemberController {
     }
 
     @GetMapping
-    public List<StudyGroupMember> getAllStudyGroupMembers() {
+    public List<StudyGroupMemberDTO> getAllStudyGroupMembers() {
         return studyGroupMemberService.getAllStudyGroupMembers();
     }
 
@@ -28,8 +30,8 @@ public class StudyGroupMemberController {
     }
 
     @PostMapping
-    public StudyGroupMember createStudyGroupMember(@RequestBody StudyGroupMember studyGroupMember) {
-        return studyGroupMemberService.createStudyGroupMember(studyGroupMember);
+    public StudyGroupMemberDTO createStudyGroupMember(@RequestBody StudyGroupMemberDTO studyGroupMemberDTO) {
+        return studyGroupMemberService.createStudyGroupMember(studyGroupMemberDTO);
     }
 
     @PutMapping("/{id}")

@@ -1,4 +1,4 @@
-package com.freeuni.coursewhisperer.model.db;
+package com.freeuni.coursewhisperer.data.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

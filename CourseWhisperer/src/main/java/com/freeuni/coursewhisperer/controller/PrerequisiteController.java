@@ -1,8 +1,8 @@
 package com.freeuni.coursewhisperer.controller;
 
-import com.freeuni.coursewhisperer.model.db.Prerequisite;
+import com.freeuni.coursewhisperer.data.api.dto.PrerequisiteDTO;
+import com.freeuni.coursewhisperer.data.entity.Prerequisite;
 import com.freeuni.coursewhisperer.service.PrerequisiteService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,33 +20,32 @@ public class PrerequisiteController {
 
     private final PrerequisiteService prerequisiteService;
 
-    @Autowired
     public PrerequisiteController(PrerequisiteService prerequisiteService) {
         this.prerequisiteService = prerequisiteService;
     }
 
     @GetMapping
-    public List<Prerequisite> getAllPrerequisites() {
+    public List<PrerequisiteDTO> getAllPrerequisites() {
         return prerequisiteService.getAllPrerequisites();
     }
 
-    @GetMapping("/{id}")
-    public Prerequisite getPrerequisiteById(@PathVariable Long id) {
-        return prerequisiteService.getPrerequisiteById(id);
+    @GetMapping("/{subjectName}")
+    public PrerequisiteDTO getPrerequisiteById(@PathVariable String subjectName) {
+        return prerequisiteService.getPrerequisiteBySubjectName(subjectName);
     }
 
     @PostMapping
-    public Prerequisite createPrerequisite(@RequestBody Prerequisite prerequisite) {
-        return prerequisiteService.createPrerequisite(prerequisite);
+    public PrerequisiteDTO createPrerequisite(@RequestBody PrerequisiteDTO prerequisiteDTO) {
+        return prerequisiteService.createPrerequisite(prerequisiteDTO);
     }
 
-    @PutMapping("/{id}")
-    public Prerequisite updatePrerequisite(@PathVariable Long id, @RequestBody Prerequisite prerequisite) {
-        return prerequisiteService.updatePrerequisite(id, prerequisite);
+    @PutMapping("/{subjectName}")
+    public PrerequisiteDTO updatePrerequisite(@PathVariable String subjectName, @RequestBody PrerequisiteDTO prerequisiteDTO) {
+        return prerequisiteService.updatePrerequisite(subjectName, prerequisiteDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public void deletePrerequisite(@PathVariable Long id) {
-        prerequisiteService.deletePrerequisite(id);
+    @DeleteMapping("/{subjectName}")
+    public void deletePrerequisite(@PathVariable String subjectName) {
+        prerequisiteService.deletePrerequisite(subjectName);
     }
 }

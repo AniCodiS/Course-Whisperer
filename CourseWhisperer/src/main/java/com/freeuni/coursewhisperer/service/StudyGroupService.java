@@ -1,9 +1,12 @@
 package com.freeuni.coursewhisperer.service;
 
-import com.freeuni.coursewhisperer.model.db.StudyGroup;
+import com.freeuni.coursewhisperer.data.api.dto.StudyGroupDTO;
+import com.freeuni.coursewhisperer.data.entity.StudyGroup;
+import com.freeuni.coursewhisperer.data.mapper.StudyGroupMapper;
 import com.freeuni.coursewhisperer.repository.StudyGroupRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -11,32 +14,40 @@ public class StudyGroupService {
 
     private final StudyGroupRepository studyGroupRepository;
 
-    @Autowired
-    public StudyGroupService(StudyGroupRepository studyGroupRepository) {
+    private final StudyGroupMapper mapper;
+
+    public StudyGroupService(StudyGroupRepository studyGroupRepository, StudyGroupMapper mapper) {
         this.studyGroupRepository = studyGroupRepository;
+        this.mapper = mapper;
     }
 
-    public List<StudyGroup> getAllStudyGroups() {
-        return studyGroupRepository.findAll();
+    public List<StudyGroupDTO> getAllStudyGroups() {
+        List<StudyGroup> studyGroups = studyGroupRepository.findAll();
+        List<StudyGroupDTO> studyGroupDTOs = new ArrayList<>();
+        for (StudyGroup studyGroup : studyGroups) {
+            studyGroupDTOs.add(mapper.modelToDto(studyGroup));
+        }
+        return studyGroupDTOs;
     }
 
-    public StudyGroup getStudyGroupById(Long id) {
-        return studyGroupRepository.findById(id).orElse(null);
+    public StudyGroupDTO getStudyGroupByGroupName(String groupName) {
+        return mapper.modelToDto(studyGroupRepository.findByGroupName(groupName));
     }
 
-    public StudyGroup createStudyGroup(StudyGroup studyGroup) {
-        return studyGroupRepository.save(studyGroup);
+    public StudyGroupDTO createStudyGroup(StudyGroupDTO studyGroupDTO) {
+        return mapper.modelToDto(studyGroupRepository.save(mapper.dtoToModel(studyGroupDTO)));
     }
 
-    public StudyGroup updateStudyGroup(Long id, StudyGroup studyGroup) {
-        if (studyGroupRepository.existsById(id)) {
-            studyGroup.setId(id);
-            return studyGroupRepository.save(studyGroup);
+    public StudyGroupDTO updateStudyGroup(String groupName, StudyGroupDTO studyGroupDTO) {
+        if (studyGroupRepository.existsByGroupName(groupName)) {
+            StudyGroup studyGroup = mapper.dtoToModel(studyGroupDTO);
+            studyGroup.setId(studyGroupRepository.findByGroupName(groupName).getId());
+            return mapper.modelToDto(studyGroupRepository.save(studyGroup));
         }
         return null;
     }
 
-    public void deleteStudyGroup(Long id) {
-        studyGroupRepository.deleteById(id);
+    public void deleteStudyGroup(String groupName) {
+        studyGroupRepository.deleteByGroupName(groupName);
     }
 }

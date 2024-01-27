@@ -1,8 +1,8 @@
 package com.freeuni.coursewhisperer.controller;
 
-import com.freeuni.coursewhisperer.model.db.PersonalInformation;
+import com.freeuni.coursewhisperer.data.api.dto.CreatedPersonalInformationDTO;
+import com.freeuni.coursewhisperer.data.api.dto.PersonalInformationDTO;
 import com.freeuni.coursewhisperer.service.PersonalInformationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,33 +20,32 @@ public class PersonalInformationController {
 
     private final PersonalInformationService personalInformationService;
 
-    @Autowired
     public PersonalInformationController(PersonalInformationService personalInformationService) {
         this.personalInformationService = personalInformationService;
     }
 
     @GetMapping
-    public List<PersonalInformation> getAllPersonalInformation() {
+    public List<PersonalInformationDTO> getAllPersonalInformation() {
         return personalInformationService.getAllPersonalInformation();
     }
 
-    @GetMapping("/{id}")
-    public PersonalInformation getPersonalInformationById(@PathVariable Long id) {
-        return personalInformationService.getPersonalInformationById(id);
+    @GetMapping("/{email}")
+    public PersonalInformationDTO getPersonalInformationByUsername(@PathVariable String email) {
+        return personalInformationService.getPersonalInformationByUsername(email);
     }
 
     @PostMapping
-    public PersonalInformation createPersonalInformation(@RequestBody PersonalInformation personalInformation) {
-        return personalInformationService.createPersonalInformation(personalInformation);
+    public CreatedPersonalInformationDTO createPersonalInformation(@RequestBody PersonalInformationDTO personalInformationDTO) {
+        return personalInformationService.createPersonalInformation(personalInformationDTO);
     }
 
-    @PutMapping("/{id}")
-    public PersonalInformation updatePersonalInformation(@PathVariable Long id, @RequestBody PersonalInformation personalInformation) {
-        return personalInformationService.updatePersonalInformation(id, personalInformation);
+    @PutMapping("/{email}")
+    public PersonalInformationDTO updatePersonalInformation(@PathVariable String email, @RequestBody PersonalInformationDTO personalInformationDTO) {
+        return personalInformationService.updatePersonalInformation(email, personalInformationDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public void deletePersonalInformation(@PathVariable Long id) {
-        personalInformationService.deletePersonalInformation(id);
+    @DeleteMapping("/{email}")
+    public void deletePersonalInformation(@PathVariable String username) {
+        personalInformationService.deletePersonalInformation(username);
     }
 }
