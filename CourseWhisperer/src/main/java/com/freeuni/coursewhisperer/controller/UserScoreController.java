@@ -37,8 +37,8 @@ public class UserScoreController {
         return userScoreService.updateUserScore(username, userScore);
     }
 
-    @DeleteMapping("/{userId}")
-    public void deleteUserScore(@PathVariable Long userId) {
-        userScoreService.deleteUserScore(userId);
+    @DeleteMapping("/{username}")
+    public void deleteUserScore(@PathVariable String username) {
+        userScoreService.deleteUserScore(username);
     }
 }

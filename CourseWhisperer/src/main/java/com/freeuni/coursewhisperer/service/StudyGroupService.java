@@ -4,6 +4,7 @@ import com.freeuni.coursewhisperer.data.api.dto.StudyGroupDTO;
 import com.freeuni.coursewhisperer.data.entity.StudyGroup;
 import com.freeuni.coursewhisperer.data.mapper.StudyGroupMapper;
 import com.freeuni.coursewhisperer.repository.StudyGroupRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class StudyGroupService {
         return null;
     }
 
+    @Transactional
     public void deleteStudyGroup(String groupName) {
         studyGroupRepository.deleteByGroupName(groupName);
     }

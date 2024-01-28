@@ -9,3 +9,6 @@ spring:
     user: myuser
     password: mypassword
     enabled: true
+
+springdoc:
+  paths-to-match: /api/**

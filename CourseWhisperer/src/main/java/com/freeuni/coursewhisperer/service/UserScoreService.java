@@ -5,6 +5,7 @@ import com.freeuni.coursewhisperer.data.api.dto.CreatedUserScoreDTO;
 import com.freeuni.coursewhisperer.data.api.dto.UserScoreDTO;
 import com.freeuni.coursewhisperer.data.entity.UserScore;
 import com.freeuni.coursewhisperer.repository.UserScoreRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,7 +54,8 @@ public class UserScoreService {
         return null;
     }
 
-    public void deleteUserScore(Long userId) {
-        userScoreRepository.deleteById(userId);
+    @Transactional
+    public void deleteUserScore(String username) {
+        userScoreRepository.deleteByUsername(username);
     }
 }

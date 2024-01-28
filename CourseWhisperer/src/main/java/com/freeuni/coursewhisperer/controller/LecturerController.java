@@ -29,9 +29,9 @@ public class LecturerController {
         return lecturerService.getAllLecturers();
     }
 
-    @GetMapping("/{id}")
-    public LecturerDTO getLecturerById(@PathVariable Long id) {
-        return lecturerService.getLecturerById(id);
+    @GetMapping("/{email}")
+    public LecturerDTO getLecturerByEmail(@PathVariable String email) {
+        return lecturerService.getLecturerByEmail(email);
     }
 
     @PostMapping
@@ -44,8 +44,8 @@ public class LecturerController {
         return lecturerService.updateLecturer(email, lecturer);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteLecturer(@PathVariable Long id) {
-        lecturerService.deleteLecturer(id);
+    @DeleteMapping("/{email}")
+    public void deleteLecturer(@PathVariable String email) {
+        lecturerService.deleteLecturer(email);
     }
 }

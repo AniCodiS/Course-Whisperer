@@ -1,7 +1,6 @@
 package com.freeuni.coursewhisperer.controller;
 
 import com.freeuni.coursewhisperer.data.api.dto.PrerequisiteDTO;
-import com.freeuni.coursewhisperer.data.entity.Prerequisite;
 import com.freeuni.coursewhisperer.service.PrerequisiteService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,9 +28,9 @@ public class PrerequisiteController {
         return prerequisiteService.getAllPrerequisites();
     }
 
-    @GetMapping("/{subjectName}")
-    public PrerequisiteDTO getPrerequisiteById(@PathVariable String subjectName) {
-        return prerequisiteService.getPrerequisiteBySubjectName(subjectName);
+    @GetMapping("/{id}")
+    public PrerequisiteDTO getPrerequisiteById(@PathVariable Long id) {
+        return prerequisiteService.getPrerequisiteById(id);
     }
 
     @PostMapping
@@ -39,13 +38,13 @@ public class PrerequisiteController {
         return prerequisiteService.createPrerequisite(prerequisiteDTO);
     }
 
-    @PutMapping("/{subjectName}")
-    public PrerequisiteDTO updatePrerequisite(@PathVariable String subjectName, @RequestBody PrerequisiteDTO prerequisiteDTO) {
-        return prerequisiteService.updatePrerequisite(subjectName, prerequisiteDTO);
+    @PutMapping("/{id}")
+    public PrerequisiteDTO updatePrerequisite(@PathVariable Long id, @RequestBody PrerequisiteDTO prerequisiteDTO) {
+        return prerequisiteService.updatePrerequisite(id, prerequisiteDTO);
     }
 
-    @DeleteMapping("/{subjectName}")
-    public void deletePrerequisite(@PathVariable String subjectName) {
-        prerequisiteService.deletePrerequisite(subjectName);
+    @DeleteMapping("/{id}")
+    public void deletePrerequisite(@PathVariable Long id) {
+        prerequisiteService.deletePrerequisite(id);
     }
 }

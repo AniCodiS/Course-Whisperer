@@ -9,4 +9,6 @@ public interface LecturerRepository extends JpaRepository<Lecturer, Long> {
     boolean existsByEmail(String email);
 
     Lecturer findByEmail(String email);
+
+    void deleteByEmail(String email);
 }

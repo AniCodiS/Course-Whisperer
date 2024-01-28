@@ -1,10 +1,12 @@
 package com.freeuni.coursewhisperer.service;
 
-import com.freeuni.coursewhisperer.data.api.dto.CreatedPersonalInformationDTO;
 import com.freeuni.coursewhisperer.data.api.dto.PersonalInformationDTO;
 import com.freeuni.coursewhisperer.data.entity.PersonalInformation;
+import com.freeuni.coursewhisperer.data.entity.User;
 import com.freeuni.coursewhisperer.data.mapper.PersonalInformationMapper;
 import com.freeuni.coursewhisperer.repository.PersonalInformationRepository;
+import com.freeuni.coursewhisperer.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,10 +17,13 @@ public class PersonalInformationService {
 
     private final PersonalInformationRepository personalInformationRepository;
 
+    private final UserRepository userRepository;
+
     private final PersonalInformationMapper mapper;
 
-    public PersonalInformationService(PersonalInformationRepository personalInformationRepository, PersonalInformationMapper mapper) {
+    public PersonalInformationService(PersonalInformationRepository personalInformationRepository, UserRepository userRepository, PersonalInformationMapper mapper) {
         this.personalInformationRepository = personalInformationRepository;
+        this.userRepository = userRepository;
         this.mapper = mapper;
     }
 
@@ -31,32 +36,41 @@ public class PersonalInformationService {
         return personalInformationDTOs;
     }
 
-    public PersonalInformationDTO getPersonalInformationByUsername(String email) {
-        return mapper.modelToDto(personalInformationRepository.findByAccountMail(email));
+    public PersonalInformationDTO getPersonalInformationByEmail(String email) {
+        return mapper.modelToDto(personalInformationRepository.findByEmail(email));
     }
 
-    public CreatedPersonalInformationDTO createPersonalInformation(PersonalInformationDTO personalInformationDTO) {
-        CreatedPersonalInformationDTO createdPersonalInformationDTO = new CreatedPersonalInformationDTO();
-        PersonalInformation personalInformation = personalInformationRepository.save(mapper.dtoToModel(personalInformationDTO));
-        createdPersonalInformationDTO.setId(personalInformation.getId());
+    public PersonalInformationDTO createPersonalInformation(PersonalInformationDTO personalInformationDTO) {
+        PersonalInformationDTO createdPersonalInformationDTO = new PersonalInformationDTO();
+        PersonalInformation personalInformation = new PersonalInformation();
+        personalInformation.setUser(userRepository.findByEmail(personalInformationDTO.getEmail()));
+        personalInformation.setFirstName(personalInformationDTO.getFirstName());
+        personalInformation.setLastName(personalInformationDTO.getLastName());
+        personalInformation.setYear(personalInformationDTO.getYear());
+        personalInformation.setFaculty(personalInformationDTO.getFaculty());
+        personalInformation.setEmail(personalInformationDTO.getEmail());
+        personalInformationRepository.save(personalInformation);
         createdPersonalInformationDTO.setFirstName(personalInformation.getFirstName());
         createdPersonalInformationDTO.setLastName(personalInformation.getLastName());
         createdPersonalInformationDTO.setYear(personalInformation.getYear());
         createdPersonalInformationDTO.setFaculty(personalInformation.getFaculty());
-        createdPersonalInformationDTO.setAccountMail(personalInformation.getAccountMail());
+        createdPersonalInformationDTO.setEmail(personalInformation.getEmail());
         return createdPersonalInformationDTO;
     }
 
     public PersonalInformationDTO updatePersonalInformation(String email, PersonalInformationDTO personalInformationDTO) {
-        if (personalInformationRepository.existsByAccountMail(email)) {
+        if (personalInformationRepository.existsByEmail(email)) {
+            User user = userRepository.findByEmail(email);
             PersonalInformation personalInformation = mapper.dtoToModel(personalInformationDTO);
-            personalInformation.setId(personalInformationRepository.findByAccountMail(email).getId());
+            personalInformation.setUser(user);
+            personalInformation.setId(personalInformationRepository.findByEmail(email).getId());
             return mapper.modelToDto(personalInformationRepository.save(personalInformation));
         }
         return null;
     }
 
+    @Transactional
     public void deletePersonalInformation(String email) {
-        personalInformationRepository.deleteByAccountMail(email);
+        personalInformationRepository.deleteByEmail(email);
     }
 }

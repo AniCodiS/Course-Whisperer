@@ -13,11 +13,12 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "subjects")
+@Table(name = "subjects", schema = "public")
 public class Subject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true)
     private Long id;
 
     @Column(name = "subject_name", nullable = false)

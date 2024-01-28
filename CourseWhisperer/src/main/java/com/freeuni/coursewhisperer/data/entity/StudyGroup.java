@@ -12,11 +12,12 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "study_groups")
+@Table(name = "study_groups", schema = "public")
 public class StudyGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true)
     private Long id;
 
     @Column(name = "subject_name")

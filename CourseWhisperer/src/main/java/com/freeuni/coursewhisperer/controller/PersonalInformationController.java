@@ -1,6 +1,5 @@
 package com.freeuni.coursewhisperer.controller;
 
-import com.freeuni.coursewhisperer.data.api.dto.CreatedPersonalInformationDTO;
 import com.freeuni.coursewhisperer.data.api.dto.PersonalInformationDTO;
 import com.freeuni.coursewhisperer.service.PersonalInformationService;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,11 +30,11 @@ public class PersonalInformationController {
 
     @GetMapping("/{email}")
     public PersonalInformationDTO getPersonalInformationByUsername(@PathVariable String email) {
-        return personalInformationService.getPersonalInformationByUsername(email);
+        return personalInformationService.getPersonalInformationByEmail(email);
     }
 
     @PostMapping
-    public CreatedPersonalInformationDTO createPersonalInformation(@RequestBody PersonalInformationDTO personalInformationDTO) {
+    public PersonalInformationDTO createPersonalInformation(@RequestBody PersonalInformationDTO personalInformationDTO) {
         return personalInformationService.createPersonalInformation(personalInformationDTO);
     }
 
@@ -45,7 +44,7 @@ public class PersonalInformationController {
     }
 
     @DeleteMapping("/{email}")
-    public void deletePersonalInformation(@PathVariable String username) {
-        personalInformationService.deletePersonalInformation(username);
+    public void deletePersonalInformation(@PathVariable String email) {
+        personalInformationService.deletePersonalInformation(email);
     }
 }

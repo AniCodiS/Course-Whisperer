@@ -6,9 +6,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PrerequisiteRepository extends JpaRepository<Prerequisite, Long> {
-    Prerequisite findBySubjectName(String subjectName);
+    boolean existsPrerequisiteById(Long id);
 
-    boolean existsBySubjectName(String subjectName);
+    Prerequisite findPrerequisiteById(Long id);
 
-    void deleteBySubjectName(String subjectName);
+    void deletePrerequisiteById(Long id);
 }

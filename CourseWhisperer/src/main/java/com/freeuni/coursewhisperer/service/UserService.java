@@ -5,6 +5,7 @@ import com.freeuni.coursewhisperer.data.api.dto.CreatedUserDTO;
 import com.freeuni.coursewhisperer.data.api.dto.UserDTO;
 import com.freeuni.coursewhisperer.data.entity.User;
 import com.freeuni.coursewhisperer.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class UserService {
         CreatedUserDTO createdUserDTO = new CreatedUserDTO();
         User createdUser = userRepository.save(mapper.dtoToModel(lecturer));
         createdUserDTO.setId(createdUser.getId());
-        createdUserDTO.setMail(createdUser.getMail());
+        createdUserDTO.setEmail(createdUser.getEmail());
         createdUserDTO.setUsername(createdUser.getUsername());
         createdUserDTO.setPassword(createdUser.getPassword());
         return createdUserDTO;
@@ -54,6 +55,7 @@ public class UserService {
         return null;
     }
 
+    @Transactional
     public void deleteUser(String username) {
         userRepository.deleteByUsername(username);
     }

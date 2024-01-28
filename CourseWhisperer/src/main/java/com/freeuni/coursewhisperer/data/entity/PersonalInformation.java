@@ -13,15 +13,16 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "personal_information")
+@Table(name = "personal_information", schema = "public")
 public class PersonalInformation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_personal_information_user"))
+    @JoinColumn(name = "username", referencedColumnName = "username", foreignKey = @ForeignKey(name = "fk_personal_information_user"))
     private User user;
 
     @Column(name = "first_name", nullable = false)
@@ -36,7 +37,7 @@ public class PersonalInformation {
     @Column(name = "faculty")
     private String faculty;
 
-    @Column(name = "account_mail", nullable = false)
-    private String accountMail;
+    @Column(name = "email", nullable = false)
+    private String email;
 
 }

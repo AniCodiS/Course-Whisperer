@@ -2,8 +2,11 @@ package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.api.dto.PrerequisiteDTO;
 import com.freeuni.coursewhisperer.data.entity.Prerequisite;
+import com.freeuni.coursewhisperer.data.entity.Subject;
 import com.freeuni.coursewhisperer.data.mapper.PrerequisiteMapper;
 import com.freeuni.coursewhisperer.repository.PrerequisiteRepository;
+import com.freeuni.coursewhisperer.repository.SubjectRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,10 +17,13 @@ public class PrerequisiteService {
 
     private final PrerequisiteRepository prerequisiteRepository;
 
+    private final SubjectRepository subjectRepository;
+
     private final PrerequisiteMapper mapper;
 
-    public PrerequisiteService(PrerequisiteRepository prerequisiteRepository, PrerequisiteMapper mapper) {
+    public PrerequisiteService(PrerequisiteRepository prerequisiteRepository, SubjectRepository subjectRepository, PrerequisiteMapper mapper) {
         this.prerequisiteRepository = prerequisiteRepository;
+        this.subjectRepository = subjectRepository;
         this.mapper = mapper;
     }
 
@@ -25,29 +31,52 @@ public class PrerequisiteService {
         List<Prerequisite> prerequisites = prerequisiteRepository.findAll();
         List<PrerequisiteDTO> prerequisiteDTOs = new ArrayList<>();
         for (Prerequisite prerequisite : prerequisites) {
-            prerequisiteDTOs.add(mapper.modelToDto(prerequisite));
+            PrerequisiteDTO prerequisiteDTO = new PrerequisiteDTO();
+            Subject subject = subjectRepository.findBySubjectName(prerequisite.getSubject().getSubjectName());
+            prerequisiteDTO.setSubjectName(subject.getSubjectName());
+            Subject prerequisiteSubject = subjectRepository.findBySubjectName(prerequisite.getPrerequisiteSubject().getSubjectName());
+            prerequisiteDTO.setPrerequisiteSubjectName(prerequisiteSubject.getSubjectName());
+            prerequisiteDTOs.add(prerequisiteDTO);
         }
         return prerequisiteDTOs;
     }
 
-    public PrerequisiteDTO getPrerequisiteBySubjectName(String subjectName) {
-        return mapper.modelToDto(prerequisiteRepository.findBySubjectName(subjectName));
+    public PrerequisiteDTO getPrerequisiteById(Long id) {
+        PrerequisiteDTO prerequisiteDTO = new PrerequisiteDTO();
+        Prerequisite prerequisite = prerequisiteRepository.findPrerequisiteById(id);
+        Subject subject = subjectRepository.findBySubjectName(prerequisite.getSubject().getSubjectName());
+        prerequisiteDTO.setSubjectName(subject.getSubjectName());
+        Subject prerequisiteSubject = subjectRepository.findBySubjectName(prerequisite.getPrerequisiteSubject().getSubjectName());
+        prerequisiteDTO.setPrerequisiteSubjectName(prerequisiteSubject.getSubjectName());
+        return prerequisiteDTO;
     }
 
     public PrerequisiteDTO createPrerequisite(PrerequisiteDTO prerequisite) {
-        return mapper.modelToDto(prerequisiteRepository.save(mapper.dtoToModel(prerequisite)));
+        Subject subject = subjectRepository.findBySubjectName(prerequisite.getSubjectName());
+        Subject prerequisiteSubject = subjectRepository.findBySubjectName(prerequisite.getPrerequisiteSubjectName());
+        Prerequisite newPrerequisite = new Prerequisite();
+        newPrerequisite.setSubject(subject);
+        newPrerequisite.setPrerequisiteSubject(prerequisiteSubject);
+        prerequisiteRepository.save(newPrerequisite);
+        return prerequisite;
     }
 
-    public PrerequisiteDTO updatePrerequisite(String subjectName, PrerequisiteDTO prerequisiteDTO) {
-        if (prerequisiteRepository.existsBySubjectName(subjectName)) {
-            Prerequisite prerequisite = mapper.dtoToModel(prerequisiteDTO);
-            prerequisite.setId(prerequisiteRepository.findBySubjectName(subjectName).getId());
-            return mapper.modelToDto(prerequisiteRepository.save(prerequisite));
+    public PrerequisiteDTO updatePrerequisite(Long id, PrerequisiteDTO prerequisiteDTO) {
+        if (prerequisiteRepository.existsPrerequisiteById(id)) {
+            Subject subject = subjectRepository.findBySubjectName(prerequisiteDTO.getSubjectName());
+            Subject prerequisiteSubject = subjectRepository.findBySubjectName(prerequisiteDTO.getPrerequisiteSubjectName());
+            Prerequisite prerequisite = new Prerequisite();
+            prerequisite.setSubject(subject);
+            prerequisite.setPrerequisiteSubject(prerequisiteSubject);
+            prerequisite.setId(id);
+            prerequisiteRepository.save(prerequisite);
+            return prerequisiteDTO;
         }
         return null;
     }
 
-    public void deletePrerequisite(String subjectName) {
-        prerequisiteRepository.deleteBySubjectName(subjectName);
+    @Transactional
+    public void deletePrerequisite(Long id) {
+        prerequisiteRepository.deletePrerequisiteById(id);
     }
 }

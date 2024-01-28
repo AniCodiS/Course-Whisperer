@@ -10,15 +10,16 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "user", schema = "public")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true)
     private Long id;
 
-    @Column(name = "mail", nullable = false)
-    private String mail;
+    @Column(name = "email", nullable = false)
+    private String email;
 
     @Column(name = "username", nullable = false)
     private String username;

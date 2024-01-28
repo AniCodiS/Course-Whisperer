@@ -10,11 +10,12 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "user_scores")
+@Table(name = "user_scores", schema = "public")
 public class UserScore {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true)
     private Long id;
 
     @Column(name = "username")

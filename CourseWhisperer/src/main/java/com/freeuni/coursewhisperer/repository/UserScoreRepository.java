@@ -9,4 +9,6 @@ public interface UserScoreRepository extends JpaRepository<UserScore, Long> {
     boolean existsByUsername(String username);
 
     UserScore findByUsername(String username);
+
+    void deleteByUsername(String username);
 }

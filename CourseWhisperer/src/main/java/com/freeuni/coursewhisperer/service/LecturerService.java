@@ -5,6 +5,7 @@ import com.freeuni.coursewhisperer.data.api.dto.CreatedLecturerDTO;
 import com.freeuni.coursewhisperer.data.api.dto.LecturerDTO;
 import com.freeuni.coursewhisperer.data.entity.Lecturer;
 import com.freeuni.coursewhisperer.repository.LecturerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,8 +31,8 @@ public class LecturerService {
         return lecturerDTOS;
     }
 
-    public LecturerDTO getLecturerById(Long id) {
-        return mapper.modelToDto(lecturerRepository.findById(id).orElse(null));
+    public LecturerDTO getLecturerByEmail(String email) {
+        return mapper.modelToDto(lecturerRepository.findByEmail(email));
     }
 
     public CreatedLecturerDTO createLecturer(LecturerDTO lecturer) {
@@ -53,7 +54,8 @@ public class LecturerService {
         return null;
     }
 
-    public void deleteLecturer(Long id) {
-        lecturerRepository.deleteById(id);
+    @Transactional
+    public void deleteLecturer(String email) {
+        lecturerRepository.deleteByEmail(email);
     }
 }
