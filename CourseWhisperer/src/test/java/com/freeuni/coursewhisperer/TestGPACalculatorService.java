@@ -12,14 +12,52 @@ public class TestGPACalculatorService {
 
     @Test
     public void testCalculateCourseGradePoints() {
-        // Filling in my grades and seeing if the given GPA matches the one I have on Emis
+        // Test case for GPA calculation
         List<Course> courses = new ArrayList<>();
-        courses.add(new Course("A", 6));
+        courses.add(new Course("D", 4));
+        courses.add(new Course("D", 5));
+        courses.add(new Course("E", 6));
+        courses.add(new Course("B", 4));
+        courses.add(new Course("C", 4));
+        courses.add(new Course("C", 3));
+        courses.add(new Course("D", 6));
+        courses.add(new Course("A", 4));
+        courses.add(new Course("C", 2));
+        courses.add(new Course("C", 5));
         courses.add(new Course("B", 6));
+        courses.add(new Course("A", 6));
+        courses.add(new Course("A", 5));
+        courses.add(new Course("A", 3));
+        courses.add(new Course("C", 6));
+        courses.add(new Course("C", 4));
+        courses.add(new Course("A", 8));
+        courses.add(new Course("A", 5));
+        courses.add(new Course("A", 3));
+        courses.add(new Course("D", 6));
+        courses.add(new Course("D", 6));
+        courses.add(new Course("E", 6));
+        courses.add(new Course("A", 3));
+        courses.add(new Course("C", 4));
+        courses.add(new Course("B", 4));
+        courses.add(new Course("D", 6));
+        courses.add(new Course("D", 6));
+        courses.add(new Course("A", 6));
+        courses.add(new Course("A", 6));
         courses.add(new Course("C", 6));
         courses.add(new Course("D", 6));
         courses.add(new Course("E", 6));
-        courses.add(new Course("F", 6));
+        courses.add(new Course("E", 6));
+        courses.add(new Course("A", 6));
+        courses.add(new Course("B", 6));
+        courses.add(new Course("C", 4));
+        courses.add(new Course("C", 6));
+        courses.add(new Course("E", 6));
+        courses.add(new Course("B", 6));
+        courses.add(new Course("D", 6));
+        courses.add(new Course("E", 6));
+        courses.add(new Course("E", 6));
+        courses.add(new Course("C", 3));
+        courses.add(new Course("A", 6));
 
         double totalGradePoints = 0.0;
         int totalCreditHours = 0;
