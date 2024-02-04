@@ -18,6 +18,7 @@ public interface AbstractMapper<E, M, D> {
     @Named(value = "modelToDto")
     D modelToDto(M m);
 
+    @Named(value = "dtoToModel")
     M dtoToModel(D d);
 
     @IterableMapping(qualifiedByName = "entityToModel")
