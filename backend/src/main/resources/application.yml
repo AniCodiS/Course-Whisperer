@@ -1,0 +1,32 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    username: myusername
+    password: mypassword
+
+  flyway:
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    user: myusername
+    password: mypassword
+    enabled: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: clientid
+            authorization-grant-type: authorization_code
+            scope: openid
+            client-secret: pDnQNf1GZOn6P8smzggdjR9W0Ckez8di
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/course-whisperer
+            authorization-uri: http://localhost:8080/realms/course-whisperer/protocol/openid-connect/auth
+            token-uri: http://localhost:8080/realms/course-whisperer/protocol/openid-connect/token
+
+springdoc:
+  paths-to-match: /api/**
