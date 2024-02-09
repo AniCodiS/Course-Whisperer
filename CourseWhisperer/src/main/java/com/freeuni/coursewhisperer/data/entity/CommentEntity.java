@@ -1,7 +1,7 @@
 package com.freeuni.coursewhisperer.data.entity;
 
 import com.freeuni.coursewhisperer.data.entity.common.AbstractIdTimestampEntity;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +12,7 @@ import lombok.Setter;
 public class CommentEntity extends AbstractIdTimestampEntity {
     @OneToOne
     @JoinColumn(name = "user")
-    private Long user;
+    private UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "post")
