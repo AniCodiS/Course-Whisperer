@@ -21,7 +21,7 @@ spring:
             client-id: clientid
             authorization-grant-type: authorization_code
             scope: openid
-            client-secret: pDnQNf1GZOn6P8smzggdjR9W0Ckez8di
+            client-secret: KL9spAwc2iVyWV6lLfAcS6W9sC1pITYW
         provider:
           keycloak:
             issuer-uri: http://localhost:8080/realms/course-whisperer
