@@ -1,14 +1,11 @@
 package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.mapper.UserMapper;
-import com.freeuni.coursewhisperer.data.api.dto.CreatedUserDTO;
-import com.freeuni.coursewhisperer.data.api.dto.UserDTO;
-import com.freeuni.coursewhisperer.data.entity.User;
+import com.freeuni.coursewhisperer.data.model.User;
 import com.freeuni.coursewhisperer.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,34 +20,26 @@ public class UserService {
         this.mapper = mapper;
     }
 
-    public List<UserDTO> getAllUsers() {
-        List<UserDTO> userDTOs = new ArrayList<>();
-        List<User> users = userRepository.findAll();
-        for (User user : users) {
-            userDTOs.add(mapper.modelToDto(user));
-        }
-        return userDTOs;
+    public List<User> getAllUsers() {
+        return userRepository.findAll().stream().map(mapper::entityToModel).toList();
     }
 
-    public UserDTO getUserByUsername(String username) {
-        return mapper.modelToDto(userRepository.findByUsername(username));
+    public User getUserByUsername(String username) {
+        return mapper.entityToModel(userRepository.findByUsername(username));
     }
 
-    public CreatedUserDTO createUser(UserDTO lecturer) {
-        CreatedUserDTO createdUserDTO = new CreatedUserDTO();
-        User createdUser = userRepository.save(mapper.dtoToModel(lecturer));
-        createdUserDTO.setId(createdUser.getId());
-        createdUserDTO.setEmail(createdUser.getEmail());
-        createdUserDTO.setUsername(createdUser.getUsername());
-        createdUserDTO.setPassword(createdUser.getPassword());
-        return createdUserDTO;
+    public User getUserByUserId (Long userId) {
+        return mapper.entityToModel(userRepository.findById(userId).get());
     }
 
-    public UserDTO updateUser(String username, UserDTO user) {
+    public User createUser(User lecturer) {
+        return mapper.entityToModel(userRepository.save(mapper.modelToEntity(lecturer)));
+    }
+
+    public User updateUser(String username, User user) {
         if (userRepository.existsByUsername(username)) {
-            User userEntity = mapper.dtoToModel(user);
-            userEntity.setId(userRepository.findByUsername(username).getId());
-            return mapper.modelToDto(userRepository.save(userEntity));
+            user.setId(userRepository.findByUsername(username).getId());
+            return mapper.entityToModel(userRepository.save(mapper.modelToEntity(user)));
         }
         return null;
     }

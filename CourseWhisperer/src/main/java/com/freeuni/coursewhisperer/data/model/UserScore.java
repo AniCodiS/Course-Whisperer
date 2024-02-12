@@ -5,9 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class User {
-    private Long id;
-    private String email;
+public class UserScore {
     private String username;
-    private String password;
+    private int score;
 }
