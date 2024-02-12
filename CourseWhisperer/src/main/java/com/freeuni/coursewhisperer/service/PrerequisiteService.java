@@ -1,8 +1,8 @@
 package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.api.dto.PrerequisiteDTO;
-import com.freeuni.coursewhisperer.data.entity.Prerequisite;
-import com.freeuni.coursewhisperer.data.entity.Subject;
+import com.freeuni.coursewhisperer.data.model.Prerequisite;
+import com.freeuni.coursewhisperer.data.model.Subject;
 import com.freeuni.coursewhisperer.data.mapper.PrerequisiteMapper;
 import com.freeuni.coursewhisperer.repository.PrerequisiteRepository;
 import com.freeuni.coursewhisperer.repository.SubjectRepository;
