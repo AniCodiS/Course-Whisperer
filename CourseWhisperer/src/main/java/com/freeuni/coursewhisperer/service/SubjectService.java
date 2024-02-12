@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class SubjectService extends AbstractService<SubjectEntity, Long, Subject, SubjectDTO> {
 
     private final SubjectRepository subjectRepository;
-
     private final PassedSubjectService passedSubjectService;
     private final PrerequisiteService prerequisiteService;
     private final SubjectMapper subjectMapper;
