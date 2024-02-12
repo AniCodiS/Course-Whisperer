@@ -1,6 +1,6 @@
 package com.freeuni.coursewhisperer.data.model;
 
-import com.freeuni.coursewhisperer.data.entity.LecturerEntity;
+import com.freeuni.coursewhisperer.data.enums.ESchool;
 import com.freeuni.coursewhisperer.data.enums.ESemester;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +9,9 @@ import lombok.Data;
 @Builder
 public class Subject {
     private String name;
-    private int creditScore;
-    private LecturerEntity lecturer;
+    private String code;
+    private ESchool schoolName;
+    private Integer creditScore;
+//    private Lecturer lecturer;
     private ESemester semester;
 }
