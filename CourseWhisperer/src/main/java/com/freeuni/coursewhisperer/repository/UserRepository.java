@@ -1,16 +1,16 @@
 package com.freeuni.coursewhisperer.repository;
 
-import com.freeuni.coursewhisperer.data.entity.User;
+import com.freeuni.coursewhisperer.data.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByUsername(String username);
 
-    User findByUsername(String username);
+    UserEntity findByUsername(String username);
 
     void deleteByUsername(String username);
 
-    User findByEmail(String email);
+    UserEntity findByEmail(String email);
 }

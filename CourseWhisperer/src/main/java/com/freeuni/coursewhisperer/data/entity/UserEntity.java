@@ -1,22 +1,18 @@
 package com.freeuni.coursewhisperer.data.entity;
 
+import com.freeuni.coursewhisperer.data.entity.common.AbstractIdTimestampEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.*;
 
-@Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 @Table(name = "user", schema = "public")
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
-    private Long id;
+public class UserEntity extends AbstractIdTimestampEntity {
 
     @Column(name = "email", nullable = false)
     private String email;

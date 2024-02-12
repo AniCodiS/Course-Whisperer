@@ -1,7 +1,6 @@
 package com.freeuni.coursewhisperer.controller;
 
 import com.freeuni.coursewhisperer.data.api.dto.StudyGroupDTO;
-import com.freeuni.coursewhisperer.data.entity.StudyGroup;
 import com.freeuni.coursewhisperer.service.StudyGroupService;
 import org.springframework.web.bind.annotation.*;
 

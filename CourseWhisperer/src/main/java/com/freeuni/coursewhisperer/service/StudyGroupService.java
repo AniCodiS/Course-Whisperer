@@ -1,7 +1,7 @@
 package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.api.dto.StudyGroupDTO;
-import com.freeuni.coursewhisperer.data.entity.StudyGroup;
+import com.freeuni.coursewhisperer.data.entity.StudyGroupEntity;
 import com.freeuni.coursewhisperer.data.mapper.StudyGroupMapper;
 import com.freeuni.coursewhisperer.repository.StudyGroupRepository;
 import jakarta.transaction.Transactional;
@@ -23,27 +23,29 @@ public class StudyGroupService {
     }
 
     public List<StudyGroupDTO> getAllStudyGroups() {
-        List<StudyGroup> studyGroups = studyGroupRepository.findAll();
+        List<StudyGroupEntity> studyGroups = studyGroupRepository.findAll();
         List<StudyGroupDTO> studyGroupDTOs = new ArrayList<>();
-        for (StudyGroup studyGroup : studyGroups) {
-            studyGroupDTOs.add(mapper.modelToDto(studyGroup));
+        for (StudyGroupEntity studyGroup : studyGroups) {
+            studyGroupDTOs.add(mapper.modelToDto(mapper.entityToModel(studyGroup)));
         }
         return studyGroupDTOs;
     }
 
     public StudyGroupDTO getStudyGroupByGroupName(String groupName) {
-        return mapper.modelToDto(studyGroupRepository.findByGroupName(groupName));
+        return mapper.modelToDto(mapper.entityToModel(studyGroupRepository.findByGroupName(groupName)));
     }
 
     public StudyGroupDTO createStudyGroup(StudyGroupDTO studyGroupDTO) {
-        return mapper.modelToDto(studyGroupRepository.save(mapper.dtoToModel(studyGroupDTO)));
+        StudyGroupEntity studyGroupEntity = mapper.modelToEntity(mapper.dtoToModel(studyGroupDTO));
+        StudyGroupEntity savedStudyGroupEntity = studyGroupRepository.save(studyGroupEntity);
+        return mapper.modelToDto(mapper.entityToModel(savedStudyGroupEntity));
     }
 
     public StudyGroupDTO updateStudyGroup(String groupName, StudyGroupDTO studyGroupDTO) {
         if (studyGroupRepository.existsByGroupName(groupName)) {
-            StudyGroup studyGroup = mapper.dtoToModel(studyGroupDTO);
-            studyGroup.setId(studyGroupRepository.findByGroupName(groupName).getId());
-            return mapper.modelToDto(studyGroupRepository.save(studyGroup));
+            StudyGroupEntity studyGroupEntity = mapper.modelToEntity(mapper.dtoToModel(studyGroupDTO));
+            studyGroupEntity.setId(studyGroupRepository.findByGroupName(groupName).getId());
+            return mapper.modelToDto(mapper.entityToModel(studyGroupRepository.save(studyGroupEntity)));
         }
         return null;
     }

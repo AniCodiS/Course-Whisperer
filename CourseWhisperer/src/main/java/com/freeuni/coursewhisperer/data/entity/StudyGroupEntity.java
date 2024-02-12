@@ -1,24 +1,20 @@
 package com.freeuni.coursewhisperer.data.entity;
 
+import com.freeuni.coursewhisperer.data.entity.common.AbstractIdTimestampEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 @Table(name = "study_groups", schema = "public")
-public class StudyGroup {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
-    private Long id;
+public class StudyGroupEntity extends AbstractIdTimestampEntity {
 
     @Column(name = "subject_name")
     private String subjectName;

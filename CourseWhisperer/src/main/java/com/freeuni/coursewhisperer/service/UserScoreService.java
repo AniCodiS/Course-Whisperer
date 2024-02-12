@@ -3,7 +3,7 @@ package com.freeuni.coursewhisperer.service;
 import com.freeuni.coursewhisperer.data.mapper.UserScoreMapper;
 import com.freeuni.coursewhisperer.data.api.dto.CreatedUserScoreDTO;
 import com.freeuni.coursewhisperer.data.api.dto.UserScoreDTO;
-import com.freeuni.coursewhisperer.data.entity.UserScore;
+import com.freeuni.coursewhisperer.data.entity.UserScoreEntity;
 import com.freeuni.coursewhisperer.repository.UserScoreRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -25,20 +25,20 @@ public class UserScoreService {
 
     public List<UserScoreDTO> getAllUserScores() {
         List<UserScoreDTO> userScoreDTOs = new ArrayList<>();
-        List<UserScore> userScores = userScoreRepository.findAll();
-        for (UserScore userScore : userScores) {
-            userScoreDTOs.add(mapper.modelToDto(userScore));
+        List<UserScoreEntity> userScores = userScoreRepository.findAll();
+        for (UserScoreEntity userScore : userScores) {
+            userScoreDTOs.add(mapper.modelToDto(mapper.entityToModel(userScore)));
         }
         return userScoreDTOs;
     }
 
     public UserScoreDTO getUserScoreByUsername(String username) {
-        return mapper.modelToDto(userScoreRepository.findByUsername(username));
+        return mapper.modelToDto(mapper.entityToModel(userScoreRepository.findByUsername(username)));
     }
 
     public CreatedUserScoreDTO createUserScore(UserScoreDTO userScoreDTO) {
         CreatedUserScoreDTO createdUserScoreDTO = new CreatedUserScoreDTO();
-        UserScore createdUserScore = userScoreRepository.save(mapper.dtoToModel(userScoreDTO));
+        UserScoreEntity createdUserScore = userScoreRepository.save(mapper.modelToEntity(mapper.dtoToModel(userScoreDTO)));
         createdUserScoreDTO.setId(createdUserScore.getId());
         createdUserScoreDTO.setUsername(createdUserScore.getUsername());
         createdUserScoreDTO.setScore(createdUserScore.getScore());
@@ -47,9 +47,9 @@ public class UserScoreService {
 
     public UserScoreDTO updateUserScore(String username, UserScoreDTO userScore) {
         if (userScoreRepository.existsByUsername(username)) {
-            UserScore userScoreEntity = mapper.dtoToModel(userScore);
+            UserScoreEntity userScoreEntity = mapper.modelToEntity(mapper.dtoToModel(userScore));
             userScoreEntity.setId(userScoreRepository.findByUsername(username).getId());
-            return mapper.modelToDto(userScoreRepository.save(userScoreEntity));
+            return mapper.modelToDto(mapper.entityToModel(userScoreRepository.save(userScoreEntity)));
         }
         return null;
     }

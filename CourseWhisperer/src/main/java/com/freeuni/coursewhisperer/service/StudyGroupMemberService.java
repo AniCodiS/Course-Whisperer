@@ -1,7 +1,7 @@
 package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.api.dto.StudyGroupMemberDTO;
-import com.freeuni.coursewhisperer.data.entity.StudyGroupMember;
+import com.freeuni.coursewhisperer.data.entity.StudyGroupMemberEntity;
 import com.freeuni.coursewhisperer.data.mapper.StudyGroupMemberMapper;
 import com.freeuni.coursewhisperer.repository.StudyGroupMemberRepository;
 import com.freeuni.coursewhisperer.repository.StudyGroupRepository;
@@ -31,9 +31,9 @@ public class StudyGroupMemberService {
     }
 
     public List<StudyGroupMemberDTO> getAllStudyGroupMembers() {
-        List<StudyGroupMember> studyGroupMembers = studyGroupMemberRepository.findAll();
+        List<StudyGroupMemberEntity> studyGroupMembers = studyGroupMemberRepository.findAll();
         List<StudyGroupMemberDTO> studyGroupMemberDTOs = new ArrayList<>();
-        for (StudyGroupMember studyGroupMember : studyGroupMembers) {
+        for (StudyGroupMemberEntity studyGroupMember : studyGroupMembers) {
             StudyGroupMemberDTO studyGroupMemberDTO = new StudyGroupMemberDTO();
             studyGroupMemberDTO.setGroupName(studyGroupMember.getStudyGroup().getGroupName());
             studyGroupMemberDTO.setMemberUsername(studyGroupMember.getMember().getUsername());
@@ -42,14 +42,14 @@ public class StudyGroupMemberService {
         return studyGroupMemberDTOs;
     }
 
-    public StudyGroupMember getStudyGroupMemberById(Long id) {
+    public StudyGroupMemberEntity getStudyGroupMemberById(Long id) {
         return studyGroupMemberRepository.findById(id).orElse(null);
     }
 
     public StudyGroupMemberDTO createStudyGroupMember(StudyGroupMemberDTO studyGroupMemberDTO) {
         String studyGroupName = studyGroupMemberDTO.getGroupName();
         String memberUsername = studyGroupMemberDTO.getMemberUsername();
-        StudyGroupMember studyGroupMember = new StudyGroupMember();
+        StudyGroupMemberEntity studyGroupMember = new StudyGroupMemberEntity();
         studyGroupMember.setStudyGroup(studyGroupRepository.findByGroupName(studyGroupName));
         studyGroupMember.setMember(userRepository.findByUsername(memberUsername));
         studyGroupMemberRepository.save(studyGroupMember);
@@ -60,7 +60,7 @@ public class StudyGroupMemberService {
         return studyGroupMemberDTO2;
     }
 
-    public StudyGroupMember updateStudyGroupMember(Long id, StudyGroupMember studyGroupMember) {
+    public StudyGroupMemberEntity updateStudyGroupMember(Long id, StudyGroupMemberEntity studyGroupMember) {
         if (studyGroupMemberRepository.existsById(id)) {
             studyGroupMember.setId(id);
             return studyGroupMemberRepository.save(studyGroupMember);

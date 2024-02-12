@@ -1,6 +1,6 @@
 package com.freeuni.coursewhisperer.data.entity.common;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

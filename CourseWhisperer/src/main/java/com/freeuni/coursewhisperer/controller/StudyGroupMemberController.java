@@ -1,7 +1,7 @@
 package com.freeuni.coursewhisperer.controller;
 
 import com.freeuni.coursewhisperer.data.api.dto.StudyGroupMemberDTO;
-import com.freeuni.coursewhisperer.data.entity.StudyGroupMember;
+import com.freeuni.coursewhisperer.data.entity.StudyGroupMemberEntity;
 import com.freeuni.coursewhisperer.service.StudyGroupMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class StudyGroupMemberController {
     }
 
     @GetMapping("/{id}")
-    public StudyGroupMember getStudyGroupMemberById(@PathVariable Long id) {
+    public StudyGroupMemberEntity getStudyGroupMemberById(@PathVariable Long id) {
         return studyGroupMemberService.getStudyGroupMemberById(id);
     }
 
@@ -35,7 +35,7 @@ public class StudyGroupMemberController {
     }
 
     @PutMapping("/{id}")
-    public StudyGroupMember updateStudyGroupMember(@PathVariable Long id, @RequestBody StudyGroupMember studyGroupMember) {
+    public StudyGroupMemberEntity updateStudyGroupMember(@PathVariable Long id, @RequestBody StudyGroupMemberEntity studyGroupMember) {
         return studyGroupMemberService.updateStudyGroupMember(id, studyGroupMember);
     }
 

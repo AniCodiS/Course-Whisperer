@@ -1,4 +1,4 @@
 package com.freeuni.coursewhisperer.data.model;
 
-public class Comment {
+public class StudyGroup {
 }
