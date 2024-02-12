@@ -14,7 +14,6 @@ import java.io.Serializable;
 @MappedSuperclass
 @NoArgsConstructor
 public abstract class AbstractIdEntity implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)

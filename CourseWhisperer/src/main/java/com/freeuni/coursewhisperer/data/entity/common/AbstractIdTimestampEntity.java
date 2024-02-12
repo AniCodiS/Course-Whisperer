@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @NoArgsConstructor
 public abstract class AbstractIdTimestampEntity extends AbstractIdEntity {
-
     @CreationTimestamp
     @Column(name = "created_at",
             nullable = false,
