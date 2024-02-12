@@ -2,10 +2,13 @@ package com.freeuni.coursewhisperer.data.entity;
 
 import com.freeuni.coursewhisperer.data.entity.common.AbstractIdTimestampEntity;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "prerequisites", schema = "public")
 public class PrerequisiteEntity extends AbstractIdTimestampEntity {
 
