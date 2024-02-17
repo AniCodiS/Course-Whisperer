@@ -55,6 +55,7 @@ public class UserService {
         // TODO: throw exception
         return null;
     }
+
     public UserDTO updateUser(String username, UserDTO userDTO) {
         if (existsByUsername(username)) {
             UserEntity userEntity = mapper.modelToEntity(mapper.dtoToModel(userDTO));
