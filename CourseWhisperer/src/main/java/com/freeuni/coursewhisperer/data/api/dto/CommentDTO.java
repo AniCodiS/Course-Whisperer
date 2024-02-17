@@ -1,4 +1,8 @@
 package com.freeuni.coursewhisperer.data.api.dto;
 
-public class CommentDTO {
+public record CommentDTO(
+        UserDTO user,
+        PostDTO post,
+        String content
+) {
 }

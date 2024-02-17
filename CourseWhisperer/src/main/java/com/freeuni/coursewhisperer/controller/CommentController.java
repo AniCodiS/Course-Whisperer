@@ -39,7 +39,7 @@ public class CommentController extends AbstractController<CommentEntity, Long, C
     @PutMapping("/update/{id}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable Long id,
                                                     @RequestParam(required = false) String context) {
-        var res = commentMapper.modelToDto(commentService.updateComment(context));
+        var res = commentMapper.modelToDto(commentService.updateComment(id, context));
         return ResponseEntity.ok(res);
     }
 
