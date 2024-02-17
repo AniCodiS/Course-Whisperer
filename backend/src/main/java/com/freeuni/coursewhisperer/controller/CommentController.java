@@ -5,11 +5,14 @@ import com.freeuni.coursewhisperer.data.entity.CommentEntity;
 import com.freeuni.coursewhisperer.data.mapper.CommentMapper;
 import com.freeuni.coursewhisperer.data.model.Comment;
 import com.freeuni.coursewhisperer.service.CommentService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/comment")
 public class CommentController extends AbstractController<CommentEntity, Long, Comment, CommentDTO> {
@@ -24,7 +27,7 @@ public class CommentController extends AbstractController<CommentEntity, Long, C
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Void> addComment(@RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<Void> addComment(@RequestBody @Valid CommentDTO commentDTO) {
         commentService.createComment(commentMapper.dtoToModel(commentDTO));
         return ResponseEntity.ok().build();
     }
@@ -38,8 +41,8 @@ public class CommentController extends AbstractController<CommentEntity, Long, C
 
     @PutMapping("/update/{id}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable Long id,
-                                                    @RequestParam(required = false) String context) {
-        var res = commentMapper.modelToDto(commentService.updateComment(id, context));
+                                                    @RequestBody @Valid CommentDTO commentDTO) {
+        var res = commentMapper.modelToDto(commentService.updateComment(id, commentDTO.content()));
         return ResponseEntity.ok(res);
     }
 
