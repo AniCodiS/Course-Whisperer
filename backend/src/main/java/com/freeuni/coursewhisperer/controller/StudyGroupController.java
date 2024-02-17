@@ -1,5 +1,6 @@
 package com.freeuni.coursewhisperer.controller;
 
+import com.freeuni.coursewhisperer.data.api.dto.DeleteStudyGroupDTO;
 import com.freeuni.coursewhisperer.data.api.dto.StudyGroupDTO;
 import com.freeuni.coursewhisperer.service.StudyGroupService;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +37,8 @@ public class StudyGroupController {
         return studyGroupService.updateStudyGroup(groupName, studyGroupDTO);
     }
 
-    @DeleteMapping("/{groupName}")
-    public void deleteStudyGroup(@PathVariable String groupName) {
-        studyGroupService.deleteStudyGroup(groupName);
+    @DeleteMapping
+    public void deleteStudyGroup(@RequestBody DeleteStudyGroupDTO deleteStudyGroupDTO) {
+        studyGroupService.deleteStudyGroup(deleteStudyGroupDTO);
     }
 }

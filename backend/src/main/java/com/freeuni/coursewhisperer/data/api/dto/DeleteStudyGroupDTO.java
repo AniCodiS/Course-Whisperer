@@ -5,16 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
-public class StudyGroupDTO {
-    private String subjectName;
-    private LocalDateTime meetingTime;
+public class DeleteStudyGroupDTO {
     private String groupName;
-    private Integer currentMemberCount;
-    private Integer maxMemberCount;
+    private String creatorUsername;
 }

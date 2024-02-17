@@ -1,12 +1,13 @@
 package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.common.Course;
+import com.freeuni.coursewhisperer.data.api.dto.CalculateGPADTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class GPACalculator {
+public class GPACalculatorService {
 
     // Coefficients for grades
     private static final double COEFFICIENT_A = 4.0;
@@ -16,8 +17,10 @@ public class GPACalculator {
     private static final double COEFFICIENT_E = 9.3 / 6;
     private static final double COEFFICIENT_F = 0.0;
 
-    public static double calculateGPA(List<Course> courses) {
-        double totalGradePoints = 0.0;
+    public Double calculateGPA(CalculateGPADTO calculateGPADTO) {
+        List<Course> courses = calculateGPADTO.getCourses();
+
+        Double totalGradePoints = 0.0;
         int totalCreditHours = 0;
 
         // Iterate through each course
@@ -29,7 +32,7 @@ public class GPACalculator {
         return totalCreditHours > 0 ? totalGradePoints / totalCreditHours : 0.0;
     }
 
-    public static double calculateCourseGradePoints(Course c) {
+    public Double calculateCourseGradePoints(Course c) {
         int creditHours = c.getCreditHours();
         String grade = c.getGrade();
         return switch (grade) {

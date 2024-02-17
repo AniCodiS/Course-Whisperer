@@ -1,6 +1,7 @@
 package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.api.dto.StudyGroupMemberDTO;
+import com.freeuni.coursewhisperer.data.entity.StudyGroupEntity;
 import com.freeuni.coursewhisperer.data.entity.StudyGroupMemberEntity;
 import com.freeuni.coursewhisperer.data.mapper.StudyGroupMemberMapper;
 import com.freeuni.coursewhisperer.repository.StudyGroupMemberRepository;
@@ -50,6 +51,13 @@ public class StudyGroupMemberService {
         String studyGroupName = studyGroupMemberDTO.getGroupName();
         String memberUsername = studyGroupMemberDTO.getMemberUsername();
         StudyGroupMemberEntity studyGroupMember = new StudyGroupMemberEntity();
+        StudyGroupEntity studyGroup = studyGroupRepository.findByGroupName(studyGroupName);
+        if (studyGroup.getCurrentMemberCount() < studyGroup.getMaxMemberCount()) {
+            studyGroup.setCurrentMemberCount(studyGroup.getCurrentMemberCount() + 1);
+            studyGroupRepository.save(studyGroup);
+        } else {
+            return null;
+        }
         studyGroupMember.setStudyGroup(studyGroupRepository.findByGroupName(studyGroupName));
         studyGroupMember.setMember(userRepository.findByUsername(memberUsername));
         studyGroupMemberRepository.save(studyGroupMember);

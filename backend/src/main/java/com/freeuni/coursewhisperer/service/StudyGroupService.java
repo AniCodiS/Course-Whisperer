@@ -1,5 +1,6 @@
 package com.freeuni.coursewhisperer.service;
 
+import com.freeuni.coursewhisperer.data.api.dto.DeleteStudyGroupDTO;
 import com.freeuni.coursewhisperer.data.api.dto.StudyGroupDTO;
 import com.freeuni.coursewhisperer.data.entity.StudyGroupEntity;
 import com.freeuni.coursewhisperer.data.mapper.StudyGroupMapper;
@@ -36,6 +37,8 @@ public class StudyGroupService {
     }
 
     public StudyGroupDTO createStudyGroup(StudyGroupDTO studyGroupDTO) {
+        studyGroupDTO.setCurrentMemberCount(0);
+        studyGroupDTO.setMaxMemberCount(10);
         StudyGroupEntity studyGroupEntity = mapper.modelToEntity(mapper.dtoToModel(studyGroupDTO));
         StudyGroupEntity savedStudyGroupEntity = studyGroupRepository.save(studyGroupEntity);
         return mapper.modelToDto(mapper.entityToModel(savedStudyGroupEntity));
@@ -51,7 +54,18 @@ public class StudyGroupService {
     }
 
     @Transactional
-    public void deleteStudyGroup(String groupName) {
-        studyGroupRepository.deleteByGroupName(groupName);
+    public void deleteStudyGroup(DeleteStudyGroupDTO deleteStudyGroupDTO) {
+        String creatorUsername = deleteStudyGroupDTO.getCreatorUsername();
+        String groupName = deleteStudyGroupDTO.getGroupName();
+        if (studyGroupRepository.existsByGroupName(groupName)) {
+            StudyGroupEntity studyGroupEntity = studyGroupRepository.findByGroupName(groupName);
+            if (studyGroupEntity.getCreatorUsername().equals(creatorUsername)) {
+                studyGroupRepository.delete(studyGroupEntity);
+            } else {
+                // TODO: throw exception
+            }
+        } else {
+            // TODO: throw exception
+        }
     }
 }

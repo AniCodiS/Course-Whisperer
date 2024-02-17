@@ -1,9 +1,11 @@
 package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.api.dto.PersonalInformationDTO;
+import com.freeuni.coursewhisperer.data.api.dto.UpdatePersonalInformationDTO;
 import com.freeuni.coursewhisperer.data.entity.PersonalInformationEntity;
 import com.freeuni.coursewhisperer.data.entity.UserEntity;
 import com.freeuni.coursewhisperer.data.mapper.PersonalInformationMapper;
+import com.freeuni.coursewhisperer.data.mapper.UpdatePersonalInformationMapper;
 import com.freeuni.coursewhisperer.repository.PersonalInformationRepository;
 import com.freeuni.coursewhisperer.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -21,10 +23,13 @@ public class PersonalInformationService {
 
     private final PersonalInformationMapper mapper;
 
-    public PersonalInformationService(PersonalInformationRepository personalInformationRepository, UserRepository userRepository, PersonalInformationMapper mapper) {
+    private final UpdatePersonalInformationMapper updateMapper;
+
+    public PersonalInformationService(PersonalInformationRepository personalInformationRepository, UserRepository userRepository, PersonalInformationMapper mapper, UpdatePersonalInformationMapper updateMapper) {
         this.personalInformationRepository = personalInformationRepository;
         this.userRepository = userRepository;
         this.mapper = mapper;
+        this.updateMapper = updateMapper;
     }
 
     public List<PersonalInformationDTO> getAllPersonalInformation() {
@@ -58,10 +63,10 @@ public class PersonalInformationService {
         return createdPersonalInformationDTO;
     }
 
-    public PersonalInformationDTO updatePersonalInformation(String email, PersonalInformationDTO personalInformationDTO) {
+    public PersonalInformationDTO updatePersonalInformation(String email, UpdatePersonalInformationDTO updatePersonalInformationDTO) {
         if (personalInformationRepository.existsByEmail(email)) {
             UserEntity user = userRepository.findByEmail(email);
-            PersonalInformationEntity personalInformationEntity = mapper.modelToEntity(mapper.dtoToModel(personalInformationDTO));
+            PersonalInformationEntity personalInformationEntity = updateMapper.modelToEntity(updateMapper.dtoToModel(updatePersonalInformationDTO));
             personalInformationEntity.setUser(user);
             personalInformationEntity.setId(personalInformationRepository.findByEmail(email).getId());
             return mapper.modelToDto(mapper.entityToModel(personalInformationRepository.save(personalInformationEntity)));
