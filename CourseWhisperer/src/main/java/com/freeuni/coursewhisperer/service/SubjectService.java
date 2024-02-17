@@ -5,7 +5,6 @@ import com.freeuni.coursewhisperer.data.entity.SubjectEntity;
 import com.freeuni.coursewhisperer.data.enums.ESchool;
 import com.freeuni.coursewhisperer.data.enums.ESemester;
 import com.freeuni.coursewhisperer.data.mapper.SubjectMapper;
-import com.freeuni.coursewhisperer.data.model.Lecturer;
 import com.freeuni.coursewhisperer.data.model.Prerequisite;
 import com.freeuni.coursewhisperer.data.model.Subject;
 import com.freeuni.coursewhisperer.repository.SubjectRepository;
@@ -38,7 +37,7 @@ public class SubjectService extends AbstractService<SubjectEntity, Long, Subject
     }
 
     public List<Subject> search(String name, String code, ESchool schoolName,
-                                Integer creditScore, Lecturer lecturer, ESemester semester) {
+                                Integer creditScore, Long lecturer, ESemester semester) {
         return subjectRepository.search(name, code, schoolName, creditScore, lecturer, semester).
                 stream().map(subjectMapper::entityToModel).toList();
     }
@@ -47,7 +46,7 @@ public class SubjectService extends AbstractService<SubjectEntity, Long, Subject
         var passedSubjects = passedSubjectService.getByUser(userId);
         var prerequisites = prerequisiteService.getAllPrerequisites().stream().collect(Collectors.groupingBy(
                 Prerequisite::getSubject,
-                Collectors.mapping(Prerequisite::getPrerequisiteSubject, Collectors.toList())
+                Collectors.mapping(Prerequisite::getPrerequisite, Collectors.toList())
         ));
 
         List<Subject> subjects = new ArrayList<>();
