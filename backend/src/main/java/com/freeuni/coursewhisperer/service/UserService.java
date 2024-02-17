@@ -1,5 +1,8 @@
 package com.freeuni.coursewhisperer.service;
 
+import com.freeuni.coursewhisperer.data.api.dto.ChangePasswordDTO;
+import com.freeuni.coursewhisperer.data.api.dto.UpdateUserDTO;
+import com.freeuni.coursewhisperer.data.mapper.UpdateUserMapper;
 import com.freeuni.coursewhisperer.data.mapper.UserMapper;
 import com.freeuni.coursewhisperer.data.api.dto.CreatedUserDTO;
 import com.freeuni.coursewhisperer.data.api.dto.UserDTO;
@@ -18,9 +21,12 @@ public class UserService {
 
     private final UserMapper mapper;
 
-    public UserService(UserRepository userRepository, UserMapper mapper) {
+    private final UpdateUserMapper updateMapper;
+
+    public UserService(UserRepository userRepository, UserMapper mapper, UpdateUserMapper updateMapper) {
         this.userRepository = userRepository;
         this.mapper = mapper;
+        this.updateMapper = updateMapper;
     }
 
     public List<UserDTO> getAllUsers() {
@@ -56,14 +62,34 @@ public class UserService {
         return null;
     }
 
-    public UserDTO updateUser(String username, UserDTO userDTO) {
+    public UpdateUserDTO updateUser(String username, UpdateUserDTO updateUserDTO) {
         if (existsByUsername(username)) {
-            UserEntity userEntity = mapper.modelToEntity(mapper.dtoToModel(userDTO));
+            UserEntity userEntity = updateMapper.modelToEntity(updateMapper.dtoToModel(updateUserDTO));
             userEntity.setId(userRepository.findByUsername(username).getId());
-            return mapper.modelToDto(mapper.entityToModel(userRepository.save(userEntity)));
+            userEntity.setPassword(userRepository.findByUsername(username).getPassword());
+            return updateMapper.modelToDto(updateMapper.entityToModel(userRepository.save(userEntity)));
         }
         // TODO: throw exception
         return null;
+    }
+
+    public boolean changePassword(String username, ChangePasswordDTO changePasswordDTO) {
+        String oldPassword = changePasswordDTO.getOldPassword();
+        String newPassword = changePasswordDTO.getNewPassword();
+        if (existsByUsername(username)) {
+            UserEntity userEntity = userRepository.findByUsername(username);
+            if (userEntity.getPassword().equals(oldPassword)) {
+                userEntity.setPassword(newPassword);
+                userRepository.save(userEntity);
+                return true;
+            } else {
+                return false;
+                // TODO: throw exception
+            }
+        } else {
+            return false;
+            // TODO: throw exception
+        }
     }
 
     @Transactional
@@ -73,6 +99,7 @@ public class UserService {
         }
         // TODO: throw exception
     }
+
 
     private boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);

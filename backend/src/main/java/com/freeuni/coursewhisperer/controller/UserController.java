@@ -1,6 +1,8 @@
 package com.freeuni.coursewhisperer.controller;
 
+import com.freeuni.coursewhisperer.data.api.dto.ChangePasswordDTO;
 import com.freeuni.coursewhisperer.data.api.dto.CreatedUserDTO;
+import com.freeuni.coursewhisperer.data.api.dto.UpdateUserDTO;
 import com.freeuni.coursewhisperer.data.api.dto.UserDTO;
 import com.freeuni.coursewhisperer.service.LoginService;
 import com.freeuni.coursewhisperer.service.UserService;
@@ -37,8 +39,13 @@ public class UserController {
     }
 
     @PutMapping("/{username}")
-    public UserDTO updateUser(@PathVariable String username, @RequestBody UserDTO user) {
-        return userService.updateUser(username, user);
+    public UpdateUserDTO updateUser(@PathVariable String username, @RequestBody UpdateUserDTO updateUserDTO) {
+        return userService.updateUser(username, updateUserDTO);
+    }
+
+    @PutMapping("/{username}/change-password")
+    public boolean changePassword(@PathVariable String username, @RequestBody ChangePasswordDTO changePasswordDTO) {
+        return userService.changePassword(username, changePasswordDTO);
     }
 
     @DeleteMapping("/{username}")

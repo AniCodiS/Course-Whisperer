@@ -1,13 +1,15 @@
 package com.freeuni.coursewhisperer.data.api.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDTO {
+public class UpdateUserDTO {
     private String email;
     private String username;
-    private String password;
 }
