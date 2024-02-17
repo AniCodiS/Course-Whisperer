@@ -2,6 +2,7 @@ package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.enums.EPostType;
 import com.freeuni.coursewhisperer.data.mapper.PostMapper;
+import com.freeuni.coursewhisperer.data.model.Comment;
 import com.freeuni.coursewhisperer.data.model.Post;
 import com.freeuni.coursewhisperer.repository.PostRepository;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,7 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
-
     private final CommentService commentService;
-
     private final PostMapper postMapper;
 
     public PostService(PostRepository postRepository,
@@ -54,5 +53,14 @@ public class PostService {
             commentService.deleteComment(comment.getId());
         });
         postRepository.deleteById(id);
+    }
+
+    public void addComment(Long id, Long user, String comment) {
+        var postEntity = postMapper.entityToModel(postRepository.findById(id).get());
+        commentService.createComment(Comment.builder()
+                .post(postEntity)
+                .user(user)
+                .content(comment)
+                .build());
     }
 }
