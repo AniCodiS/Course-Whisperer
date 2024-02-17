@@ -3,9 +3,6 @@ package com.freeuni.coursewhisperer.repository;
 import com.freeuni.coursewhisperer.data.entity.SubjectEntity;
 import com.freeuni.coursewhisperer.data.enums.ESchool;
 import com.freeuni.coursewhisperer.data.enums.ESemester;
-import com.freeuni.coursewhisperer.data.model.Lecturer;
-import com.freeuni.coursewhisperer.data.model.Subject;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -23,5 +20,5 @@ public interface SubjectRepository extends AbstractRepository<SubjectEntity, Lon
             "(:lecturer is null or s.lecturer = :lecturer) and " +
             "(:semester is null or s.semester = :semester)")
     List<SubjectEntity> search(String name, String code, ESchool schoolName,
-                               Integer creditScore, Lecturer lecturer, ESemester semester);
+                               Integer creditScore, Long lecturer, ESemester semester);
 }
