@@ -2,6 +2,7 @@ package com.freeuni.coursewhisperer.controller;
 
 import com.freeuni.coursewhisperer.data.api.dto.PostDTO;
 import com.freeuni.coursewhisperer.data.enums.EPostType;
+import com.freeuni.coursewhisperer.data.enums.EPostVote;
 import com.freeuni.coursewhisperer.data.mapper.PostMapper;
 import com.freeuni.coursewhisperer.service.PostService;
 import org.springframework.http.ResponseEntity;
@@ -50,10 +51,17 @@ public class PostController {
         return ResponseEntity.ok(res);
     }
 
+    @PutMapping("/vote/{id}")
+    public ResponseEntity<PostDTO> updatePost(@PathVariable Long id,
+                                              @RequestParam(required = false) EPostVote vote) {
+        var res = postMapper.modelToDto(postService.updatePost(id, vote));
+        return ResponseEntity.ok(res);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Void> addComment(@PathVariable Long id,
-                                              @RequestParam Long user,
-                                              @RequestParam String comment) {
+                                           @RequestParam Long user,
+                                           @RequestParam String comment) {
         postService.addComment(id, user, comment);
         return ResponseEntity.ok().build();
     }

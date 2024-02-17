@@ -1,6 +1,7 @@
 package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.enums.EPostType;
+import com.freeuni.coursewhisperer.data.enums.EPostVote;
 import com.freeuni.coursewhisperer.data.mapper.PostMapper;
 import com.freeuni.coursewhisperer.data.model.Comment;
 import com.freeuni.coursewhisperer.data.model.Post;
@@ -14,13 +15,16 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final CommentService commentService;
+    private final UserService userService;
     private final PostMapper postMapper;
 
     public PostService(PostRepository postRepository,
                        CommentService commentService,
+                       UserService userService,
                        PostMapper postMapper) {
         this.postRepository = postRepository;
         this.commentService = commentService;
+        this.userService = userService;
         this.postMapper = postMapper;
     }
 
@@ -45,6 +49,16 @@ public class PostService {
     public Post updatePost(Long id, String content) {
         var postEntity = postRepository.findById(id).get();
         postEntity.setContent(content);
+        return postMapper.entityToModel(postRepository.save(postEntity));
+    }
+
+    public synchronized Post updatePost(Long id, EPostVote vote) {
+        var postEntity = postRepository.findById(id).get();
+        if (vote == EPostVote.UPVOTE) {
+            postEntity.setUpVote(postEntity.getUpVote() + 1);
+        } else {
+            postEntity.setDownVote(postEntity.getDownVote() + 1);
+        }
         return postMapper.entityToModel(postRepository.save(postEntity));
     }
 
