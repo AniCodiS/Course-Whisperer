@@ -3,6 +3,8 @@ package com.freeuni.coursewhisperer.service;
 import com.freeuni.coursewhisperer.common.Course;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GPACalculator {
 
@@ -13,6 +15,19 @@ public class GPACalculator {
     private static final double COEFFICIENT_D = 12.96 / 6;
     private static final double COEFFICIENT_E = 9.3 / 6;
     private static final double COEFFICIENT_F = 0.0;
+
+    public static double calculateGPA(List<Course> courses) {
+        double totalGradePoints = 0.0;
+        int totalCreditHours = 0;
+
+        // Iterate through each course
+        for (Course course : courses) {
+            totalGradePoints += calculateCourseGradePoints(course);
+            totalCreditHours += course.getCreditHours();
+        }
+
+        return totalCreditHours > 0 ? totalGradePoints / totalCreditHours : 0.0;
+    }
 
     public static double calculateCourseGradePoints(Course c) {
         int creditHours = c.getCreditHours();
