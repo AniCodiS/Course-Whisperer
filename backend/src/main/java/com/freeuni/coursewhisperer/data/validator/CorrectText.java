@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CorrectText {
-    String message() default "Text contains invalid words";
+    String message() default "Text contains forbidden words";
 
     Class<?>[] groups() default {};
 
