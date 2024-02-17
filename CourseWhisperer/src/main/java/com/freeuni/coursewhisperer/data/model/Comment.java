@@ -6,7 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class Comment {
-    private User user;
+    private Long id;
+    private Long user;
     private Post post;
     private String content;
 }
