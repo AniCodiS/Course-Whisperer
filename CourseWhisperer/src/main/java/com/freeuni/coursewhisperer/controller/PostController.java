@@ -45,8 +45,8 @@ public class PostController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<PostDTO> updatePost(@PathVariable Long id,
-                                              @RequestParam(required = false) String context) {
-        var res = postMapper.modelToDto(postService.updatePost(id, context));
+                                              @RequestParam(required = false) String content) {
+        var res = postMapper.modelToDto(postService.updatePost(id, content));
         return ResponseEntity.ok(res);
     }
 
