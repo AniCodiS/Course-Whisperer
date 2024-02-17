@@ -27,7 +27,7 @@ public class PrerequisiteService {
         this.mapper = mapper;
     }
 
-    public List<PrerequisiteDTO> getAllPrerequisites() {
+    public List<Prerequisite> getAllPrerequisites() {
         List<Prerequisite> prerequisites = prerequisiteRepository.findAll();
         List<PrerequisiteDTO> prerequisiteDTOs = new ArrayList<>();
         for (Prerequisite prerequisite : prerequisites) {

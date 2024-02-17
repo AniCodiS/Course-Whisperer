@@ -1,8 +1,13 @@
 package com.freeuni.coursewhisperer.data.entity;
 
 import com.freeuni.coursewhisperer.data.entity.common.AbstractIdTimestampEntity;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -11,15 +16,9 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "prerequisites", schema = "public")
 public class PrerequisiteEntity extends AbstractIdTimestampEntity {
+    @Column(name = "subject")
+    private Long subject;
 
-    @ManyToOne
-    @JoinColumn(name = "subject_id", referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "fk_prerequisites_subject"))
-    private SubjectEntity subject;
-
-    @ManyToOne
-    @JoinColumn(name = "prerequisite_subject_id", referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "fk_prerequisites_prerequisite_subject"))
-    private SubjectEntity prerequisiteSubject;
-
+    @Column(name = "subject_code")
+    private String prerequisite;
 }
