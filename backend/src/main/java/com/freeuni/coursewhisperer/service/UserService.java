@@ -33,30 +33,51 @@ public class UserService {
     }
 
     public UserDTO getUserByUsername(String username) {
-        return mapper.modelToDto(mapper.entityToModel(userRepository.findByUsername(username)));
+        if (existsByUsername(username)) {
+            return mapper.modelToDto(mapper.entityToModel(userRepository.findByUsername(username)));
+        }
+        // TODO: throw exception
+        return null;
     }
 
-    public CreatedUserDTO createUser(UserDTO lecturer) {
-        CreatedUserDTO createdUserDTO = new CreatedUserDTO();
-        UserEntity createdUser = userRepository.save(mapper.modelToEntity(mapper.dtoToModel(lecturer)));
-        createdUserDTO.setId(createdUser.getId());
-        createdUserDTO.setEmail(createdUser.getEmail());
-        createdUserDTO.setUsername(createdUser.getUsername());
-        createdUserDTO.setPassword(createdUser.getPassword());
-        return createdUserDTO;
+    public CreatedUserDTO createUser(UserDTO userDTO) {
+        String newUsername = userDTO.getUsername();
+        String newEmail = userDTO.getEmail();
+        if (!existsByUsername(newUsername) && !existsByEmail(newEmail)) {
+            CreatedUserDTO createdUserDTO = new CreatedUserDTO();
+            UserEntity createdUser = userRepository.save(mapper.modelToEntity(mapper.dtoToModel(userDTO)));
+            createdUserDTO.setId(createdUser.getId());
+            createdUserDTO.setEmail(createdUser.getEmail());
+            createdUserDTO.setUsername(createdUser.getUsername());
+            createdUserDTO.setPassword(createdUser.getPassword());
+            return createdUserDTO;
+        }
+        // TODO: throw exception
+        return null;
     }
-
-    public UserDTO updateUser(String username, UserDTO user) {
-        if (userRepository.existsByUsername(username)) {
-            UserEntity userEntity = mapper.modelToEntity(mapper.dtoToModel(user));
+    public UserDTO updateUser(String username, UserDTO userDTO) {
+        if (existsByUsername(username)) {
+            UserEntity userEntity = mapper.modelToEntity(mapper.dtoToModel(userDTO));
             userEntity.setId(userRepository.findByUsername(username).getId());
             return mapper.modelToDto(mapper.entityToModel(userRepository.save(userEntity)));
         }
+        // TODO: throw exception
         return null;
     }
 
     @Transactional
     public void deleteUser(String username) {
-        userRepository.deleteByUsername(username);
+        if (existsByUsername(username)) {
+            userRepository.deleteByUsername(username);
+        }
+        // TODO: throw exception
+    }
+
+    private boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    private boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

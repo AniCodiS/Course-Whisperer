@@ -2,6 +2,7 @@ package com.freeuni.coursewhisperer.controller;
 
 import com.freeuni.coursewhisperer.data.api.dto.CreatedUserDTO;
 import com.freeuni.coursewhisperer.data.api.dto.UserDTO;
+import com.freeuni.coursewhisperer.service.LoginService;
 import com.freeuni.coursewhisperer.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +14,11 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final LoginService loginService;
+
+    public UserController(UserService userService, LoginService loginService) {
         this.userService = userService;
+        this.loginService = loginService;
     }
 
     @GetMapping
@@ -40,5 +44,10 @@ public class UserController {
     @DeleteMapping("/{username}")
     public void deleteUser(@PathVariable String username) {
         userService.deleteUser(username);
+    }
+
+    @GetMapping("/login")
+    public boolean login(@RequestParam String username, @RequestParam String password) {
+        return loginService.login(username, password);
     }
 }
