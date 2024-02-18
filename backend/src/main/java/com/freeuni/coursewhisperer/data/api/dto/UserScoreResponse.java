@@ -1,25 +1,25 @@
 package com.freeuni.coursewhisperer.data.api.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-public class CreatedUserScoreDTO {
+public class UserScoreResponse {
 
-    private Long id;
     private String username;
     private Integer score;
     private String errorMessage;
 
-    public CreatedUserScoreDTO() {
+    public UserScoreResponse() {
     }
 
-    public CreatedUserScoreDTO(String username, Integer score) {
+    public UserScoreResponse(String username, Integer score) {
         this.username = username;
         this.score = score;
     }
 
-    public CreatedUserScoreDTO(String errorMessage) {
+    public UserScoreResponse(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 }

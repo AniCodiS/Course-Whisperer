@@ -90,6 +90,18 @@ public final class ExceptionFactory {
         return badRequest("old.password.does.not.match", "Old password does not match");
     }
 
+    public static CourseWhispererException NoUserScoresPresent() {
+        return notFound("user.scores.not.found", "There are no user scores present");
+    }
+
+    public static CourseWhispererException UserScoreNotFound() {
+        return notFound("user.score.not.found", "User score not found");
+    }
+
+    public static CourseWhispererException UserScoreAlreadyExists() {
+        return conflict("user.score.already.exists", "User score with this id already exists");
+    }
+
     public static CourseWhispererException commentIsNotYours() {
         return badRequest("comment.is.not.yours", "Cannot update comment that is not done by you");
     }
