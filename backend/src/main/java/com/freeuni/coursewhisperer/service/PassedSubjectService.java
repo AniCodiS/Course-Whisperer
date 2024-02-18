@@ -3,7 +3,9 @@ package com.freeuni.coursewhisperer.service;
 import com.freeuni.coursewhisperer.data.api.dto.PassedSubjectDTO;
 import com.freeuni.coursewhisperer.data.entity.PassedSubjectEntity;
 import com.freeuni.coursewhisperer.data.enums.EGrade;
+import com.freeuni.coursewhisperer.data.mapper.PassedSubjectMapper;
 import com.freeuni.coursewhisperer.data.model.PassedSubject;
+import com.freeuni.coursewhisperer.repository.PassedSubjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,7 @@ public class PassedSubjectService extends AbstractService<PassedSubjectEntity, L
         this.passedSubjectMapper = passedSubjectMapper;
     }
 
-    public List<String> getByUser(Long userId) {
-        return passedSubjectRepository.findByStudentAndGrade(userId, EGrade.F);
+    public List<String> getPassesSubjects(String username) {
+        return passedSubjectRepository.findByUsernameAndGrade(username, EGrade.F);
     }
 }
