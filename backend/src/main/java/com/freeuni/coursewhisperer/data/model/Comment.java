@@ -8,6 +8,6 @@ import lombok.Data;
 public class Comment {
     private Long id;
     private String username;
-    private Post post;
+    private Long post;
     private String content;
 }

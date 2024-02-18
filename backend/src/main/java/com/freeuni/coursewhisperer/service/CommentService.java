@@ -4,7 +4,6 @@ import com.freeuni.coursewhisperer.data.api.dto.CommentDTO;
 import com.freeuni.coursewhisperer.data.entity.CommentEntity;
 import com.freeuni.coursewhisperer.data.mapper.CommentMapper;
 import com.freeuni.coursewhisperer.data.model.Comment;
-import com.freeuni.coursewhisperer.exception.CourseWhispererException;
 import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.CommentRepository;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ public class CommentService extends AbstractService<CommentEntity, Long, Comment
     }
 
     public List<Comment> getComments(Long postId) {
-        return commentRepository.getAllByPost(postId).stream().map(commentMapper::entityToModel).toList();
+        return commentRepository.getAllByPostId(postId).stream().map(commentMapper::entityToModel).toList();
     }
 
     public Comment updateComment(Long id, Comment comment) {

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CommentRepository extends AbstractRepository<CommentEntity, Long> {
 
-    List<CommentEntity> getAllByPost(Long post);
+    List<CommentEntity> getAllByPostId(Long postId);
 }

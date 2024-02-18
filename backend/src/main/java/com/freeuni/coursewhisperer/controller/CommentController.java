@@ -14,7 +14,7 @@ import java.util.List;
 
 @Validated
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/api/comment")
 public class CommentController extends AbstractController<CommentEntity, Long, Comment, CommentDTO> {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
@@ -40,7 +40,7 @@ public class CommentController extends AbstractController<CommentEntity, Long, C
         return ResponseEntity.ok(res);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/remove/{id}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long id,
                                               @RequestParam String username) {
         commentService.deleteComment(username,id);
