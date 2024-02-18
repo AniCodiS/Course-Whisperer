@@ -15,16 +15,13 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final CommentService commentService;
-    private final UserService userService;
     private final PostMapper postMapper;
 
     public PostService(PostRepository postRepository,
                        CommentService commentService,
-                       UserService userService,
                        PostMapper postMapper) {
         this.postRepository = postRepository;
         this.commentService = commentService;
-        this.userService = userService;
         this.postMapper = postMapper;
     }
 
@@ -34,6 +31,10 @@ public class PostService {
 
     public Post getPost(Long postId) {
         return postMapper.entityToModel(postRepository.findById(postId).get());
+    }
+
+    public Long getPost(Post post) {
+        return post.getId();
     }
 
     public void createPost(Post post) {
@@ -46,8 +47,8 @@ public class PostService {
         return res.stream().map(postMapper::entityToModel).toList();
     }
 
-    public Post updatePost(Long id, String content) {
-        var postEntity = postRepository.findById(id).get();
+    public Post updatePost(String username, Long id, String content) {
+        var postEntity = postRepository.findById(id).get(); // TODO exception
         postEntity.setContent(content);
         return postMapper.entityToModel(postRepository.save(postEntity));
     }
@@ -62,18 +63,18 @@ public class PostService {
         return postMapper.entityToModel(postRepository.save(postEntity));
     }
 
-    public void deletePost(Long id) {
+    public void deletePost(String username, Long id) { // TODO exception
         commentService.getComments(id).forEach(comment -> {
-            commentService.deleteComment(comment.getId());
+            commentService.deleteComment(username, comment.getId());
         });
         postRepository.deleteById(id);
     }
 
-    public void addComment(Long id, Long user, String comment) {
+    public void addComment(Long id, String username, String comment) {
         var postEntity = postMapper.entityToModel(postRepository.findById(id).get());
         commentService.createComment(Comment.builder()
                 .post(postEntity)
-                .user(user)
+                .username(username)
                 .content(comment)
                 .build());
     }

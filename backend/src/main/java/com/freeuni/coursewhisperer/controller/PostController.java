@@ -49,8 +49,9 @@ public class PostController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<PostDTO> updatePost(@PathVariable Long id,
+                                              @RequestParam String username,
                                               @RequestParam(required = false) String content) {
-        var res = postMapper.modelToDto(postService.updatePost(id, content));
+        var res = postMapper.modelToDto(postService.updatePost(username, id, content));
         return ResponseEntity.ok(res);
     }
 
@@ -63,15 +64,16 @@ public class PostController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> addComment(@PathVariable Long id,
-                                           @RequestParam Long user,
+                                           @RequestParam String username,
                                            @RequestParam String comment) {
-        postService.addComment(id, user, comment);
+        postService.addComment(id, username, comment);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long id) {
-        postService.deletePost(id);
+    public ResponseEntity<Void> deletePost(@PathVariable Long id,
+                                           @RequestParam String username) {
+        postService.deletePost(username, id);
         return ResponseEntity.ok().build();
     }
 }
