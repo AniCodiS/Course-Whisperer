@@ -14,11 +14,11 @@ public interface PostRepository extends AbstractRepository<PostEntity, Long>{
     Optional<PostEntity> findById(Long id);
 
     @Query("select p from PostEntity p where " +
-            "(:student is null or p.student =:student) and " +
+            "(:username is null or p.username =:username) and " +
             "(:subject is null or p.subject = :subject) and " +
             "(:type is null or p.type = :type) order by p.upVote desc ")
 
-    List<PostEntity> searchPosts(Long student, Long subject, EPostType type);
+    List<PostEntity> searchPosts(String username, Long subject, EPostType type);
 
     void deleteById(Long id);
 }

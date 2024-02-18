@@ -29,21 +29,13 @@ public class PostService {
         return postRepository.getPosts().stream().map(postMapper::entityToModel).toList();
     }
 
-    public Post getPost(Long postId) {
-        return postMapper.entityToModel(postRepository.findById(postId).get());
-    }
-
-    public Long getPost(Post post) {
-        return post.getId();
-    }
-
     public void createPost(Post post) {
         var postEntity = postMapper.modelToEntity(post);
         postRepository.save(postEntity);
     }
 
-    public List<Post> searchPosts(Long student, Long subject, EPostType type) {
-        var res = postRepository.searchPosts(student, subject, type);
+    public List<Post> searchPosts(String username, Long subject, EPostType type) {
+        var res = postRepository.searchPosts(username, subject, type);
         return res.stream().map(postMapper::entityToModel).toList();
     }
 
@@ -73,7 +65,7 @@ public class PostService {
     public void addComment(Long id, String username, String comment) {
         var postEntity = postMapper.entityToModel(postRepository.findById(id).get());
         commentService.createComment(Comment.builder()
-                .post(postEntity)
+                .post(postEntity.getId())
                 .username(username)
                 .content(comment)
                 .build());
