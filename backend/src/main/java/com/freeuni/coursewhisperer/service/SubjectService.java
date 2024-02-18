@@ -42,8 +42,8 @@ public class SubjectService extends AbstractService<SubjectEntity, Long, Subject
                 stream().map(subjectMapper::entityToModel).toList();
     }
 
-    public List<Subject> chooseSubject(Long userId, Integer creditScore, ESchool schoolName, ESemester semester) {
-        var passedSubjects = passedSubjectService.getByUser(userId);
+    public List<Subject> chooseSubject(String username, Integer creditScore, ESchool schoolName, ESemester semester) {
+        var passedSubjects = passedSubjectService.getPassesSubjects(username);
         var prerequisites = prerequisiteService.getAllPrerequisites().stream().collect(Collectors.groupingBy(
                 Prerequisite::getSubject,
                 Collectors.mapping(Prerequisite::getPrerequisite, Collectors.toList())

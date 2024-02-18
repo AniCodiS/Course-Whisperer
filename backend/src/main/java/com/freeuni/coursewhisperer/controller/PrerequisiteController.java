@@ -23,10 +23,10 @@ public class PrerequisiteController {
         this.prerequisiteService = prerequisiteService;
     }
 
-    @GetMapping
-    public List<PrerequisiteDTO> getAllPrerequisites() {
-        return prerequisiteService.getAllPrerequisites();
-    }
+//    @GetMapping
+//    public List<PrerequisiteDTO> getAllPrerequisites() {
+//        return prerequisiteService.getAllPrerequisites();
+//    }
 
     @GetMapping("/{id}")
     public PrerequisiteDTO getPrerequisiteById(@PathVariable Long id) {
