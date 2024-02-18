@@ -1,12 +1,11 @@
 package com.freeuni.coursewhisperer.repository;
 
-import com.freeuni.coursewhisperer.data.entity.StudyGroup;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.freeuni.coursewhisperer.data.entity.StudyGroupEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StudyGroupRepository extends JpaRepository<StudyGroup, Long> {
-    StudyGroup findByGroupName(String name);
+public interface StudyGroupRepository extends AbstractRepository<StudyGroupEntity, Long> {
+    StudyGroupEntity findByGroupName(String name);
 
     boolean existsByGroupName(String name);
 

@@ -1,9 +1,9 @@
 package com.freeuni.coursewhisperer.service;
 
+import com.freeuni.coursewhisperer.data.entity.LecturerEntity;
 import com.freeuni.coursewhisperer.data.mapper.LecturerMapper;
 import com.freeuni.coursewhisperer.data.api.dto.CreatedLecturerDTO;
 import com.freeuni.coursewhisperer.data.api.dto.LecturerDTO;
-import com.freeuni.coursewhisperer.data.entity.Lecturer;
 import com.freeuni.coursewhisperer.repository.LecturerRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -23,39 +23,55 @@ public class LecturerService {
     }
 
     public List<LecturerDTO> getAllLecturers() {
-        List<Lecturer> lecturers = lecturerRepository.findAll();
+        List<LecturerEntity> lecturers = lecturerRepository.findAll();
+        if (lecturers.isEmpty()) {
+            // TODO: throw exception
+            return null;
+        }
         List<LecturerDTO> lecturerDTOS = new ArrayList<>();
-        for (Lecturer lecturer : lecturers) {
-            lecturerDTOS.add(mapper.modelToDto(lecturer));
+        for (LecturerEntity lecturer : lecturers) {
+            lecturerDTOS.add(mapper.modelToDto(mapper.entityToModel(lecturer)));
         }
         return lecturerDTOS;
     }
 
     public LecturerDTO getLecturerByEmail(String email) {
-        return mapper.modelToDto(lecturerRepository.findByEmail(email));
+        if (!lecturerRepository.existsByEmail(email)) {
+            return mapper.modelToDto(mapper.entityToModel(lecturerRepository.findByEmail(email)));
+        }
+        // TODO: throw exception
+        return null;
     }
 
     public CreatedLecturerDTO createLecturer(LecturerDTO lecturer) {
-        CreatedLecturerDTO createdLecturerDTO = new CreatedLecturerDTO();
-        Lecturer createdLecturer = lecturerRepository.save(mapper.dtoToModel(lecturer));
-        createdLecturerDTO.setId(createdLecturer.getId());
-        createdLecturerDTO.setLecturerName(createdLecturer.getLecturerName());
-        createdLecturerDTO.setDepartment(createdLecturer.getDepartment());
-        createdLecturerDTO.setEmail(createdLecturer.getEmail());
-        return createdLecturerDTO;
+        if (!lecturerRepository.existsByEmail(lecturer.getEmail())) {
+            CreatedLecturerDTO createdLecturerDTO = new CreatedLecturerDTO();
+            LecturerEntity createdLecturer = lecturerRepository.save(mapper.modelToEntity(mapper.dtoToModel(lecturer)));
+            createdLecturerDTO.setId(createdLecturer.getId());
+            createdLecturerDTO.setLecturerName(createdLecturer.getLecturerName());
+            createdLecturerDTO.setDepartment(createdLecturer.getDepartment());
+            createdLecturerDTO.setEmail(createdLecturer.getEmail());
+            return createdLecturerDTO;
+        }
+        // TODO: throw exception
+        return null;
     }
 
     public LecturerDTO updateLecturer(String email, LecturerDTO lecturer) {
         if (lecturerRepository.existsByEmail(email)) {
-            Lecturer lecturerEntity = mapper.dtoToModel(lecturer);
+            LecturerEntity lecturerEntity = mapper.modelToEntity(mapper.dtoToModel(lecturer));
             lecturerEntity.setId(lecturerRepository.findByEmail(email).getId());
-            return mapper.modelToDto(lecturerRepository.save(lecturerEntity));
+            return mapper.modelToDto(mapper.entityToModel(lecturerRepository.save(lecturerEntity)));
         }
+        // TODO: throw exception
         return null;
     }
 
     @Transactional
     public void deleteLecturer(String email) {
-        lecturerRepository.deleteByEmail(email);
+        if (lecturerRepository.existsByEmail(email)) {
+            lecturerRepository.deleteByEmail(email);
+        }
+        // TODO: throw exception
     }
 }

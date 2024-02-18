@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user-scores")
+@RequestMapping("/api/user-score")
 public class UserScoreController {
 
     private final UserScoreService userScoreService;
@@ -17,27 +17,27 @@ public class UserScoreController {
         this.userScoreService = userScoreService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<UserScoreDTO> getAllUserScores() {
         return userScoreService.getAllUserScores();
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/get/{username}")
     public UserScoreDTO getUserScoreByUsername(@PathVariable String username) {
         return userScoreService.getUserScoreByUsername(username);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public CreatedUserScoreDTO createUserScore(@RequestBody UserScoreDTO userScore) {
         return userScoreService.createUserScore(userScore);
     }
 
-    @PutMapping("/{username}")
+    @PutMapping("update/{username}")
     public UserScoreDTO updateUserScore(@PathVariable String username, @RequestBody UserScoreDTO userScore) {
         return userScoreService.updateUserScore(username, userScore);
     }
 
-    @DeleteMapping("/{username}")
+    @DeleteMapping("/delete/{username}")
     public void deleteUserScore(@PathVariable String username) {
         userScoreService.deleteUserScore(username);
     }

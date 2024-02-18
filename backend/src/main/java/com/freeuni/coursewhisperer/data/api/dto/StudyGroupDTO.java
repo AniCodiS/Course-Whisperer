@@ -15,4 +15,6 @@ public class StudyGroupDTO {
     private String subjectName;
     private LocalDateTime meetingTime;
     private String groupName;
+    private Integer currentMemberCount;
+    private Integer maxMemberCount;
 }

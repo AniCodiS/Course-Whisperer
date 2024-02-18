@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/lecturers")
+@RequestMapping("/api/lecturer")
 public class LecturerController {
 
     private final LecturerService lecturerService;
@@ -24,27 +24,27 @@ public class LecturerController {
         this.lecturerService = lecturerService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<LecturerDTO> getAllLecturers() {
         return lecturerService.getAllLecturers();
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/get/{email}")
     public LecturerDTO getLecturerByEmail(@PathVariable String email) {
         return lecturerService.getLecturerByEmail(email);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public CreatedLecturerDTO createLecturer(@RequestBody LecturerDTO lecturer) {
         return lecturerService.createLecturer(lecturer);
     }
 
-    @PutMapping("/{email}")
+    @PutMapping("/update/{email}")
     public LecturerDTO updateLecturer(@PathVariable String email, @RequestBody LecturerDTO lecturer) {
         return lecturerService.updateLecturer(email, lecturer);
     }
 
-    @DeleteMapping("/{email}")
+    @DeleteMapping("/delete/{email}")
     public void deleteLecturer(@PathVariable String email) {
         lecturerService.deleteLecturer(email);
     }

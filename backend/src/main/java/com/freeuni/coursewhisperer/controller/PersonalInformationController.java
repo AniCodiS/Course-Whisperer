@@ -1,6 +1,7 @@
 package com.freeuni.coursewhisperer.controller;
 
 import com.freeuni.coursewhisperer.data.api.dto.PersonalInformationDTO;
+import com.freeuni.coursewhisperer.data.api.dto.UpdatePersonalInformationDTO;
 import com.freeuni.coursewhisperer.service.PersonalInformationService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,27 +24,27 @@ public class PersonalInformationController {
         this.personalInformationService = personalInformationService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<PersonalInformationDTO> getAllPersonalInformation() {
         return personalInformationService.getAllPersonalInformation();
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/get/{email}")
     public PersonalInformationDTO getPersonalInformationByUsername(@PathVariable String email) {
         return personalInformationService.getPersonalInformationByEmail(email);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public PersonalInformationDTO createPersonalInformation(@RequestBody PersonalInformationDTO personalInformationDTO) {
         return personalInformationService.createPersonalInformation(personalInformationDTO);
     }
 
-    @PutMapping("/{email}")
-    public PersonalInformationDTO updatePersonalInformation(@PathVariable String email, @RequestBody PersonalInformationDTO personalInformationDTO) {
-        return personalInformationService.updatePersonalInformation(email, personalInformationDTO);
+    @PutMapping("/update/{email}")
+    public PersonalInformationDTO updatePersonalInformation(@PathVariable String email, @RequestBody UpdatePersonalInformationDTO updatePersonalInformationDTO) {
+        return personalInformationService.updatePersonalInformation(email, updatePersonalInformationDTO);
     }
 
-    @DeleteMapping("/{email}")
+    @DeleteMapping("/delete/{email}")
     public void deletePersonalInformation(@PathVariable String email) {
         personalInformationService.deletePersonalInformation(email);
     }

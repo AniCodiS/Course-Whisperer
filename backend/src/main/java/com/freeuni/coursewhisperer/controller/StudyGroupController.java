@@ -1,14 +1,14 @@
 package com.freeuni.coursewhisperer.controller;
 
+import com.freeuni.coursewhisperer.data.api.dto.DeleteStudyGroupDTO;
 import com.freeuni.coursewhisperer.data.api.dto.StudyGroupDTO;
-import com.freeuni.coursewhisperer.data.entity.StudyGroup;
 import com.freeuni.coursewhisperer.service.StudyGroupService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/study-groups")
+@RequestMapping("/api/study-group")
 public class StudyGroupController {
 
     private final StudyGroupService studyGroupService;
@@ -17,28 +17,28 @@ public class StudyGroupController {
         this.studyGroupService = studyGroupService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<StudyGroupDTO> getAllStudyGroups() {
         return studyGroupService.getAllStudyGroups();
     }
 
-    @GetMapping("/{groupName}")
+    @GetMapping("/get/{groupName}")
     public StudyGroupDTO getStudyGroupById(@PathVariable String groupName) {
         return studyGroupService.getStudyGroupByGroupName(groupName);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public StudyGroupDTO createStudyGroup(@RequestBody StudyGroupDTO studyGroupDTO) {
         return studyGroupService.createStudyGroup(studyGroupDTO);
     }
 
-    @PutMapping("/{groupName}")
+    @PutMapping("/update/{groupName}")
     public StudyGroupDTO updateStudyGroup(@PathVariable String groupName, @RequestBody StudyGroupDTO studyGroupDTO) {
         return studyGroupService.updateStudyGroup(groupName, studyGroupDTO);
     }
 
-    @DeleteMapping("/{groupName}")
-    public void deleteStudyGroup(@PathVariable String groupName) {
-        studyGroupService.deleteStudyGroup(groupName);
+    @DeleteMapping("/delete")
+    public void deleteStudyGroup(@RequestBody DeleteStudyGroupDTO deleteStudyGroupDTO) {
+        studyGroupService.deleteStudyGroup(deleteStudyGroupDTO);
     }
 }

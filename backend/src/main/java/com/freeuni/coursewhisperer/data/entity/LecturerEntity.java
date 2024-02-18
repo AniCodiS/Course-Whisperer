@@ -4,10 +4,13 @@ import com.freeuni.coursewhisperer.data.entity.common.AbstractIdTimestampEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.*;
 
-@Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 @Table(name = "lecturers", schema = "public")
 public class LecturerEntity extends AbstractIdTimestampEntity {
 

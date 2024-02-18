@@ -1,14 +1,19 @@
 package com.freeuni.coursewhisperer.data.entity;
 
 import com.freeuni.coursewhisperer.data.entity.common.AbstractIdTimestampEntity;
-import com.freeuni.coursewhisperer.data.enums.EUserStatus;
-import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.*;
 
-@Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 @Table(name = "user", schema = "public")
 public class UserEntity extends AbstractIdTimestampEntity {
+
     @Column(name = "email", nullable = false)
     private String email;
 
@@ -17,9 +22,5 @@ public class UserEntity extends AbstractIdTimestampEntity {
 
     @Column(name = "password", nullable = false)
     private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private EUserStatus status;
 
 }

@@ -1,5 +1,6 @@
 package com.freeuni.coursewhisperer.data.model;
 
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
