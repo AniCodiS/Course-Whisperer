@@ -28,7 +28,7 @@ public class SubjectEntity extends AbstractIdTimestampEntity {
     private Integer creditScore;
 
     @Column(name = "lecturer")
-    private Long lecturer;
+    private String lecturer;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "semester", nullable = false)

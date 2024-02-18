@@ -12,6 +12,6 @@ public class Subject {
     private String code;
     private ESchool schoolName;
     private Integer creditScore;
-//    private Lecturer lecturer;
+    private String lecturer;
     private ESemester semester;
 }
