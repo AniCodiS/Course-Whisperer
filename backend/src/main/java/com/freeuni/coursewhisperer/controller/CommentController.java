@@ -26,12 +26,6 @@ public class CommentController extends AbstractController<CommentEntity, Long, C
         this.commentMapper = commentMapper;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Void> addComment(@RequestBody @Valid CommentDTO commentDTO) {
-        commentService.createComment(commentMapper.dtoToModel(commentDTO));
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping("/{postId}/all")
     public ResponseEntity<List<CommentDTO>> getComments(@PathVariable Long postId) {
         var res = commentService.getComments(postId).stream().
@@ -42,13 +36,14 @@ public class CommentController extends AbstractController<CommentEntity, Long, C
     @PutMapping("/update/{id}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable Long id,
                                                     @RequestBody @Valid CommentDTO commentDTO) {
-        var res = commentMapper.modelToDto(commentService.updateComment(id, commentDTO.content()));
+        var res = commentMapper.modelToDto(commentService.updateComment(id, commentMapper.dtoToModel(commentDTO)));
         return ResponseEntity.ok(res);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
-        commentService.deleteComment(id);
+    public ResponseEntity<Void> deleteComment(@PathVariable Long id,
+                                              @RequestParam String username) {
+        commentService.deleteComment(username,id);
         return ResponseEntity.ok().build();
     }
 }

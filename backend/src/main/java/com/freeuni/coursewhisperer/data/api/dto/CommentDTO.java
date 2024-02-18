@@ -4,7 +4,7 @@ import com.freeuni.coursewhisperer.data.validator.CorrectText;
 
 public record CommentDTO(
         String username,
-        Long post,
+        Long postId,
         @CorrectText
         String content
 ) {

@@ -4,6 +4,8 @@ import com.freeuni.coursewhisperer.data.api.dto.CommentDTO;
 import com.freeuni.coursewhisperer.data.entity.CommentEntity;
 import com.freeuni.coursewhisperer.data.mapper.CommentMapper;
 import com.freeuni.coursewhisperer.data.model.Comment;
+import com.freeuni.coursewhisperer.exception.CourseWhispererException;
+import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,14 +32,20 @@ public class CommentService extends AbstractService<CommentEntity, Long, Comment
         return commentRepository.getAllByPost(postId).stream().map(commentMapper::entityToModel).toList();
     }
 
-    public Comment updateComment(Long id, String content) {
+    public Comment updateComment(Long id, Comment comment) {
         var entity = commentRepository.findById(id).get();
-        entity.setContent(content);
+        if (!entity.getUsername().equals(comment.getUsername())) {
+            throw ExceptionFactory.commentIsNotYours();
+        }
+        entity.setContent(comment.getContent());
         return commentMapper.entityToModel(commentRepository.save(entity));
     }
 
-    public void deleteComment(Long id) {
+    public void deleteComment(String username, Long id) {
         var entity = commentRepository.findById(id).get();
+        if (!entity.getUsername().equals(username)) {
+            throw ExceptionFactory.commentIsNotYours();
+        }
         commentRepository.delete(entity);
     }
 }

@@ -17,7 +17,7 @@ public class CommentEntity extends AbstractIdTimestampEntity {
     private String username;
 
     @Column(name = "post")
-    private Long post;
+    private Long postId;
 
     @Column(name = "content")
     private String content;
