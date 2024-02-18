@@ -58,6 +58,18 @@ public final class ExceptionFactory {
         return forbidden("study.group.not.yours", "You are not a member of this study group");
     }
 
+    public static CourseWhispererException NoStudyGroupMembersPresent() {
+        return notFound("study.group.members.not.found", "There are no study group members present");
+    }
+
+    public static CourseWhispererException StudyGroupWithNameNotFound() {
+        return notFound("study.group.with.name.not.found", "Study group with this name not found");
+    }
+
+    public static CourseWhispererException StudyGroupIsFull() {
+        return conflict("study.group.is.full", "Study group is full");
+    }
+
     public static CourseWhispererException commentIsNotYours() {
         return badRequest("comment.is.not.yours", "Cannot update comment that is not done by you");
     }
