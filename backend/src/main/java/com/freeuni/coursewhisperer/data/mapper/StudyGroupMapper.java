@@ -6,7 +6,7 @@ import com.freeuni.coursewhisperer.data.model.StudyGroup;
 import com.freeuni.coursewhisperer.service.StudyGroupService;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = StudyGroupService.class)
+@Mapper(componentModel = "spring")
 public interface StudyGroupMapper extends AbstractMapper<StudyGroupEntity, StudyGroup, StudyGroupDTO> {
 
 }

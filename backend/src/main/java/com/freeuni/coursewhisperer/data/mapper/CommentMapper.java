@@ -3,12 +3,13 @@ package com.freeuni.coursewhisperer.data.mapper;
 import com.freeuni.coursewhisperer.data.api.dto.CommentDTO;
 import com.freeuni.coursewhisperer.data.entity.CommentEntity;
 import com.freeuni.coursewhisperer.data.model.Comment;
+import com.freeuni.coursewhisperer.data.model.Post;
 import com.freeuni.coursewhisperer.service.PostService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring", uses = {PostService.class})
+@Mapper(componentModel = "spring")
 public interface CommentMapper extends AbstractMapper<CommentEntity, Comment, CommentDTO> {
 
     @Override

@@ -6,7 +6,7 @@ import com.freeuni.coursewhisperer.data.model.User;
 import com.freeuni.coursewhisperer.service.UserService;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = UserService.class)
+@Mapper(componentModel = "spring")
 public interface UserMapper extends AbstractMapper<UserEntity, User, UserDTO> {
 
 }
