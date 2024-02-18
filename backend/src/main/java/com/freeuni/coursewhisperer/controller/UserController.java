@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
@@ -23,12 +23,12 @@ public class UserController {
         this.loginService = loginService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<UserDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/get/{username}")
     public UserDTO getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
     }
@@ -38,7 +38,7 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @PutMapping("/{username}")
+    @PutMapping("/update/{username}")
     public UpdateUserDTO updateUser(@PathVariable String username, @RequestBody UpdateUserDTO updateUserDTO) {
         return userService.updateUser(username, updateUserDTO);
     }
@@ -48,7 +48,7 @@ public class UserController {
         return userService.changePassword(username, changePasswordDTO);
     }
 
-    @DeleteMapping("/{username}")
+    @DeleteMapping("delete/{username}")
     public void deleteUser(@PathVariable String username) {
         userService.deleteUser(username);
     }

@@ -46,7 +46,7 @@ public class PersonalInformationService {
     }
 
     public PersonalInformationDTO getPersonalInformationByEmail(String email) {
-        if (!personalInformationRepository.existsByEmail(email)) {
+        if (personalInformationRepository.existsByEmail(email)) {
             return mapper.modelToDto(mapper.entityToModel(personalInformationRepository.findByEmail(email)));
         }
         // TODO: throw exception
@@ -54,7 +54,7 @@ public class PersonalInformationService {
     }
 
     public PersonalInformationDTO createPersonalInformation(PersonalInformationDTO personalInformationDTO) {
-        if (userRepository.existsByEmail(personalInformationDTO.getEmail())) {
+        if (userRepository.existsByEmail(personalInformationDTO.getEmail()) && !personalInformationRepository.existsByEmail(personalInformationDTO.getEmail())) {
             PersonalInformationDTO createdPersonalInformationDTO = new PersonalInformationDTO();
             PersonalInformationEntity personalInformation = new PersonalInformationEntity();
             personalInformation.setUser(userRepository.findByEmail(personalInformationDTO.getEmail()));
@@ -79,8 +79,29 @@ public class PersonalInformationService {
         if (personalInformationRepository.existsByEmail(email)) {
             UserEntity user = userRepository.findByEmail(email);
             PersonalInformationEntity personalInformationEntity = updateMapper.modelToEntity(updateMapper.dtoToModel(updatePersonalInformationDTO));
+            personalInformationEntity.setEmail(email);
             personalInformationEntity.setUser(user);
             personalInformationEntity.setId(personalInformationRepository.findByEmail(email).getId());
+            if (updatePersonalInformationDTO.getFirstName() != null) {
+                personalInformationEntity.setFirstName(updatePersonalInformationDTO.getFirstName());
+            } else {
+                personalInformationEntity.setFirstName(personalInformationRepository.findByEmail(email).getFirstName());
+            }
+            if (updatePersonalInformationDTO.getLastName() != null) {
+                personalInformationEntity.setLastName(updatePersonalInformationDTO.getLastName());
+            } else {
+                personalInformationEntity.setLastName(personalInformationRepository.findByEmail(email).getLastName());
+            }
+            if (updatePersonalInformationDTO.getYear() != null) {
+                personalInformationEntity.setYear(updatePersonalInformationDTO.getYear());
+            } else {
+                personalInformationEntity.setYear(personalInformationRepository.findByEmail(email).getYear());
+            }
+            if (updatePersonalInformationDTO.getFaculty() != null) {
+                personalInformationEntity.setFaculty(updatePersonalInformationDTO.getFaculty());
+            } else {
+                personalInformationEntity.setFaculty(personalInformationRepository.findByEmail(email).getFaculty());
+            }
             return mapper.modelToDto(mapper.entityToModel(personalInformationRepository.save(personalInformationEntity)));
         }
         // TODO: throw exception

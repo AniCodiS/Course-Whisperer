@@ -14,7 +14,7 @@ public class GPACalculatorController {
         this.gpaCalculatorService = gpaCalculatorService;
     }
 
-    @GetMapping
+    @GetMapping("/calculate")
     public Double calculateGPA(@RequestBody CalculateGPADTO calculateGPADTO) {
         return gpaCalculatorService.calculateGPA(calculateGPADTO);
     }

@@ -10,7 +10,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class UpdatePersonalInformationDTO {
-    private String fullName;
+    private String firstName;
+    private String lastName;
     private Integer year;
     private String faculty;
 }

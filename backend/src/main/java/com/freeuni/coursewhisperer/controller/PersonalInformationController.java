@@ -24,27 +24,27 @@ public class PersonalInformationController {
         this.personalInformationService = personalInformationService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<PersonalInformationDTO> getAllPersonalInformation() {
         return personalInformationService.getAllPersonalInformation();
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/get/{email}")
     public PersonalInformationDTO getPersonalInformationByUsername(@PathVariable String email) {
         return personalInformationService.getPersonalInformationByEmail(email);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public PersonalInformationDTO createPersonalInformation(@RequestBody PersonalInformationDTO personalInformationDTO) {
         return personalInformationService.createPersonalInformation(personalInformationDTO);
     }
 
-    @PutMapping("/{email}")
+    @PutMapping("/update/{email}")
     public PersonalInformationDTO updatePersonalInformation(@PathVariable String email, @RequestBody UpdatePersonalInformationDTO updatePersonalInformationDTO) {
         return personalInformationService.updatePersonalInformation(email, updatePersonalInformationDTO);
     }
 
-    @DeleteMapping("/{email}")
+    @DeleteMapping("/delete/{email}")
     public void deletePersonalInformation(@PathVariable String email) {
         personalInformationService.deletePersonalInformation(email);
     }

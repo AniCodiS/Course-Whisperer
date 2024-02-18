@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/study-group-members")
+@RequestMapping("/api/study-group-member")
 public class StudyGroupMemberController {
 
     private final StudyGroupMemberService studyGroupMemberService;
@@ -20,27 +20,27 @@ public class StudyGroupMemberController {
         this.studyGroupMemberService = studyGroupMemberService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<StudyGroupMemberDTO> getAllStudyGroupMembers() {
         return studyGroupMemberService.getAllStudyGroupMembers();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public StudyGroupMemberEntity getStudyGroupMemberById(@PathVariable Long id) {
         return studyGroupMemberService.getStudyGroupMemberById(id);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public StudyGroupMemberDTO createStudyGroupMember(@RequestBody StudyGroupMemberDTO studyGroupMemberDTO) {
         return studyGroupMemberService.createStudyGroupMember(studyGroupMemberDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public StudyGroupMemberEntity updateStudyGroupMember(@PathVariable Long id, @RequestBody StudyGroupMemberEntity studyGroupMember) {
         return studyGroupMemberService.updateStudyGroupMember(id, studyGroupMember);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete")
     public void deleteStudyGroupMember(@RequestBody DeleteStudyGroupMemberDTO deleteStudyGroupMemberDTO) {
         studyGroupMemberService.deleteStudyGroupMember(deleteStudyGroupMemberDTO);
     }
