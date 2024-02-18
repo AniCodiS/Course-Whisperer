@@ -17,10 +17,10 @@ import lombok.*;
 @Table(name = "passed_subject")
 public class PassedSubjectEntity extends AbstractIdTimestampEntity {
     @Column(name = "student")
-    private Long student;
+    private String username;
 
     @Column(name = "subject")
-    private Long subject;
+    private String subject;
 
     @Column(name = "grade")
     private EGrade grade;
