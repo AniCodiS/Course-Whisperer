@@ -70,6 +70,26 @@ public final class ExceptionFactory {
         return conflict("study.group.is.full", "Study group is full");
     }
 
+    public static CourseWhispererException NoUsersPresent() {
+        return notFound("users.not.found", "There are no users present");
+    }
+
+    public static CourseWhispererException UsernameAlreadyExists() {
+        return conflict("username.already.exists", "Username with this email already exists");
+    }
+
+    public static CourseWhispererException EmailAlreadyExists() {
+        return conflict("email.already.exists", "Email with this email already exists");
+    }
+
+    public static CourseWhispererException PasswordsDoNotMatch() {
+        return badRequest("passwords.do.not.match", "Passwords do not match");
+    }
+
+    public static CourseWhispererException OldPasswordDoesNotMatch() {
+        return badRequest("old.password.does.not.match", "Old password does not match");
+    }
+
     public static CourseWhispererException commentIsNotYours() {
         return badRequest("comment.is.not.yours", "Cannot update comment that is not done by you");
     }

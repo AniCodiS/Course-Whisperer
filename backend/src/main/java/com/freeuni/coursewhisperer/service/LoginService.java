@@ -1,5 +1,6 @@
 package com.freeuni.coursewhisperer.service;
 
+import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +13,10 @@ public class LoginService {
         this.userRepository = userRepository;
     }
 
-    public boolean login(String username, String password) {
-        return userRepository.findByUsernameAndPassword(username, password) != null;
-        // TODO: throw exception
+    public String login(String username, String password) {
+        if (userRepository.findByUsernameAndPassword(username, password) == null) {
+            throw ExceptionFactory.UserNotFound();
+        }
+        return "Login successful";
     }
 }
