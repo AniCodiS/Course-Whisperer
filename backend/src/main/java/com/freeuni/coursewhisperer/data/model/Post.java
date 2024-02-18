@@ -8,8 +8,8 @@ import lombok.Data;
 @Builder
 public class Post {
     private Long id;
-    private User student;
-    private Subject subject;
+    private String username;
+    private String subject;
     private String content;
     private Integer upVote;
     private Integer downVote;

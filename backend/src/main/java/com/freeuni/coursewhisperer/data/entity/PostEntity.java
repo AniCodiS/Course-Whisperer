@@ -15,10 +15,10 @@ import lombok.*;
 @Table(name = "post")
 public class PostEntity extends AbstractIdTimestampEntity {
     @Column(name = "student")
-    private Long student;
+    private String username;
 
     @Column(name = "subject")
-    private Long subject;
+    private String subject;
 
     @Column(name = "content")
     private String content;
