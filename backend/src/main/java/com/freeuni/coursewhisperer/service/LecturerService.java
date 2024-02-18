@@ -1,9 +1,12 @@
 package com.freeuni.coursewhisperer.service;
 
+import com.freeuni.coursewhisperer.data.api.dto.LecturerDTOResponse;
 import com.freeuni.coursewhisperer.data.entity.LecturerEntity;
+import com.freeuni.coursewhisperer.data.mapper.LecturerDTOResponseMapper;
 import com.freeuni.coursewhisperer.data.mapper.LecturerMapper;
 import com.freeuni.coursewhisperer.data.api.dto.CreatedLecturerDTO;
 import com.freeuni.coursewhisperer.data.api.dto.LecturerDTO;
+import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.LecturerRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -16,31 +19,31 @@ public class LecturerService {
 
     private final LecturerRepository lecturerRepository;
     private final LecturerMapper mapper;
+    private final LecturerDTOResponseMapper lecturerDTOResponseMapper;
 
-    public LecturerService(LecturerRepository lecturerRepository, LecturerMapper mapper) {
+    public LecturerService(LecturerRepository lecturerRepository, LecturerMapper mapper, LecturerDTOResponseMapper lecturerDTOResponseMapper) {
         this.lecturerRepository = lecturerRepository;
         this.mapper = mapper;
+        this.lecturerDTOResponseMapper = lecturerDTOResponseMapper;
     }
 
-    public List<LecturerDTO> getAllLecturers() {
+    public List<LecturerDTOResponse> getAllLecturers() {
         List<LecturerEntity> lecturers = lecturerRepository.findAll();
         if (lecturers.isEmpty()) {
-            // TODO: throw exception
-            return null;
+            throw ExceptionFactory.NoLecturersPresent();
         }
-        List<LecturerDTO> lecturerDTOS = new ArrayList<>();
+        List<LecturerDTOResponse> lecturerDTOS = new ArrayList<>();
         for (LecturerEntity lecturer : lecturers) {
-            lecturerDTOS.add(mapper.modelToDto(mapper.entityToModel(lecturer)));
+            lecturerDTOS.add(lecturerDTOResponseMapper.modelToDto(lecturerDTOResponseMapper.entityToModel(lecturer)));
         }
         return lecturerDTOS;
     }
 
-    public LecturerDTO getLecturerByEmail(String email) {
+    public LecturerDTOResponse getLecturerByEmail(String email) {
         if (!lecturerRepository.existsByEmail(email)) {
-            return mapper.modelToDto(mapper.entityToModel(lecturerRepository.findByEmail(email)));
+            return lecturerDTOResponseMapper.modelToDto(lecturerDTOResponseMapper.entityToModel(lecturerRepository.findByEmail(email)));
         }
-        // TODO: throw exception
-        return null;
+        throw ExceptionFactory.LecturerNotFound();
     }
 
     public CreatedLecturerDTO createLecturer(LecturerDTO lecturer) {
@@ -53,18 +56,16 @@ public class LecturerService {
             createdLecturerDTO.setEmail(createdLecturer.getEmail());
             return createdLecturerDTO;
         }
-        // TODO: throw exception
-        return null;
+        throw ExceptionFactory.LecturerAlreadyExists();
     }
 
-    public LecturerDTO updateLecturer(String email, LecturerDTO lecturer) {
+    public LecturerDTOResponse updateLecturer(String email, LecturerDTO lecturer) {
         if (lecturerRepository.existsByEmail(email)) {
             LecturerEntity lecturerEntity = mapper.modelToEntity(mapper.dtoToModel(lecturer));
             lecturerEntity.setId(lecturerRepository.findByEmail(email).getId());
-            return mapper.modelToDto(mapper.entityToModel(lecturerRepository.save(lecturerEntity)));
+            return lecturerDTOResponseMapper.modelToDto(lecturerDTOResponseMapper.entityToModel(lecturerRepository.save(lecturerEntity)));
         }
-        // TODO: throw exception
-        return null;
+        throw ExceptionFactory.LecturerNotFound();
     }
 
     @Transactional
@@ -72,6 +73,6 @@ public class LecturerService {
         if (lecturerRepository.existsByEmail(email)) {
             lecturerRepository.deleteByEmail(email);
         }
-        // TODO: throw exception
+        throw ExceptionFactory.LecturerNotFound();
     }
 }

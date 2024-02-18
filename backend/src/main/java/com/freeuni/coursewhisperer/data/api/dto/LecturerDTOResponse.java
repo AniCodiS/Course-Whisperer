@@ -1,27 +1,27 @@
 package com.freeuni.coursewhisperer.data.api.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
-@Setter
 @Getter
-public class CreatedLecturerDTO {
+@Setter
+public class LecturerDTOResponse {
 
-    private Long id;
     private String lecturerName;
     private String department;
     private String email;
     private String errorMessage;
 
-    public CreatedLecturerDTO() {
+    public LecturerDTOResponse() {
     }
 
-    public CreatedLecturerDTO(String lecturerName, String department, String email) {
+    public LecturerDTOResponse(String lecturerName, String department, String email) {
         this.lecturerName = lecturerName;
         this.department = department;
         this.email = email;
     }
 
-    public CreatedLecturerDTO(String errorMessage) {
+    public LecturerDTOResponse(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 }

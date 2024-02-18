@@ -10,6 +10,22 @@ public final class ExceptionFactory {
     private ExceptionFactory() {
     }
 
+    public static CourseWhispererException GPACoursesEmpty() {
+        return badRequest("gpa.courses.empty", "Courses list is empty");
+    }
+
+    public static CourseWhispererException NoLecturersPresent() {
+        return badRequest("lecturers.empty", "There are no lecturers present");
+    }
+
+    public static CourseWhispererException LecturerNotFound() {
+        return notFound("lecturer.not.found", "Lecturer not found");
+    }
+
+    public static CourseWhispererException LecturerAlreadyExists() {
+        return conflict("lecturer.already.exists", "Lecturer with this email already exists");
+    }
+
     public static CourseWhispererException commentIsNotYours() {
         return badRequest("comment.is.not.yours", "Cannot update comment that is not done by you");
     }
@@ -66,7 +82,7 @@ public final class ExceptionFactory {
                 transParamsMap.put(params[i], params[++i]);
             }
         }
-        return new CourseWhispererException("wallet.pro." + key, message, status, transParamsMap);
+        return new CourseWhispererException("course.whisperer" + key, message, status, transParamsMap);
     }
 
 }
