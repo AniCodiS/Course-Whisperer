@@ -14,7 +14,7 @@ import lombok.*;
 @Table(name = "comment")
 public class CommentEntity extends AbstractIdTimestampEntity {
     @Column(name = "user")
-    private Long user;
+    private String username;
 
     @Column(name = "post")
     private Long post;

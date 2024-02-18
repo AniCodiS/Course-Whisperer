@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class Comment {
     private Long id;
-    private Long user;
+    private String username;
     private Post post;
     private String content;
 }
