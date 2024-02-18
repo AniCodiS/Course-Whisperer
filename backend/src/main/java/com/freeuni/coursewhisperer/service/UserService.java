@@ -39,7 +39,7 @@ public class UserService {
     }
 
     public UserDTO getUserByUsername(String username) {
-        if (existsByUsername(username)) {
+        if (userRepository.existsByUsername(username)) {
             return mapper.modelToDto(mapper.entityToModel(userRepository.findByUsername(username)));
         }
         // TODO: throw exception
@@ -49,7 +49,7 @@ public class UserService {
     public CreatedUserDTO createUser(UserDTO userDTO) {
         String newUsername = userDTO.getUsername();
         String newEmail = userDTO.getEmail();
-        if (!existsByUsername(newUsername) && !existsByEmail(newEmail)) {
+        if (!userRepository.existsByUsername(newUsername) && !userRepository.existsByEmail(newEmail)) {
             CreatedUserDTO createdUserDTO = new CreatedUserDTO();
             UserEntity createdUser = userRepository.save(mapper.modelToEntity(mapper.dtoToModel(userDTO)));
             createdUserDTO.setId(createdUser.getId());
@@ -63,7 +63,7 @@ public class UserService {
     }
 
     public UpdateUserDTO updateUser(String username, UpdateUserDTO updateUserDTO) {
-        if (existsByUsername(username)) {
+        if (userRepository.existsByUsername(username)) {
             UserEntity userEntity = updateMapper.modelToEntity(updateMapper.dtoToModel(updateUserDTO));
             userEntity.setId(userRepository.findByUsername(username).getId());
             userEntity.setPassword(userRepository.findByUsername(username).getPassword());
@@ -76,9 +76,13 @@ public class UserService {
     public boolean changePassword(String username, ChangePasswordDTO changePasswordDTO) {
         String oldPassword = changePasswordDTO.getOldPassword();
         String newPassword = changePasswordDTO.getNewPassword();
-        if (existsByUsername(username)) {
+        String confirmNewPassword = changePasswordDTO.getConfirmNewPassword();
+        if (userRepository.existsByUsername(username)) {
             UserEntity userEntity = userRepository.findByUsername(username);
             if (userEntity.getPassword().equals(oldPassword)) {
+                if (!newPassword.equals(confirmNewPassword)) {
+                    return false;
+                }
                 userEntity.setPassword(newPassword);
                 userRepository.save(userEntity);
                 return true;
@@ -94,18 +98,9 @@ public class UserService {
 
     @Transactional
     public void deleteUser(String username) {
-        if (existsByUsername(username)) {
+        if (userRepository.existsByUsername(username)) {
             userRepository.deleteByUsername(username);
         }
         // TODO: throw exception
-    }
-
-
-    private boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
-    }
-
-    private boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
     }
 }

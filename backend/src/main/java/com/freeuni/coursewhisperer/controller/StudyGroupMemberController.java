@@ -1,5 +1,6 @@
 package com.freeuni.coursewhisperer.controller;
 
+import com.freeuni.coursewhisperer.data.api.dto.DeleteStudyGroupMemberDTO;
 import com.freeuni.coursewhisperer.data.api.dto.StudyGroupMemberDTO;
 import com.freeuni.coursewhisperer.data.entity.StudyGroupMemberEntity;
 import com.freeuni.coursewhisperer.service.StudyGroupMemberService;
@@ -39,8 +40,8 @@ public class StudyGroupMemberController {
         return studyGroupMemberService.updateStudyGroupMember(id, studyGroupMember);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteStudyGroupMember(@PathVariable Long id) {
-        studyGroupMemberService.deleteStudyGroupMember(id);
+    @DeleteMapping
+    public void deleteStudyGroupMember(@RequestBody DeleteStudyGroupMemberDTO deleteStudyGroupMemberDTO) {
+        studyGroupMemberService.deleteStudyGroupMember(deleteStudyGroupMemberDTO);
     }
 }

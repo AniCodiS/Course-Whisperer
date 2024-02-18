@@ -19,16 +19,13 @@ public class GPACalculatorService {
 
     public Double calculateGPA(CalculateGPADTO calculateGPADTO) {
         List<Course> courses = calculateGPADTO.getCourses();
-
         Double totalGradePoints = 0.0;
         int totalCreditHours = 0;
-
         // Iterate through each course
         for (Course course : courses) {
             totalGradePoints += calculateCourseGradePoints(course);
             totalCreditHours += course.getCreditHours();
         }
-
         return totalCreditHours > 0 ? totalGradePoints / totalCreditHours : 0.0;
     }
 

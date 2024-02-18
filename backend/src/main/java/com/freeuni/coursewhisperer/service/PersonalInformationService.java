@@ -34,6 +34,10 @@ public class PersonalInformationService {
 
     public List<PersonalInformationDTO> getAllPersonalInformation() {
         List<PersonalInformationEntity> personalInfos = personalInformationRepository.findAll();
+        if (personalInfos.isEmpty()) {
+            // TODO: throw exception
+            return null;
+        }
         List<PersonalInformationDTO> personalInformationDTOs = new ArrayList<>();
         for (PersonalInformationEntity personalInformation : personalInfos) {
             personalInformationDTOs.add(mapper.modelToDto(mapper.entityToModel(personalInformation)));
@@ -42,25 +46,33 @@ public class PersonalInformationService {
     }
 
     public PersonalInformationDTO getPersonalInformationByEmail(String email) {
-        return mapper.modelToDto(mapper.entityToModel(personalInformationRepository.findByEmail(email)));
+        if (!personalInformationRepository.existsByEmail(email)) {
+            return mapper.modelToDto(mapper.entityToModel(personalInformationRepository.findByEmail(email)));
+        }
+        // TODO: throw exception
+        return null;
     }
 
     public PersonalInformationDTO createPersonalInformation(PersonalInformationDTO personalInformationDTO) {
-        PersonalInformationDTO createdPersonalInformationDTO = new PersonalInformationDTO();
-        PersonalInformationEntity personalInformation = new PersonalInformationEntity();
-        personalInformation.setUser(userRepository.findByEmail(personalInformationDTO.getEmail()));
-        personalInformation.setFirstName(personalInformationDTO.getFirstName());
-        personalInformation.setLastName(personalInformationDTO.getLastName());
-        personalInformation.setYear(personalInformationDTO.getYear());
-        personalInformation.setFaculty(personalInformationDTO.getFaculty());
-        personalInformation.setEmail(personalInformationDTO.getEmail());
-        personalInformationRepository.save(personalInformation);
-        createdPersonalInformationDTO.setFirstName(personalInformation.getFirstName());
-        createdPersonalInformationDTO.setLastName(personalInformation.getLastName());
-        createdPersonalInformationDTO.setYear(personalInformation.getYear());
-        createdPersonalInformationDTO.setFaculty(personalInformation.getFaculty());
-        createdPersonalInformationDTO.setEmail(personalInformation.getEmail());
-        return createdPersonalInformationDTO;
+        if (userRepository.existsByEmail(personalInformationDTO.getEmail())) {
+            PersonalInformationDTO createdPersonalInformationDTO = new PersonalInformationDTO();
+            PersonalInformationEntity personalInformation = new PersonalInformationEntity();
+            personalInformation.setUser(userRepository.findByEmail(personalInformationDTO.getEmail()));
+            personalInformation.setFirstName(personalInformationDTO.getFirstName());
+            personalInformation.setLastName(personalInformationDTO.getLastName());
+            personalInformation.setYear(personalInformationDTO.getYear());
+            personalInformation.setFaculty(personalInformationDTO.getFaculty());
+            personalInformation.setEmail(personalInformationDTO.getEmail());
+            personalInformationRepository.save(personalInformation);
+            createdPersonalInformationDTO.setFirstName(personalInformation.getFirstName());
+            createdPersonalInformationDTO.setLastName(personalInformation.getLastName());
+            createdPersonalInformationDTO.setYear(personalInformation.getYear());
+            createdPersonalInformationDTO.setFaculty(personalInformation.getFaculty());
+            createdPersonalInformationDTO.setEmail(personalInformation.getEmail());
+            return createdPersonalInformationDTO;
+        }
+        // TODO: throw exception
+        return null;
     }
 
     public PersonalInformationDTO updatePersonalInformation(String email, UpdatePersonalInformationDTO updatePersonalInformationDTO) {
@@ -71,11 +83,15 @@ public class PersonalInformationService {
             personalInformationEntity.setId(personalInformationRepository.findByEmail(email).getId());
             return mapper.modelToDto(mapper.entityToModel(personalInformationRepository.save(personalInformationEntity)));
         }
+        // TODO: throw exception
         return null;
     }
 
     @Transactional
     public void deletePersonalInformation(String email) {
-        personalInformationRepository.deleteByEmail(email);
+        if (personalInformationRepository.existsByEmail(email)) {
+            personalInformationRepository.deleteByEmail(email);
+        }
+        // TODO: throw exception
     }
 }

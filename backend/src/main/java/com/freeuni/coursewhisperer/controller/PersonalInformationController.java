@@ -3,7 +3,6 @@ package com.freeuni.coursewhisperer.controller;
 import com.freeuni.coursewhisperer.data.api.dto.PersonalInformationDTO;
 import com.freeuni.coursewhisperer.data.api.dto.UpdatePersonalInformationDTO;
 import com.freeuni.coursewhisperer.service.PersonalInformationService;
-import org.hibernate.sql.Update;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

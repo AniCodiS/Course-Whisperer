@@ -25,6 +25,10 @@ public class StudyGroupService {
 
     public List<StudyGroupDTO> getAllStudyGroups() {
         List<StudyGroupEntity> studyGroups = studyGroupRepository.findAll();
+        if (studyGroups.isEmpty()) {
+            // TODO: throw exception
+            return null;
+        }
         List<StudyGroupDTO> studyGroupDTOs = new ArrayList<>();
         for (StudyGroupEntity studyGroup : studyGroups) {
             studyGroupDTOs.add(mapper.modelToDto(mapper.entityToModel(studyGroup)));
@@ -33,10 +37,18 @@ public class StudyGroupService {
     }
 
     public StudyGroupDTO getStudyGroupByGroupName(String groupName) {
-        return mapper.modelToDto(mapper.entityToModel(studyGroupRepository.findByGroupName(groupName)));
+        if (!studyGroupRepository.existsByGroupName(groupName)) {
+            return mapper.modelToDto(mapper.entityToModel(studyGroupRepository.findByGroupName(groupName)));
+        }
+        // TODO: throw exception
+        return null;
     }
 
     public StudyGroupDTO createStudyGroup(StudyGroupDTO studyGroupDTO) {
+        if (studyGroupRepository.existsByGroupName(studyGroupDTO.getGroupName())) {
+            // TODO: throw exception
+            return null;
+        }
         studyGroupDTO.setCurrentMemberCount(0);
         studyGroupDTO.setMaxMemberCount(10);
         StudyGroupEntity studyGroupEntity = mapper.modelToEntity(mapper.dtoToModel(studyGroupDTO));
@@ -50,6 +62,7 @@ public class StudyGroupService {
             studyGroupEntity.setId(studyGroupRepository.findByGroupName(groupName).getId());
             return mapper.modelToDto(mapper.entityToModel(studyGroupRepository.save(studyGroupEntity)));
         }
+        // TODO: throw exception
         return null;
     }
 
