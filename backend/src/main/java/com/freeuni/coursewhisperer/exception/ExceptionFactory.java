@@ -26,6 +26,22 @@ public final class ExceptionFactory {
         return conflict("lecturer.already.exists", "Lecturer with this email already exists");
     }
 
+    public static CourseWhispererException NoPersonalInformationPresent() {
+        return notFound("personal.information.not.found", "Personal information not found");
+    }
+
+    public static CourseWhispererException PersonalInformationNotFound() {
+        return notFound("personal.information.not.found", "Personal information not found");
+    }
+
+    public static CourseWhispererException UserNotFound() {
+        return notFound("user.not.found", "User not found");
+    }
+
+    public static CourseWhispererException PersonalInformationAlreadyExists() {
+        return conflict("personal.information.already.exists", "Personal information with this email already exists");
+    }
+
     public static CourseWhispererException commentIsNotYours() {
         return badRequest("comment.is.not.yours", "Cannot update comment that is not done by you");
     }

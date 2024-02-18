@@ -5,23 +5,23 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LecturerDTOResponse {
+public class LecturerResponse {
 
     private String lecturerName;
     private String department;
     private String email;
     private String errorMessage;
 
-    public LecturerDTOResponse() {
+    public LecturerResponse() {
     }
 
-    public LecturerDTOResponse(String lecturerName, String department, String email) {
+    public LecturerResponse(String lecturerName, String department, String email) {
         this.lecturerName = lecturerName;
         this.department = department;
         this.email = email;
     }
 
-    public LecturerDTOResponse(String errorMessage) {
+    public LecturerResponse(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 }

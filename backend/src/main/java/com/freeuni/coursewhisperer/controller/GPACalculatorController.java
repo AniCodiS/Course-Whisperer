@@ -1,7 +1,7 @@
 package com.freeuni.coursewhisperer.controller;
 
 import com.freeuni.coursewhisperer.data.api.dto.CalculateGPADTO;
-import com.freeuni.coursewhisperer.data.api.dto.CalculatedGPADTO;
+import com.freeuni.coursewhisperer.data.api.dto.CalculateGPAResponse;
 import com.freeuni.coursewhisperer.exception.CourseWhispererException;
 import com.freeuni.coursewhisperer.service.GPACalculatorService;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +18,11 @@ public class GPACalculatorController {
     }
 
     @GetMapping("/calculate")
-    public ResponseEntity<CalculatedGPADTO> calculateGPA(@RequestBody CalculateGPADTO calculateGPADTO) {
+    public ResponseEntity<CalculateGPAResponse> calculateGPA(@RequestBody CalculateGPADTO calculateGPADTO) {
         try {
-            return ResponseEntity.ok(new CalculatedGPADTO(gpaCalculatorService.calculateGPA(calculateGPADTO)));
+            return ResponseEntity.ok(new CalculateGPAResponse(gpaCalculatorService.calculateGPA(calculateGPADTO)));
         } catch (CourseWhispererException e) {
-            return ResponseEntity.status(e.getStatus()).body(new CalculatedGPADTO(e.getErrorDescription()));
+            return ResponseEntity.status(e.getStatus()).body(new CalculateGPAResponse(e.getErrorDescription()));
         }
     }
 }

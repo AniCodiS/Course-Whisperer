@@ -6,7 +6,7 @@ import com.freeuni.coursewhisperer.data.model.PersonalInformation;
 import com.freeuni.coursewhisperer.service.PersonalInformationService;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = PersonalInformationService.class)
+@Mapper(componentModel = "spring")
 public interface PersonalInformationMapper extends AbstractMapper<PersonalInformationEntity, PersonalInformation, PersonalInformationDTO> {
 
 }

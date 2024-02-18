@@ -4,14 +4,14 @@ import lombok.*;
 
 @Setter
 @Getter
-public class CalculatedGPADTO {
+public class CalculateGPAResponse {
 
     private Double gpa;
     private String errorMessage;
 
-    public CalculatedGPADTO(Double aDouble) {
+    public CalculateGPAResponse(Double aDouble) {
     }
 
-    public CalculatedGPADTO(String errorMessage) {
+    public CalculateGPAResponse(String errorMessage) {
     }
 }
