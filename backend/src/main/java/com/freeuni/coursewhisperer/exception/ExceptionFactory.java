@@ -10,6 +10,15 @@ public final class ExceptionFactory {
     private ExceptionFactory() {
     }
 
+    public static CourseWhispererException commentIsNotYours() {
+        return badRequest("comment.is.not.yours", "Cannot update comment that is not done by you");
+    }
+
+    public static CourseWhispererException containsOddWords() {
+        return badRequest("contains.odd.word",
+                "The text you provided contains words that goes against our guidelines");
+    }
+
     public static CourseWhispererException resourceNotFound(Class<?> clazz, String id) {
         return notFound("resource.not.found",
                 String.format("%s with id %s not found", clazz.getSimpleName(), id));
