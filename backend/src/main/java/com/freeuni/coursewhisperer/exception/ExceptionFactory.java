@@ -42,6 +42,22 @@ public final class ExceptionFactory {
         return conflict("personal.information.already.exists", "Personal information with this email already exists");
     }
 
+    public static CourseWhispererException NoStudyGroupsPresent() {
+        return notFound("study.groups.not.found", "There are no study groups present");
+    }
+
+    public static CourseWhispererException StudyGroupNotFound() {
+        return notFound("study.group.not.found", "Study group not found");
+    }
+
+    public static CourseWhispererException StudyGroupAlreadyExists() {
+        return conflict("study.group.already.exists", "Study group with this name already exists");
+    }
+
+    public static CourseWhispererException StudyGroupNotYours() {
+        return forbidden("study.group.not.yours", "You are not a member of this study group");
+    }
+
     public static CourseWhispererException commentIsNotYours() {
         return badRequest("comment.is.not.yours", "Cannot update comment that is not done by you");
     }

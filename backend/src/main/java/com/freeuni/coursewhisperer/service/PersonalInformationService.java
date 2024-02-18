@@ -24,16 +24,13 @@ public class PersonalInformationService {
 
     private final UserRepository userRepository;
 
-    private final PersonalInformationMapper mapper;
-
     private final UpdatePersonalInformationMapper updateMapper;
 
     private final PersonalInformationResponseMapper personalInformationResponseMapper;
 
-    public PersonalInformationService(PersonalInformationRepository personalInformationRepository, UserRepository userRepository, PersonalInformationMapper mapper, UpdatePersonalInformationMapper updateMapper, PersonalInformationResponseMapper personalInformationResponseMapper) {
+    public PersonalInformationService(PersonalInformationRepository personalInformationRepository, UserRepository userRepository, UpdatePersonalInformationMapper updateMapper, PersonalInformationResponseMapper personalInformationResponseMapper) {
         this.personalInformationRepository = personalInformationRepository;
         this.userRepository = userRepository;
-        this.mapper = mapper;
         this.updateMapper = updateMapper;
         this.personalInformationResponseMapper = personalInformationResponseMapper;
     }
