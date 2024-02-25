@@ -41,7 +41,7 @@ public class PostController {
 
     @GetMapping("/search")
     public ResponseEntity<List<PostDTO>> getPosts(@RequestParam(required = false) String username,
-                                                  @RequestParam(required = false) Long subject,
+                                                  @RequestParam(required = false) String subject,
                                                   @RequestParam(required = false) EPostType type) {
         var res = postService.searchPosts(username, subject, type).stream().map(postMapper::modelToDto).toList();
         return ResponseEntity.ok(res);

@@ -1,7 +1,9 @@
 package com.freeuni.coursewhisperer.controller;
 
 import com.freeuni.coursewhisperer.data.api.dto.PrerequisiteDTO;
+import com.freeuni.coursewhisperer.data.mapper.PrerequisiteMapper;
 import com.freeuni.coursewhisperer.service.PrerequisiteService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,14 +21,18 @@ public class PrerequisiteController {
 
     private final PrerequisiteService prerequisiteService;
 
-    public PrerequisiteController(PrerequisiteService prerequisiteService) {
+    private final PrerequisiteMapper prerequisiteMapper;
+
+    public PrerequisiteController(PrerequisiteService prerequisiteService,
+                                  PrerequisiteMapper prerequisiteMapper) {
         this.prerequisiteService = prerequisiteService;
+        this.prerequisiteMapper = prerequisiteMapper;
     }
 
-//    @GetMapping
-//    public List<PrerequisiteDTO> getAllPrerequisites() {
-//        return prerequisiteService.getAllPrerequisites();
-//    }
+    @GetMapping
+    public List<PrerequisiteDTO> getAllPrerequisites() {
+        return prerequisiteMapper.modelToDto(prerequisiteService.getAllPrerequisites());
+    }
 
     @GetMapping("/{id}")
     public PrerequisiteDTO getPrerequisiteById(@PathVariable Long id) {
@@ -39,8 +45,9 @@ public class PrerequisiteController {
     }
 
     @PutMapping("/{id}")
-    public PrerequisiteDTO updatePrerequisite(@PathVariable Long id, @RequestBody PrerequisiteDTO prerequisiteDTO) {
-        return prerequisiteService.updatePrerequisite(id, prerequisiteDTO);
+    public ResponseEntity<Void> updatePrerequisite(@PathVariable Long id, @RequestBody PrerequisiteDTO prerequisiteDTO) {
+        prerequisiteService.updatePrerequisite(id, prerequisiteDTO);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
