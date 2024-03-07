@@ -68,7 +68,7 @@ public class LecturerController {
         try {
             lecturerService.deleteLecturer(email);
         } catch (CourseWhispererException e) {
-            ResponseEntity.status(e.getStatus()).body(e.getErrorDescription());
+            return ResponseEntity.status(e.getStatus()).body(e.getErrorDescription());
         }
         return ResponseEntity.ok().body("Personal information deleted successfully");
     }

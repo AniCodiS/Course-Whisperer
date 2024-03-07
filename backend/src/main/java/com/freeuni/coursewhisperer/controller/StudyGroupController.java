@@ -61,7 +61,7 @@ public class StudyGroupController {
         try {
             studyGroupService.deleteStudyGroup(deleteStudyGroupDTO);
         } catch (CourseWhispererException e) {
-            ResponseEntity.status(e.getStatus()).body(e.getErrorDescription());
+            return ResponseEntity.status(e.getStatus()).body(e.getErrorDescription());
         }
         return ResponseEntity.ok().body("Study Group deleted successfully");
     }

@@ -72,9 +72,9 @@ public class UserController {
         try {
             userService.deleteUser(username);
         } catch (CourseWhispererException e) {
-            ResponseEntity.status(e.getStatus()).body(e.getErrorDescription());
+            return ResponseEntity.status(e.getStatus()).body(e.getErrorDescription());
         }
-        return ResponseEntity.ok().body("Study Group deleted successfully");
+        return ResponseEntity.ok().body("User deleted successfully");
     }
 
     @GetMapping("/login")

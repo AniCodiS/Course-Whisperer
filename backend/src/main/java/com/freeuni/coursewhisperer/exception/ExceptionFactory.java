@@ -75,11 +75,11 @@ public final class ExceptionFactory {
     }
 
     public static CourseWhispererException UsernameAlreadyExists() {
-        return conflict("username.already.exists", "Username with this email already exists");
+        return conflict("username.already.exists", "User with this username already exists");
     }
 
     public static CourseWhispererException EmailAlreadyExists() {
-        return conflict("email.already.exists", "Email with this email already exists");
+        return conflict("email.already.exists", "User with this email already exists");
     }
 
     public static CourseWhispererException PasswordsDoNotMatch() {
