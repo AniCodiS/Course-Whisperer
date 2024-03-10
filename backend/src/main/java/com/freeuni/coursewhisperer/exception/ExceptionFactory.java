@@ -106,6 +106,10 @@ public final class ExceptionFactory {
         return badRequest("comment.is.not.yours", "Cannot update comment that is not done by you");
     }
 
+    public static CourseWhispererException resourseIsNotYours() {
+        return badRequest("resource.is.not.yours", "You are trying to access to the resource that does not belong to you");
+    }
+
     public static CourseWhispererException containsOddWords() {
         return badRequest("contains.odd.word",
                 "The text you provided contains words that goes against our guidelines");

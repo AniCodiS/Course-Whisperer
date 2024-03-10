@@ -4,6 +4,7 @@ public enum ESchool {
     MACSE,
     ESM,
     PHYSICS,
+    VADS,
     OTHER
 
 }
