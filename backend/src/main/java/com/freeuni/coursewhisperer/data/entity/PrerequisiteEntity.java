@@ -17,7 +17,7 @@ import lombok.Setter;
 @Table(name = "prerequisites", schema = "public")
 public class PrerequisiteEntity extends AbstractIdTimestampEntity {
     @Column(name = "subject")
-    private Long subject;
+    private String subject;
 
     @Column(name = "subject_code")
     private String prerequisite;

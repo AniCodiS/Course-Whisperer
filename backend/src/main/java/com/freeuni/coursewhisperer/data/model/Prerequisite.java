@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class Prerequisite {
-    private Subject subject;
-    private Subject prerequisite;
+    private String subject;
+    private String prerequisite;
 }
