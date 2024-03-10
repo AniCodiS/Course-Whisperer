@@ -28,8 +28,7 @@ public class CommentController extends AbstractController<CommentEntity, Long, C
 
     @GetMapping("/{postId}/all")
     public ResponseEntity<List<CommentDTO>> getComments(@PathVariable Long postId) {
-        var res = commentService.getComments(postId).stream().
-                map(commentMapper::modelToDto).toList();
+        var res = commentService.getComments(postId).stream().map(commentMapper::modelToDto).toList();
         return ResponseEntity.ok(res);
     }
 
