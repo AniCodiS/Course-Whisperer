@@ -2,7 +2,10 @@ package com.freeuni.coursewhisperer.controller;
 
 import com.freeuni.coursewhisperer.data.api.dto.CreatedLecturerDTO;
 import com.freeuni.coursewhisperer.data.api.dto.LecturerDTO;
+import com.freeuni.coursewhisperer.data.api.dto.LecturerResponse;
+import com.freeuni.coursewhisperer.exception.CourseWhispererException;
 import com.freeuni.coursewhisperer.service.LecturerService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,27 +28,48 @@ public class LecturerController {
     }
 
     @GetMapping("/all")
-    public List<LecturerDTO> getAllLecturers() {
-        return lecturerService.getAllLecturers();
+    public ResponseEntity<List<LecturerResponse>> getAllLecturers() {
+        try {
+            return ResponseEntity.ok().body(lecturerService.getAllLecturers());
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(List.of(new LecturerResponse(e.getErrorDescription())));
+        }
     }
 
     @GetMapping("/get/{email}")
-    public LecturerDTO getLecturerByEmail(@PathVariable String email) {
-        return lecturerService.getLecturerByEmail(email);
+    public ResponseEntity<LecturerResponse> getLecturerByEmail(@PathVariable String email) {
+        try {
+            return ResponseEntity.ok().body(lecturerService.getLecturerByEmail(email));
+        } catch(CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(new LecturerResponse(e.getErrorDescription()));
+        }
     }
 
     @PostMapping("/create")
-    public CreatedLecturerDTO createLecturer(@RequestBody LecturerDTO lecturer) {
-        return lecturerService.createLecturer(lecturer);
+    public ResponseEntity<CreatedLecturerDTO> createLecturer(@RequestBody LecturerDTO lecturer) {
+        try {
+            return ResponseEntity.ok().body(lecturerService.createLecturer(lecturer));
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(new CreatedLecturerDTO(e.getErrorDescription()));
+        }
     }
 
     @PutMapping("/update/{email}")
-    public LecturerDTO updateLecturer(@PathVariable String email, @RequestBody LecturerDTO lecturer) {
-        return lecturerService.updateLecturer(email, lecturer);
+    public ResponseEntity<LecturerResponse> updateLecturer(@PathVariable String email, @RequestBody LecturerDTO lecturer) {
+        try {
+            return ResponseEntity.ok().body(lecturerService.updateLecturer(email, lecturer));
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(new LecturerResponse(e.getErrorDescription()));
+        }
     }
 
     @DeleteMapping("/delete/{email}")
-    public void deleteLecturer(@PathVariable String email) {
-        lecturerService.deleteLecturer(email);
+    public ResponseEntity<String> deleteLecturer(@PathVariable String email) {
+        try {
+            lecturerService.deleteLecturer(email);
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getErrorDescription());
+        }
+        return ResponseEntity.ok().body("Personal information deleted successfully");
     }
 }

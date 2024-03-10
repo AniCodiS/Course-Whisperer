@@ -1,11 +1,14 @@
 package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.api.dto.PersonalInformationDTO;
+import com.freeuni.coursewhisperer.data.api.dto.PersonalInformationResponse;
 import com.freeuni.coursewhisperer.data.api.dto.UpdatePersonalInformationDTO;
 import com.freeuni.coursewhisperer.data.entity.PersonalInformationEntity;
 import com.freeuni.coursewhisperer.data.entity.UserEntity;
 import com.freeuni.coursewhisperer.data.mapper.PersonalInformationMapper;
+import com.freeuni.coursewhisperer.data.mapper.PersonalInformationResponseMapper;
 import com.freeuni.coursewhisperer.data.mapper.UpdatePersonalInformationMapper;
+import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.PersonalInformationRepository;
 import com.freeuni.coursewhisperer.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -21,61 +24,61 @@ public class PersonalInformationService {
 
     private final UserRepository userRepository;
 
-    private final PersonalInformationMapper mapper;
-
     private final UpdatePersonalInformationMapper updateMapper;
 
-    public PersonalInformationService(PersonalInformationRepository personalInformationRepository, UserRepository userRepository, PersonalInformationMapper mapper, UpdatePersonalInformationMapper updateMapper) {
+    private final PersonalInformationResponseMapper personalInformationResponseMapper;
+
+    public PersonalInformationService(PersonalInformationRepository personalInformationRepository, UserRepository userRepository, UpdatePersonalInformationMapper updateMapper, PersonalInformationResponseMapper personalInformationResponseMapper) {
         this.personalInformationRepository = personalInformationRepository;
         this.userRepository = userRepository;
-        this.mapper = mapper;
         this.updateMapper = updateMapper;
+        this.personalInformationResponseMapper = personalInformationResponseMapper;
     }
 
-    public List<PersonalInformationDTO> getAllPersonalInformation() {
+    public List<PersonalInformationResponse> getAllPersonalInformation() {
         List<PersonalInformationEntity> personalInfos = personalInformationRepository.findAll();
         if (personalInfos.isEmpty()) {
-            // TODO: throw exception
-            return null;
+            throw ExceptionFactory.NoPersonalInformationPresent();
         }
-        List<PersonalInformationDTO> personalInformationDTOs = new ArrayList<>();
+        List<PersonalInformationResponse> personalInformationDTOs = new ArrayList<>();
         for (PersonalInformationEntity personalInformation : personalInfos) {
-            personalInformationDTOs.add(mapper.modelToDto(mapper.entityToModel(personalInformation)));
+            personalInformationDTOs.add(personalInformationResponseMapper.modelToDto(personalInformationResponseMapper.entityToModel(personalInformation)));
         }
         return personalInformationDTOs;
     }
 
-    public PersonalInformationDTO getPersonalInformationByEmail(String email) {
+    public PersonalInformationResponse getPersonalInformationByEmail(String email) {
         if (personalInformationRepository.existsByEmail(email)) {
-            return mapper.modelToDto(mapper.entityToModel(personalInformationRepository.findByEmail(email)));
+            return personalInformationResponseMapper.modelToDto(personalInformationResponseMapper.entityToModel(personalInformationRepository.findByEmail(email)));
         }
-        // TODO: throw exception
-        return null;
+        throw ExceptionFactory.PersonalInformationNotFound();
     }
 
-    public PersonalInformationDTO createPersonalInformation(PersonalInformationDTO personalInformationDTO) {
-        if (userRepository.existsByEmail(personalInformationDTO.getEmail()) && !personalInformationRepository.existsByEmail(personalInformationDTO.getEmail())) {
-            PersonalInformationDTO createdPersonalInformationDTO = new PersonalInformationDTO();
-            PersonalInformationEntity personalInformation = new PersonalInformationEntity();
-            personalInformation.setUser(userRepository.findByEmail(personalInformationDTO.getEmail()));
-            personalInformation.setFirstName(personalInformationDTO.getFirstName());
-            personalInformation.setLastName(personalInformationDTO.getLastName());
-            personalInformation.setYear(personalInformationDTO.getYear());
-            personalInformation.setFaculty(personalInformationDTO.getFaculty());
-            personalInformation.setEmail(personalInformationDTO.getEmail());
-            personalInformationRepository.save(personalInformation);
-            createdPersonalInformationDTO.setFirstName(personalInformation.getFirstName());
-            createdPersonalInformationDTO.setLastName(personalInformation.getLastName());
-            createdPersonalInformationDTO.setYear(personalInformation.getYear());
-            createdPersonalInformationDTO.setFaculty(personalInformation.getFaculty());
-            createdPersonalInformationDTO.setEmail(personalInformation.getEmail());
-            return createdPersonalInformationDTO;
+    public PersonalInformationResponse createPersonalInformation(PersonalInformationDTO personalInformationDTO) {
+        if (!userRepository.existsByEmail(personalInformationDTO.getEmail())) {
+            throw ExceptionFactory.UserNotFound();
         }
-        // TODO: throw exception
-        return null;
+        if (personalInformationRepository.existsByEmail(personalInformationDTO.getEmail())) {
+            throw ExceptionFactory.PersonalInformationAlreadyExists();
+        }
+        PersonalInformationResponse createdPersonalInformationDTO = new PersonalInformationResponse();
+        PersonalInformationEntity personalInformation = new PersonalInformationEntity();
+        personalInformation.setUser(userRepository.findByEmail(personalInformationDTO.getEmail()));
+        personalInformation.setFirstName(personalInformationDTO.getFirstName());
+        personalInformation.setLastName(personalInformationDTO.getLastName());
+        personalInformation.setYear(personalInformationDTO.getYear());
+        personalInformation.setFaculty(personalInformationDTO.getFaculty());
+        personalInformation.setEmail(personalInformationDTO.getEmail());
+        personalInformationRepository.save(personalInformation);
+        createdPersonalInformationDTO.setFirstName(personalInformation.getFirstName());
+        createdPersonalInformationDTO.setLastName(personalInformation.getLastName());
+        createdPersonalInformationDTO.setYear(personalInformation.getYear());
+        createdPersonalInformationDTO.setFaculty(personalInformation.getFaculty());
+        createdPersonalInformationDTO.setEmail(personalInformation.getEmail());
+        return createdPersonalInformationDTO;
     }
 
-    public PersonalInformationDTO updatePersonalInformation(String email, UpdatePersonalInformationDTO updatePersonalInformationDTO) {
+    public PersonalInformationResponse updatePersonalInformation(String email, UpdatePersonalInformationDTO updatePersonalInformationDTO) {
         if (personalInformationRepository.existsByEmail(email)) {
             UserEntity user = userRepository.findByEmail(email);
             PersonalInformationEntity personalInformationEntity = updateMapper.modelToEntity(updateMapper.dtoToModel(updatePersonalInformationDTO));
@@ -102,7 +105,7 @@ public class PersonalInformationService {
             } else {
                 personalInformationEntity.setFaculty(personalInformationRepository.findByEmail(email).getFaculty());
             }
-            return mapper.modelToDto(mapper.entityToModel(personalInformationRepository.save(personalInformationEntity)));
+            return personalInformationResponseMapper.modelToDto(personalInformationResponseMapper.entityToModel(personalInformationRepository.save(personalInformationEntity)));
         }
         // TODO: throw exception
         return null;

@@ -1,8 +1,11 @@
 package com.freeuni.coursewhisperer.controller;
 
 import com.freeuni.coursewhisperer.data.api.dto.PersonalInformationDTO;
+import com.freeuni.coursewhisperer.data.api.dto.PersonalInformationResponse;
 import com.freeuni.coursewhisperer.data.api.dto.UpdatePersonalInformationDTO;
+import com.freeuni.coursewhisperer.exception.CourseWhispererException;
 import com.freeuni.coursewhisperer.service.PersonalInformationService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,27 +28,48 @@ public class PersonalInformationController {
     }
 
     @GetMapping("/all")
-    public List<PersonalInformationDTO> getAllPersonalInformation() {
-        return personalInformationService.getAllPersonalInformation();
+    public ResponseEntity<List<PersonalInformationResponse>> getAllPersonalInformation() {
+        try {
+            return ResponseEntity.ok().body(personalInformationService.getAllPersonalInformation());
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(List.of(new PersonalInformationResponse(e.getErrorDescription())));
+        }
     }
 
     @GetMapping("/get/{email}")
-    public PersonalInformationDTO getPersonalInformationByUsername(@PathVariable String email) {
-        return personalInformationService.getPersonalInformationByEmail(email);
+    public ResponseEntity<PersonalInformationResponse> getPersonalInformationByUsername(@PathVariable String email) {
+        try {
+            return ResponseEntity.ok().body(personalInformationService.getPersonalInformationByEmail(email));
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(new PersonalInformationResponse(e.getErrorDescription()));
+        }
     }
 
     @PostMapping("/create")
-    public PersonalInformationDTO createPersonalInformation(@RequestBody PersonalInformationDTO personalInformationDTO) {
-        return personalInformationService.createPersonalInformation(personalInformationDTO);
+    public ResponseEntity<PersonalInformationResponse> createPersonalInformation(@RequestBody PersonalInformationDTO personalInformationDTO) {
+        try {
+            return ResponseEntity.ok().body(personalInformationService.createPersonalInformation(personalInformationDTO));
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(new PersonalInformationResponse(e.getErrorDescription()));
+        }
     }
 
     @PutMapping("/update/{email}")
-    public PersonalInformationDTO updatePersonalInformation(@PathVariable String email, @RequestBody UpdatePersonalInformationDTO updatePersonalInformationDTO) {
-        return personalInformationService.updatePersonalInformation(email, updatePersonalInformationDTO);
+    public ResponseEntity<PersonalInformationResponse> updatePersonalInformation(@PathVariable String email, @RequestBody UpdatePersonalInformationDTO updatePersonalInformationDTO) {
+        try {
+            return ResponseEntity.ok().body(personalInformationService.updatePersonalInformation(email, updatePersonalInformationDTO));
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(new PersonalInformationResponse(e.getErrorDescription()));
+        }
     }
 
     @DeleteMapping("/delete/{email}")
-    public void deletePersonalInformation(@PathVariable String email) {
-        personalInformationService.deletePersonalInformation(email);
+    public ResponseEntity<String> deletePersonalInformation(@PathVariable String email) {
+        try {
+            personalInformationService.deletePersonalInformation(email);
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getErrorDescription());
+        }
+        return ResponseEntity.ok().body("Personal information deleted successfully");
     }
 }

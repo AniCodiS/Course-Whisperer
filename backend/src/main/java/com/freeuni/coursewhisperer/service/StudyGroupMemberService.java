@@ -2,8 +2,10 @@ package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.api.dto.DeleteStudyGroupMemberDTO;
 import com.freeuni.coursewhisperer.data.api.dto.StudyGroupMemberDTO;
+import com.freeuni.coursewhisperer.data.api.dto.StudyGroupMemberResponse;
 import com.freeuni.coursewhisperer.data.entity.StudyGroupEntity;
 import com.freeuni.coursewhisperer.data.entity.StudyGroupMemberEntity;
+import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.StudyGroupMemberRepository;
 import com.freeuni.coursewhisperer.repository.StudyGroupRepository;
 import com.freeuni.coursewhisperer.repository.UserRepository;
@@ -28,36 +30,29 @@ public class StudyGroupMemberService {
         this.userRepository = userRepository;
     }
 
-    public List<StudyGroupMemberDTO> getAllStudyGroupMembers() {
+    public List<StudyGroupMemberResponse> getAllStudyGroupMembers() {
         List<StudyGroupMemberEntity> studyGroupMembers = studyGroupMemberRepository.findAll();
         if (studyGroupMembers.isEmpty()) {
-            // TODO: throw exception
-            return null;
+            throw ExceptionFactory.NoStudyGroupMembersPresent();
         }
-        List<StudyGroupMemberDTO> studyGroupMemberDTOs = new ArrayList<>();
+        List<StudyGroupMemberResponse> studyGroupMemberResponses = new ArrayList<>();
         for (StudyGroupMemberEntity studyGroupMember : studyGroupMembers) {
-            StudyGroupMemberDTO studyGroupMemberDTO = new StudyGroupMemberDTO();
-            studyGroupMemberDTO.setGroupName(studyGroupMember.getStudyGroup().getGroupName());
-            studyGroupMemberDTO.setMemberUsername(studyGroupMember.getMember().getUsername());
-            studyGroupMemberDTOs.add(studyGroupMemberDTO);
+            StudyGroupMemberResponse studyGroupMemberResponse = new StudyGroupMemberResponse();
+            studyGroupMemberResponse.setGroupName(studyGroupMember.getStudyGroup().getGroupName());
+            studyGroupMemberResponse.setMemberUsername(studyGroupMember.getMember().getUsername());
+            studyGroupMemberResponses.add(studyGroupMemberResponse);
         }
-        return studyGroupMemberDTOs;
+        return studyGroupMemberResponses;
     }
 
-    public StudyGroupMemberEntity getStudyGroupMemberById(Long id) {
-        if (studyGroupMemberRepository.existsById(id)) {
-            return studyGroupMemberRepository.findById(id).orElse(null);
-        }
-        // TODO: throw exception
-        return null;
-    }
-
-    public StudyGroupMemberDTO createStudyGroupMember(StudyGroupMemberDTO studyGroupMemberDTO) {
+    public StudyGroupMemberResponse createStudyGroupMember(StudyGroupMemberDTO studyGroupMemberDTO) {
         String studyGroupName = studyGroupMemberDTO.getGroupName();
         String memberUsername = studyGroupMemberDTO.getMemberUsername();
-        if (studyGroupRepository.findByGroupName(studyGroupName) == null || userRepository.findByUsername(memberUsername) == null) {
-            // TODO: throw exception
-            return null;
+        if (studyGroupRepository.findByGroupName(studyGroupName) == null) {
+            throw ExceptionFactory.StudyGroupWithNameNotFound();
+        }
+        if (userRepository.findByUsername(memberUsername) == null) {
+            throw ExceptionFactory.UserNotFound();
         }
         StudyGroupMemberEntity studyGroupMember = new StudyGroupMemberEntity();
         StudyGroupEntity studyGroup = studyGroupRepository.findByGroupName(studyGroupName);
@@ -65,25 +60,15 @@ public class StudyGroupMemberService {
             studyGroup.setCurrentMemberCount(studyGroup.getCurrentMemberCount() + 1);
             studyGroupRepository.save(studyGroup);
         } else {
-            // TODO: throw exception
-            return null;
+            throw ExceptionFactory.StudyGroupIsFull();
         }
         studyGroupMember.setStudyGroup(studyGroupRepository.findByGroupName(studyGroupName));
         studyGroupMember.setMember(userRepository.findByUsername(memberUsername));
         studyGroupMemberRepository.save(studyGroupMember);
-        StudyGroupMemberDTO studyGroupMemberDTO2 = new StudyGroupMemberDTO();
+        StudyGroupMemberResponse studyGroupMemberDTO2 = new StudyGroupMemberResponse();
         studyGroupMemberDTO2.setGroupName(studyGroupMember.getStudyGroup().getGroupName());
         studyGroupMemberDTO2.setMemberUsername(studyGroupMember.getMember().getUsername());
         return studyGroupMemberDTO2;
-    }
-
-    public StudyGroupMemberEntity updateStudyGroupMember(Long id, StudyGroupMemberEntity studyGroupMember) {
-        if (studyGroupMemberRepository.existsById(id)) {
-            studyGroupMember.setId(id);
-            return studyGroupMemberRepository.save(studyGroupMember);
-        }
-        // TODO: throw exception
-        return null;
     }
 
     @Transactional

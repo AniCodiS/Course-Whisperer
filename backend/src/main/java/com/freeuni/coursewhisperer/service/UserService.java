@@ -1,14 +1,15 @@
 package com.freeuni.coursewhisperer.service;
 
-import com.freeuni.coursewhisperer.data.api.dto.ChangePasswordDTO;
-import com.freeuni.coursewhisperer.data.api.dto.UpdateUserDTO;
+import com.freeuni.coursewhisperer.data.api.dto.*;
 import com.freeuni.coursewhisperer.data.mapper.UpdateUserMapper;
+import com.freeuni.coursewhisperer.data.mapper.UpdatedUserMapper;
 import com.freeuni.coursewhisperer.data.mapper.UserMapper;
-import com.freeuni.coursewhisperer.data.api.dto.CreatedUserDTO;
-import com.freeuni.coursewhisperer.data.api.dto.UserDTO;
 import com.freeuni.coursewhisperer.data.entity.UserEntity;
+import com.freeuni.coursewhisperer.data.mapper.UserResponseMapper;
+import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,57 +24,65 @@ public class UserService {
 
     private final UpdateUserMapper updateMapper;
 
-    public UserService(UserRepository userRepository, UserMapper mapper, UpdateUserMapper updateMapper) {
+    private final UpdatedUserMapper updatedUserMapper;
+
+    private final UserResponseMapper userResponseMapper;
+
+    public UserService(UserRepository userRepository, UserMapper mapper, UpdateUserMapper updateMapper, UpdatedUserMapper updatedUserMapper, UserResponseMapper userResponseMapper) {
         this.userRepository = userRepository;
         this.mapper = mapper;
         this.updateMapper = updateMapper;
+        this.updatedUserMapper = updatedUserMapper;
+        this.userResponseMapper = userResponseMapper;
     }
 
-    public List<UserDTO> getAllUsers() {
-        List<UserDTO> userDTOs = new ArrayList<>();
+    public List<UserResponse> getAllUsers() {
+        List<UserResponse> userResponses = new ArrayList<>();
         List<UserEntity> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            throw ExceptionFactory.NoUsersPresent();
+        }
         for (UserEntity user : users) {
-            userDTOs.add(mapper.modelToDto(mapper.entityToModel(user)));
+            userResponses.add(userResponseMapper.modelToDto(userResponseMapper.entityToModel(user)));
         }
-        return userDTOs;
+        return userResponses;
     }
 
-    public UserDTO getUserByUsername(String username) {
+    public UserResponse getUserByUsername(String username) {
         if (userRepository.existsByUsername(username)) {
-            return mapper.modelToDto(mapper.entityToModel(userRepository.findByUsername(username)));
+            return userResponseMapper.modelToDto(userResponseMapper.entityToModel(userRepository.findByUsername(username)));
         }
-        // TODO: throw exception
-        return null;
+        throw ExceptionFactory.UserNotFound();
     }
 
-    public CreatedUserDTO createUser(UserDTO userDTO) {
+    public UserResponse createUser(UserDTO userDTO) {
         String newUsername = userDTO.getUsername();
         String newEmail = userDTO.getEmail();
-        if (!userRepository.existsByUsername(newUsername) && !userRepository.existsByEmail(newEmail)) {
-            CreatedUserDTO createdUserDTO = new CreatedUserDTO();
-            UserEntity createdUser = userRepository.save(mapper.modelToEntity(mapper.dtoToModel(userDTO)));
-            createdUserDTO.setId(createdUser.getId());
-            createdUserDTO.setEmail(createdUser.getEmail());
-            createdUserDTO.setUsername(createdUser.getUsername());
-            createdUserDTO.setPassword(createdUser.getPassword());
-            return createdUserDTO;
+        if (userRepository.existsByUsername(newUsername)) {
+            throw ExceptionFactory.UsernameAlreadyExists();
         }
-        // TODO: throw exception
-        return null;
+        if (userRepository.existsByEmail(newEmail)) {
+            throw ExceptionFactory.EmailAlreadyExists();
+        }
+        UserResponse userResponse = new UserResponse();
+        UserEntity createdUser = userRepository.save(mapper.modelToEntity(mapper.dtoToModel(userDTO)));
+        userResponse.setEmail(createdUser.getEmail());
+        userResponse.setUsername(createdUser.getUsername());
+        userResponse.setPassword(createdUser.getPassword());
+        return userResponse;
     }
 
-    public UpdateUserDTO updateUser(String username, UpdateUserDTO updateUserDTO) {
+    public UpdatedUserDTO updateUser(String username, UpdateUserDTO updateUserDTO) {
         if (userRepository.existsByUsername(username)) {
             UserEntity userEntity = updateMapper.modelToEntity(updateMapper.dtoToModel(updateUserDTO));
             userEntity.setId(userRepository.findByUsername(username).getId());
             userEntity.setPassword(userRepository.findByUsername(username).getPassword());
-            return updateMapper.modelToDto(updateMapper.entityToModel(userRepository.save(userEntity)));
+            return updatedUserMapper.modelToDto(updatedUserMapper.entityToModel(userRepository.save(userEntity)));
         }
-        // TODO: throw exception
-        return null;
+        throw ExceptionFactory.UserNotFound();
     }
 
-    public boolean changePassword(String username, ChangePasswordDTO changePasswordDTO) {
+    public String changePassword(String username, ChangePasswordDTO changePasswordDTO) {
         String oldPassword = changePasswordDTO.getOldPassword();
         String newPassword = changePasswordDTO.getNewPassword();
         String confirmNewPassword = changePasswordDTO.getConfirmNewPassword();
@@ -81,18 +90,16 @@ public class UserService {
             UserEntity userEntity = userRepository.findByUsername(username);
             if (userEntity.getPassword().equals(oldPassword)) {
                 if (!newPassword.equals(confirmNewPassword)) {
-                    return false;
+                    throw ExceptionFactory.PasswordsDoNotMatch();
                 }
                 userEntity.setPassword(newPassword);
                 userRepository.save(userEntity);
-                return true;
+                return "Password changed successfully!";
             } else {
-                return false;
-                // TODO: throw exception
+                throw ExceptionFactory.OldPasswordDoesNotMatch();
             }
         } else {
-            return false;
-            // TODO: throw exception
+            throw ExceptionFactory.UserNotFound();
         }
     }
 
@@ -100,7 +107,8 @@ public class UserService {
     public void deleteUser(String username) {
         if (userRepository.existsByUsername(username)) {
             userRepository.deleteByUsername(username);
+        } else {
+            throw ExceptionFactory.UserNotFound();
         }
-        // TODO: throw exception
     }
 }

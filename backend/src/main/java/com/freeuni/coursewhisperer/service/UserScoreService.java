@@ -1,9 +1,12 @@
 package com.freeuni.coursewhisperer.service;
 
+import com.freeuni.coursewhisperer.data.api.dto.UserScoreResponse;
 import com.freeuni.coursewhisperer.data.mapper.UserScoreMapper;
 import com.freeuni.coursewhisperer.data.api.dto.CreatedUserScoreDTO;
 import com.freeuni.coursewhisperer.data.api.dto.UserScoreDTO;
 import com.freeuni.coursewhisperer.data.entity.UserScoreEntity;
+import com.freeuni.coursewhisperer.data.mapper.UserScoreResponseMapper;
+import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.UserRepository;
 import com.freeuni.coursewhisperer.repository.UserScoreRepository;
 import jakarta.transaction.Transactional;
@@ -21,41 +24,40 @@ public class UserScoreService {
 
     private final UserScoreMapper mapper;
 
-    public UserScoreService(UserScoreRepository userScoreRepository, UserRepository userRepository, UserScoreMapper mapper) {
+    private final UserScoreResponseMapper responseMapper;
+
+    public UserScoreService(UserScoreRepository userScoreRepository, UserRepository userRepository, UserScoreMapper mapper, UserScoreResponseMapper responseMapper) {
         this.userScoreRepository = userScoreRepository;
         this.userRepository = userRepository;
         this.mapper = mapper;
+        this.responseMapper = responseMapper;
     }
 
-    public List<UserScoreDTO> getAllUserScores() {
-        List<UserScoreDTO> userScoreDTOs = new ArrayList<>();
+    public List<UserScoreResponse> getAllUserScores() {
+        List<UserScoreResponse> userScoreResponses = new ArrayList<>();
         if (userScoreRepository.findAll().isEmpty()) {
-            // TODO: throw exception
-            return null;
+            throw ExceptionFactory.NoUserScoresPresent();
         }
         List<UserScoreEntity> userScores = userScoreRepository.findAll();
         for (UserScoreEntity userScore : userScores) {
-            userScoreDTOs.add(mapper.modelToDto(mapper.entityToModel(userScore)));
+            userScoreResponses.add(responseMapper.modelToDto(responseMapper.entityToModel(userScore)));
         }
-        return userScoreDTOs;
+        return userScoreResponses;
     }
 
-    public UserScoreDTO getUserScoreByUsername(String username) {
+    public UserScoreResponse getUserScoreByUsername(String username) {
         if (userScoreRepository.existsByUsername(username)) {
-            return mapper.modelToDto(mapper.entityToModel(userScoreRepository.findByUsername(username)));
+            return responseMapper.modelToDto(responseMapper.entityToModel(userScoreRepository.findByUsername(username)));
         }
-        // TODO: throw exception
-        return null;
+        throw ExceptionFactory.UserScoreNotFound();
     }
 
     public CreatedUserScoreDTO createUserScore(UserScoreDTO userScoreDTO) {
         if (userScoreRepository.existsByUsername(userScoreDTO.getUsername())) {
-            // TODO: throw exception
-            return null;
+            throw ExceptionFactory.UserScoreAlreadyExists();
         }
         if (!userRepository.existsByUsername(userScoreDTO.getUsername())) {
-            // TODO: throw exception
-            return null;
+            throw ExceptionFactory.UserNotFound();
         }
         CreatedUserScoreDTO createdUserScoreDTO = new CreatedUserScoreDTO();
         UserScoreEntity createdUserScore = userScoreRepository.save(mapper.modelToEntity(mapper.dtoToModel(userScoreDTO)));
@@ -65,14 +67,13 @@ public class UserScoreService {
         return createdUserScoreDTO;
     }
 
-    public UserScoreDTO updateUserScore(String username, UserScoreDTO userScore) {
+    public UserScoreResponse updateUserScore(String username, UserScoreDTO userScore) {
         if (userScoreRepository.existsByUsername(username)) {
             UserScoreEntity userScoreEntity = mapper.modelToEntity(mapper.dtoToModel(userScore));
             userScoreEntity.setId(userScoreRepository.findByUsername(username).getId());
-            return mapper.modelToDto(mapper.entityToModel(userScoreRepository.save(userScoreEntity)));
+            return responseMapper.modelToDto(responseMapper.entityToModel(userScoreRepository.save(userScoreEntity)));
         }
-        // TODO: throw exception
-        return null;
+        throw ExceptionFactory.UserScoreNotFound();
     }
 
     @Transactional
@@ -80,7 +81,7 @@ public class UserScoreService {
         if (userScoreRepository.existsByUsername(username)) {
             userScoreRepository.deleteByUsername(username);
         } else {
-            // TODO: throw exception
+            throw ExceptionFactory.UserScoreNotFound();
         }
     }
 }

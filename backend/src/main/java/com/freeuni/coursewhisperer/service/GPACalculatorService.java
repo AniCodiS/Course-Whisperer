@@ -2,6 +2,7 @@ package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.common.Course;
 import com.freeuni.coursewhisperer.data.api.dto.CalculateGPADTO;
+import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,9 @@ public class GPACalculatorService {
 
     public Double calculateGPA(CalculateGPADTO calculateGPADTO) {
         List<Course> courses = calculateGPADTO.getCourses();
+        if (courses == null || courses.isEmpty()) {
+            throw ExceptionFactory.GPACoursesEmpty();
+        }
         Double totalGradePoints = 0.0;
         int totalCreditHours = 0;
         // Iterate through each course

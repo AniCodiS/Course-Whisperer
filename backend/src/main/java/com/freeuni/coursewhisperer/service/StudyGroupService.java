@@ -2,8 +2,11 @@ package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.api.dto.DeleteStudyGroupDTO;
 import com.freeuni.coursewhisperer.data.api.dto.StudyGroupDTO;
+import com.freeuni.coursewhisperer.data.api.dto.StudyGroupResponse;
 import com.freeuni.coursewhisperer.data.entity.StudyGroupEntity;
 import com.freeuni.coursewhisperer.data.mapper.StudyGroupMapper;
+import com.freeuni.coursewhisperer.data.mapper.StudyGroupResponseMapper;
+import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.StudyGroupRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -18,52 +21,51 @@ public class StudyGroupService {
 
     private final StudyGroupMapper mapper;
 
-    public StudyGroupService(StudyGroupRepository studyGroupRepository, StudyGroupMapper mapper) {
+    private final StudyGroupResponseMapper studyGroupResponseMapper;
+
+    public StudyGroupService(StudyGroupRepository studyGroupRepository, StudyGroupMapper mapper, StudyGroupResponseMapper studyGroupResponseMapper) {
         this.studyGroupRepository = studyGroupRepository;
         this.mapper = mapper;
+        this.studyGroupResponseMapper = studyGroupResponseMapper;
     }
 
-    public List<StudyGroupDTO> getAllStudyGroups() {
+    public List<StudyGroupResponse> getAllStudyGroups() {
         List<StudyGroupEntity> studyGroups = studyGroupRepository.findAll();
         if (studyGroups.isEmpty()) {
-            // TODO: throw exception
-            return null;
+            throw ExceptionFactory.NoStudyGroupsPresent();
         }
-        List<StudyGroupDTO> studyGroupDTOs = new ArrayList<>();
+        List<StudyGroupResponse> studyGroupResponses = new ArrayList<>();
         for (StudyGroupEntity studyGroup : studyGroups) {
-            studyGroupDTOs.add(mapper.modelToDto(mapper.entityToModel(studyGroup)));
+            studyGroupResponses.add(studyGroupResponseMapper.modelToDto(studyGroupResponseMapper.entityToModel(studyGroup)));
         }
-        return studyGroupDTOs;
+        return studyGroupResponses;
     }
 
-    public StudyGroupDTO getStudyGroupByGroupName(String groupName) {
+    public StudyGroupResponse getStudyGroupByGroupName(String groupName) {
         if (!studyGroupRepository.existsByGroupName(groupName)) {
-            return mapper.modelToDto(mapper.entityToModel(studyGroupRepository.findByGroupName(groupName)));
+            return studyGroupResponseMapper.modelToDto(studyGroupResponseMapper.entityToModel(studyGroupRepository.findByGroupName(groupName)));
         }
-        // TODO: throw exception
-        return null;
+        throw ExceptionFactory.StudyGroupNotFound();
     }
 
-    public StudyGroupDTO createStudyGroup(StudyGroupDTO studyGroupDTO) {
+    public StudyGroupResponse createStudyGroup(StudyGroupDTO studyGroupDTO) {
         if (studyGroupRepository.existsByGroupName(studyGroupDTO.getGroupName())) {
-            // TODO: throw exception
-            return null;
+            throw ExceptionFactory.StudyGroupAlreadyExists();
         }
         studyGroupDTO.setCurrentMemberCount(0);
         studyGroupDTO.setMaxMemberCount(10);
         StudyGroupEntity studyGroupEntity = mapper.modelToEntity(mapper.dtoToModel(studyGroupDTO));
         StudyGroupEntity savedStudyGroupEntity = studyGroupRepository.save(studyGroupEntity);
-        return mapper.modelToDto(mapper.entityToModel(savedStudyGroupEntity));
+        return studyGroupResponseMapper.modelToDto(studyGroupResponseMapper.entityToModel(savedStudyGroupEntity));
     }
 
-    public StudyGroupDTO updateStudyGroup(String groupName, StudyGroupDTO studyGroupDTO) {
+    public StudyGroupResponse updateStudyGroup(String groupName, StudyGroupDTO studyGroupDTO) {
         if (studyGroupRepository.existsByGroupName(groupName)) {
             StudyGroupEntity studyGroupEntity = mapper.modelToEntity(mapper.dtoToModel(studyGroupDTO));
             studyGroupEntity.setId(studyGroupRepository.findByGroupName(groupName).getId());
-            return mapper.modelToDto(mapper.entityToModel(studyGroupRepository.save(studyGroupEntity)));
+            return studyGroupResponseMapper.modelToDto(studyGroupResponseMapper.entityToModel(studyGroupRepository.save(studyGroupEntity)));
         }
-        // TODO: throw exception
-        return null;
+        throw ExceptionFactory.StudyGroupNotFound();
     }
 
     @Transactional
@@ -75,10 +77,10 @@ public class StudyGroupService {
             if (studyGroupEntity.getCreatorUsername().equals(creatorUsername)) {
                 studyGroupRepository.delete(studyGroupEntity);
             } else {
-                // TODO: throw exception
+                throw ExceptionFactory.StudyGroupNotYours();
             }
         } else {
-            // TODO: throw exception
+            throw ExceptionFactory.StudyGroupNotFound();
         }
     }
 }

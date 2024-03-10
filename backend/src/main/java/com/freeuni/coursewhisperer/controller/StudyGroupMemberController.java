@@ -2,9 +2,13 @@ package com.freeuni.coursewhisperer.controller;
 
 import com.freeuni.coursewhisperer.data.api.dto.DeleteStudyGroupMemberDTO;
 import com.freeuni.coursewhisperer.data.api.dto.StudyGroupMemberDTO;
+import com.freeuni.coursewhisperer.data.api.dto.StudyGroupMemberResponse;
+import com.freeuni.coursewhisperer.data.api.dto.StudyGroupResponse;
 import com.freeuni.coursewhisperer.data.entity.StudyGroupMemberEntity;
+import com.freeuni.coursewhisperer.exception.CourseWhispererException;
 import com.freeuni.coursewhisperer.service.StudyGroupMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,27 +25,30 @@ public class StudyGroupMemberController {
     }
 
     @GetMapping("/all")
-    public List<StudyGroupMemberDTO> getAllStudyGroupMembers() {
-        return studyGroupMemberService.getAllStudyGroupMembers();
-    }
-
-    @GetMapping("/get/{id}")
-    public StudyGroupMemberEntity getStudyGroupMemberById(@PathVariable Long id) {
-        return studyGroupMemberService.getStudyGroupMemberById(id);
+    public ResponseEntity<List<StudyGroupMemberResponse>> getAllStudyGroupMembers() {
+        try {
+            return ResponseEntity.ok().body(studyGroupMemberService.getAllStudyGroupMembers());
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(List.of(new StudyGroupMemberResponse(e.getErrorDescription())));
+        }
     }
 
     @PostMapping("/create")
-    public StudyGroupMemberDTO createStudyGroupMember(@RequestBody StudyGroupMemberDTO studyGroupMemberDTO) {
-        return studyGroupMemberService.createStudyGroupMember(studyGroupMemberDTO);
-    }
-
-    @PutMapping("/update/{id}")
-    public StudyGroupMemberEntity updateStudyGroupMember(@PathVariable Long id, @RequestBody StudyGroupMemberEntity studyGroupMember) {
-        return studyGroupMemberService.updateStudyGroupMember(id, studyGroupMember);
+    public ResponseEntity<StudyGroupMemberResponse> createStudyGroupMember(@RequestBody StudyGroupMemberDTO studyGroupMemberDTO) {
+        try {
+            return ResponseEntity.ok().body(studyGroupMemberService.createStudyGroupMember(studyGroupMemberDTO));
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(new StudyGroupMemberResponse(e.getErrorDescription()));
+        }
     }
 
     @DeleteMapping("/delete")
-    public void deleteStudyGroupMember(@RequestBody DeleteStudyGroupMemberDTO deleteStudyGroupMemberDTO) {
-        studyGroupMemberService.deleteStudyGroupMember(deleteStudyGroupMemberDTO);
+    public ResponseEntity<String> deleteStudyGroupMember(@RequestBody DeleteStudyGroupMemberDTO deleteStudyGroupMemberDTO) {
+        try {
+            studyGroupMemberService.deleteStudyGroupMember(deleteStudyGroupMemberDTO);
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getErrorDescription());
+        }
+        return ResponseEntity.ok().body("User from study group deleted successfully");
     }
 }
