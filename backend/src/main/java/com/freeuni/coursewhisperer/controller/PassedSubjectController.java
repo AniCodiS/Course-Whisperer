@@ -27,26 +27,27 @@ public class PassedSubjectController extends AbstractController<PassedSubjectEnt
 
     @PostMapping("/create")
     public ResponseEntity<PassedSubjectDTO> createPassedSubject(@RequestBody @Valid PassedSubjectDTO passedSubjectDTO) {
-        var res = passedSubjectMapper.modelToDto(passedSubjectService.createPassedSubject(passedSubjectDTO));
+        var res = passedSubjectMapper.modelToDto(passedSubjectService.
+                createPassedSubject(passedSubjectMapper.dtoToModel(passedSubjectDTO)));
         return ResponseEntity.ok(res);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PassedSubjectDTO>> getPassedSubjects() {
-        var res = passedSubjectService.getPassedSubjects().stream().map(passedSubjectMapper::modelToDto).toList();
+    public ResponseEntity<List<PassedSubjectDTO>> getPassedSubjects(@RequestParam String username) {
+        var res = passedSubjectService.getPassedSubjects(username).stream().map(passedSubjectMapper::modelToDto).toList();
         return ResponseEntity.ok(res);
     }
 
-    @PutMapping("/{code}")
-    public ResponseEntity<PassedSubjectDTO> updatePassedSubject(@PathVariable String code,
+    @PutMapping("/{id}")
+    public ResponseEntity<PassedSubjectDTO> updatePassedSubject(@PathVariable Long id,
                                                                 @RequestBody @Valid PassedSubjectDTO passedSubjectDTO) {
-        var res = passedSubjectMapper.modelToDto(passedSubjectService.updatePassedSubject(code, passedSubjectMapper.dtoToModel(passedSubjectDTO)));
+        var res = passedSubjectMapper.modelToDto(passedSubjectService.updatePassedSubject(id, passedSubjectMapper.dtoToModel(passedSubjectDTO)));
         return ResponseEntity.ok(res);
     }
 
-    @DeleteMapping("/remove/{code}")
-    public ResponseEntity<Void> deletePassedSubject(@PathVariable String code, @RequestParam String username) {
-        passedSubjectService.deletePassedSubject(username, code);
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<Void> deletePassedSubject(@PathVariable Long id, @RequestParam String username) {
+        passedSubjectService.deletePassedSubject(username, id);
         return ResponseEntity.ok().build();
     }
 }

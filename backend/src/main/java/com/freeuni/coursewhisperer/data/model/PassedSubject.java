@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class PassedSubject {
-    private String student;
+    private String username;
     private String subject;
     private EGrade grade;
     private Integer gradeScore;

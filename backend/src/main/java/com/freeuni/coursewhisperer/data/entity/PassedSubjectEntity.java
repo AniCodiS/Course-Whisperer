@@ -16,7 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "passed_subject")
 public class PassedSubjectEntity extends AbstractIdTimestampEntity {
-    @Column(name = "student")
+    @Column(name = "username")
     private String username;
 
     @Column(name = "subject")
