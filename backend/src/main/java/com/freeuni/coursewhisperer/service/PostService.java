@@ -34,7 +34,7 @@ public class PostService {
         postRepository.save(postEntity);
     }
 
-    public List<Post> searchPosts(String username, Long subject, EPostType type) {
+    public List<Post> searchPosts(String username, String subject, EPostType type) {
         var res = postRepository.searchPosts(username, subject, type);
         return res.stream().map(postMapper::entityToModel).toList();
     }

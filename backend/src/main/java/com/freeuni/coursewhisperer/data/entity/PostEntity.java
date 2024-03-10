@@ -14,7 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "post")
 public class PostEntity extends AbstractIdTimestampEntity {
-    @Column(name = "student")
+    @Column(name = "username")
     private String username;
 
     @Column(name = "subject")

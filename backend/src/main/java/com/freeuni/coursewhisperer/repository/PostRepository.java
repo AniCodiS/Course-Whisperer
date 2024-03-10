@@ -18,7 +18,7 @@ public interface PostRepository extends AbstractRepository<PostEntity, Long>{
             "(:subject is null or p.subject = :subject) and " +
             "(:type is null or p.type = :type) order by p.upVote desc ")
 
-    List<PostEntity> searchPosts(String username, Long subject, EPostType type);
+    List<PostEntity> searchPosts(String username, String subject, EPostType type);
 
     void deleteById(Long id);
 }
