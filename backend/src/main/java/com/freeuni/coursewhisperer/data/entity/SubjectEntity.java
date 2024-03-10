@@ -1,6 +1,5 @@
 package com.freeuni.coursewhisperer.data.entity;
 
-import com.freeuni.coursewhisperer.data.entity.common.AbstractIdTimestampEntity;
 import com.freeuni.coursewhisperer.data.enums.ESchool;
 import com.freeuni.coursewhisperer.data.enums.ESemester;
 import jakarta.persistence.*;
@@ -13,12 +12,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "subject")
-public class SubjectEntity extends AbstractIdTimestampEntity {
+public class SubjectEntity {
+    @Id
+    @Column(name = "subject_code", nullable = false, unique = true)
+    private String code;
+
     @Column(name = "subject_name")
     private String name;
-
-    @Column(name = "subject_code")
-    private String code;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "school_name")
@@ -33,5 +33,6 @@ public class SubjectEntity extends AbstractIdTimestampEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "semester", nullable = false)
     private ESemester semester;
+
 
 }

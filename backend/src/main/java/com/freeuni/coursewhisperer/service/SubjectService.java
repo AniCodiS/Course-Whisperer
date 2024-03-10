@@ -1,7 +1,5 @@
 package com.freeuni.coursewhisperer.service;
 
-import com.freeuni.coursewhisperer.data.api.dto.SubjectDTO;
-import com.freeuni.coursewhisperer.data.entity.SubjectEntity;
 import com.freeuni.coursewhisperer.data.enums.ESchool;
 import com.freeuni.coursewhisperer.data.enums.ESemester;
 import com.freeuni.coursewhisperer.data.mapper.SubjectMapper;
@@ -18,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class SubjectService extends AbstractService<SubjectEntity, Long, Subject, SubjectDTO> {
+public class SubjectService {
 
     private final SubjectRepository subjectRepository;
     private final PassedSubjectService passedSubjectService;
@@ -29,7 +27,6 @@ public class SubjectService extends AbstractService<SubjectEntity, Long, Subject
                           PassedSubjectService passedSubjectService,
                           PrerequisiteService prerequisiteService,
                           SubjectMapper subjectMapper) {
-        super(subjectRepository, subjectMapper, SubjectEntity.class);
         this.subjectRepository = subjectRepository;
         this.passedSubjectService = passedSubjectService;
         this.prerequisiteService = prerequisiteService;
@@ -42,7 +39,7 @@ public class SubjectService extends AbstractService<SubjectEntity, Long, Subject
                 stream().map(subjectMapper::entityToModel).toList();
     }
 
-    public List<Subject> chooseSubject(String username, Integer creditScore, ESchool schoolName, ESemester semester) {
+    public List<Subject> chooseSubject(String username, ESchool schoolName, Integer creditScore, ESemester semester) {
         var passedSubjects = passedSubjectService.getPassesSubjects(username);
         var prerequisites = prerequisiteService.getAllPrerequisites().stream().collect(Collectors.groupingBy(
                 Prerequisite::getSubject,
@@ -54,12 +51,27 @@ public class SubjectService extends AbstractService<SubjectEntity, Long, Subject
         subjectRepository.search(null, null, schoolName, creditScore, null, semester).
                 stream().map(subjectMapper::entityToModel).forEach(subject -> {
                             if (!passedSubjects.contains(subject.getCode()) &&
-                                    new HashSet<>(passedSubjects).containsAll(prerequisites.get(subject).
-                                            stream().map(Subject::getCode).toList())) {
+                                    new HashSet<>(passedSubjects).containsAll(prerequisites.get(subject))) {
                                 subjects.add(subject);
                             }
                         }
                 );
         return subjects;
+    }
+
+    public Subject createSubject(Subject subject) {
+        return subjectMapper.entityToModel(subjectRepository.save(subjectMapper.modelToEntity(subject)));
+
+    }
+
+    public Subject updateSubject(String code, Subject subject) {
+        var entity = subjectMapper.modelToEntity(subject);
+        return subjectMapper.entityToModel(subjectRepository.save(entity));
+
+    }
+
+    public void deleteSubject(String code) {
+        var entity = subjectRepository.findByCode(code);
+        subjectRepository.delete(entity);
     }
 }

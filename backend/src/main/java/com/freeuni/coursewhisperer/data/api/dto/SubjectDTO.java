@@ -8,8 +8,8 @@ import lombok.Data;
 @Data
 @Builder
 public class SubjectDTO {
-    private String name;
     private String code;
+    private String name;
     private ESchool schoolName;
     private Integer creditScore;
     private String lecturer;
