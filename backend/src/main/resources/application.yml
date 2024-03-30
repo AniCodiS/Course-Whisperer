@@ -4,14 +4,27 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/mydatabase
-    username: myusername
-    password: mypassword
+    username: root
+    password: mkulo
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        format_sql: true
+    show-sql: true
 
   flyway:
-    url: jdbc:postgresql://localhost:5432/mydatabase
-    user: myusername
-    password: mypassword
+    baseline-on-migrate: true
     enabled: true
+    table: db_migrations
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    user: root
+    password: mkulo
 
   security:
     oauth2:
