@@ -1,0 +1,8 @@
+CREATE TABLE prerequisites
+(
+    id           BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    subject      VARCHAR(255),
+    subject_code VARCHAR(255),
+    created_at   TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    modified_at  TIMESTAMP WITHOUT TIME ZONE
+);

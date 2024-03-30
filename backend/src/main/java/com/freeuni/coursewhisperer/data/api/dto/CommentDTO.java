@@ -1,11 +1,16 @@
 package com.freeuni.coursewhisperer.data.api.dto;
 
-import com.freeuni.coursewhisperer.data.validator.CorrectText;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record CommentDTO(
-        String username,
-        Long postId,
-        @CorrectText
-        String content
-) {
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class CommentDTO {
+    private String username;
+    private Long postId;
+    private String content;
 }

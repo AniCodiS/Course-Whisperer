@@ -1,15 +1,20 @@
 package com.freeuni.coursewhisperer.data.api.dto;
 
 import com.freeuni.coursewhisperer.data.enums.EPostType;
-import com.freeuni.coursewhisperer.data.validator.CorrectText;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record PostDTO(
-        String username,
-        String subject,
-        @CorrectText
-        String content,
-        Integer upVote,
-        Integer downVote,
-        EPostType type
-) {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PostDTO {
+    private String username;
+    private String subject;
+    private String content;
+    private Integer upVote;
+    private Integer downVote;
+    private EPostType type;
 }

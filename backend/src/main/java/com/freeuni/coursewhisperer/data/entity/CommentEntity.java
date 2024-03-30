@@ -13,10 +13,10 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "comment")
 public class CommentEntity extends AbstractIdTimestampEntity {
-    @Column(name = "user")
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "post")
+    @Column(name = "post_id")
     private Long postId;
 
     @Column(name = "content")
