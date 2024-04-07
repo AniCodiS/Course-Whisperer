@@ -7,6 +7,7 @@ import com.freeuni.coursewhisperer.service.GPACalculatorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/gpa-calculator")
 public class GPACalculatorController {

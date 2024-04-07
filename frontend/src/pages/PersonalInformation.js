@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../styles/PersonalInformation.css';
 
 const PersonalInformation = () => {
     const [personalInfo, setPersonalInfo] = useState(null);
@@ -20,14 +21,14 @@ const PersonalInformation = () => {
     }, []);
 
     return (
-        <div>
-            {error && <p>Error: {error}</p>}
+        <div className="personal-info-container">
+            {error && <p className="error-message">Error: {error}</p>}
             {personalInfo && (
-                <div>
+                <div className="personal-info">
                     <h2>{personalInfo.firstName} {personalInfo.lastName}</h2>
-                    <p>Faculty: {personalInfo.faculty}</p>
-                    <p>Email: {personalInfo.email}</p>
-                    <p>Year: {personalInfo.year}</p>
+                    <p><strong>Faculty:</strong> {personalInfo.faculty}</p>
+                    <p><strong>Email:</strong> {personalInfo.email}</p>
+                    <p><strong>Year:</strong> {personalInfo.year}</p>
                 </div>
             )}
         </div>

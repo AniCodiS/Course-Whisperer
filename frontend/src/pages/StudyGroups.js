@@ -1,78 +1,117 @@
-// StudyGroups.js
-
-import React, { useState } from 'react';
-import '../styles/StudyGroups.css'; // Import CSS file for Study Groups page
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import '../styles/StudyGroups.css';
 
 const StudyGroups = () => {
-    // Hardcoded data for study groups
-    const [studyGroups, setStudyGroups] = useState([
-        { id: 1, name: 'Group 1', timing: 'Monday 6 PM', subject: 'Mathematics', joined: false },
-        { id: 2, name: 'Group 2', timing: 'Tuesday 7 PM', subject: 'Physics', joined: true },
-        { id: 3, name: 'Group 3', timing: 'Wednesday 5 PM', subject: 'Computer Science', joined: false },
-        // Add more study groups as needed
-    ]);
-
+    const [studyGroups, setStudyGroups] = useState([]);
     const [newGroupName, setNewGroupName] = useState('');
     const [newGroupTiming, setNewGroupTiming] = useState('');
     const [newGroupSubject, setNewGroupSubject] = useState('');
 
-    const handleCreateGroup = event => {
-        event.preventDefault();
-        const newGroup = {
-            id: studyGroups.length + 1,
-            name: newGroupName,
-            timing: newGroupTiming,
-            subject: newGroupSubject,
-            joined: false
+    useEffect(() => {
+        const fetchStudyGroups = async () => {
+            try {
+                const response = await axios.get('http://localhost:8081/api/study-group/all');
+                setStudyGroups(response.data);
+            } catch (error) {
+                console.error('Error fetching study groups:', error);
+            }
         };
-        setStudyGroups([...studyGroups, newGroup]);
-        setNewGroupName('');
-        setNewGroupTiming('');
-        setNewGroupSubject('');
+
+        fetchStudyGroups();
+    }, []);
+
+    const handleCreateGroup = async event => {
+        event.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:8081/api/study-group/create', {
+                subjectName: newGroupSubject,
+                meetingTime: newGroupTiming,
+                groupName: newGroupName
+            });
+            setStudyGroups([...studyGroups, response.data]);
+            setNewGroupName('');
+            setNewGroupTiming('');
+            setNewGroupSubject('');
+        } catch (error) {
+            console.error('Error creating study group:', error);
+        }
     };
 
-    const handleJoinGroup = id => {
-        const updatedStudyGroups = studyGroups.map(group =>
-            group.id === id ? { ...group, joined: !group.joined } : group
-        );
-        setStudyGroups(updatedStudyGroups);
+    const handleJoinGroup = async (groupName, currentMemberCount, maxMemberCount) => {
+        try {
+            // Check if the user is already in the group
+            const isUserInGroup = studyGroups.find(group => group.groupName === groupName);
+            if (isUserInGroup) {
+                // Do nothing if the user is already in the group
+                return;
+            }
+
+            // Check if the group is full
+            if (currentMemberCount === maxMemberCount) {
+                alert('The group is full.');
+                return;
+            }
+
+            // Join the group
+            await axios.post('http://localhost:8081/api/study-group-member/create', {
+                groupName: groupName,
+                memberUsername: "username"
+                // Add other necessary data like username
+            });
+
+            // Update the UI (optional)
+            const updatedGroups = studyGroups.map(group => {
+                if (group.groupName === groupName) {
+                    return { ...group, currentMemberCount: group.currentMemberCount + 1 };
+                }
+                return group;
+            });
+            setStudyGroups(updatedGroups);
+        } catch (error) {
+            console.error('Error joining study group:', error);
+        }
+    };
+
+    const handleLeaveGroup = async (groupName, currentMemberCount) => {
+        try {
+            // Leave the group
+            await axios.delete('http://localhost:8081/api/study-group-member/delete', {
+                data: { groupName: groupName, /* Add other necessary data like username */ }
+            });
+
+            // Update the UI (optional)
+            const updatedGroups = studyGroups.map(group => {
+                if (group.groupName === groupName) {
+                    return { ...group, currentMemberCount: group.currentMemberCount - 1 };
+                }
+                return group;
+            });
+            setStudyGroups(updatedGroups);
+        } catch (error) {
+            console.error('Error leaving study group:', error);
+        }
     };
 
     return (
         <div className="study-groups-container">
             <h2>Study Groups</h2>
             <form onSubmit={handleCreateGroup}>
-                <input
-                    type="text"
-                    placeholder="Group Name"
-                    value={newGroupName}
-                    onChange={e => setNewGroupName(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Timing"
-                    value={newGroupTiming}
-                    onChange={e => setNewGroupTiming(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Subject"
-                    value={newGroupSubject}
-                    onChange={e => setNewGroupSubject(e.target.value)}
-                />
-                <button type="submit">Create Group</button>
+                {/* Form inputs for creating a new group */}
             </form>
             <div className="groups-list">
                 {studyGroups.map(group => (
                     <div key={group.id} className="group-item">
-                        <h3>{group.name}</h3>
-                        <p><strong>Timing:</strong> {group.timing}</p>
-                        <p><strong>Subject:</strong> {group.subject}</p>
-                        {group.joined ? (
-                            <button onClick={() => handleJoinGroup(group.id)}>Leave Group</button>
-                        ) : (
-                            <button onClick={() => handleJoinGroup(group.id)}>Join Group</button>
-                        )}
+                        <h3>{group.groupName}</h3>
+                        <p><strong>Timing:</strong> {group.meetingTime}</p>
+                        <p><strong>Subject:</strong> {group.subjectName}</p>
+                        <p><strong>Current Members:</strong> {group.currentMemberCount}/{group.maxMemberCount}</p>
+                        <button onClick={() => handleJoinGroup(group.groupName, group.currentMemberCount, group.maxMemberCount)}>
+                            Join Group
+                        </button>
+                        <button onClick={() => handleLeaveGroup(group.groupName, group.currentMemberCount)}>
+                            Leave Group
+                        </button>
                     </div>
                 ))}
             </div>

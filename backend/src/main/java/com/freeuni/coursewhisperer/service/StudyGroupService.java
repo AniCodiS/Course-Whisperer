@@ -36,7 +36,10 @@ public class StudyGroupService {
         }
         List<StudyGroupResponse> studyGroupResponses = new ArrayList<>();
         for (StudyGroupEntity studyGroup : studyGroups) {
-            studyGroupResponses.add(studyGroupResponseMapper.modelToDto(studyGroupResponseMapper.entityToModel(studyGroup)));
+            StudyGroupResponse studyGroupResponse = studyGroupResponseMapper.modelToDto(studyGroupResponseMapper.entityToModel(studyGroup));
+            studyGroupResponse.setCurrentMemberCount(studyGroup.getCurrentMemberCount());
+            studyGroupResponse.setMaxMemberCount(studyGroup.getMaxMemberCount());
+            studyGroupResponses.add(studyGroupResponse);
         }
         return studyGroupResponses;
     }
@@ -54,9 +57,16 @@ public class StudyGroupService {
         }
         studyGroupDTO.setCurrentMemberCount(0);
         studyGroupDTO.setMaxMemberCount(10);
+        studyGroupDTO.setCreatorUsername("bla");
         StudyGroupEntity studyGroupEntity = mapper.modelToEntity(mapper.dtoToModel(studyGroupDTO));
+        studyGroupEntity.setCreatorUsername("bla");
+        studyGroupEntity.setCurrentMemberCount(0);
+        studyGroupEntity.setMaxMemberCount(10);
         StudyGroupEntity savedStudyGroupEntity = studyGroupRepository.save(studyGroupEntity);
-        return studyGroupResponseMapper.modelToDto(studyGroupResponseMapper.entityToModel(savedStudyGroupEntity));
+        StudyGroupResponse studyGroupResponse = studyGroupResponseMapper.modelToDto(studyGroupResponseMapper.entityToModel(savedStudyGroupEntity));
+        studyGroupResponse.setCurrentMemberCount(0);
+        studyGroupResponse.setMaxMemberCount(10);
+        return studyGroupResponse;
     }
 
     public StudyGroupResponse updateStudyGroup(String groupName, StudyGroupDTO studyGroupDTO) {
