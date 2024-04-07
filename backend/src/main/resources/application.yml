@@ -4,8 +4,8 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/mydatabase
-    username: root
-    password: mkulo
+    username: myusername
+    password: mypassword
 
   jpa:
     hibernate:
@@ -21,25 +21,25 @@ spring:
   flyway:
     baseline-on-migrate: true
     enabled: true
-    table: db_migrations
+    table: flyway_schema_history
     url: jdbc:postgresql://localhost:5432/mydatabase
-    user: root
-    password: mkulo
+    user: myusername
+    password: mypassword
 
-  security:
-    oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: clientid
-            authorization-grant-type: authorization_code
-            scope: openid
-            client-secret: KL9spAwc2iVyWV6lLfAcS6W9sC1pITYW
-        provider:
-          keycloak:
-            issuer-uri: http://localhost:8080/realms/course-whisperer
-            authorization-uri: http://localhost:8080/realms/course-whisperer/protocol/openid-connect/auth
-            token-uri: http://localhost:8080/realms/course-whisperer/protocol/openid-connect/token
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          keycloak:
+#            client-id: clientid
+#            authorization-grant-type: authorization_code
+#            scope: openid
+#            client-secret: KL9spAwc2iVyWV6lLfAcS6W9sC1pITYW
+#        provider:
+#          keycloak:
+#            issuer-uri: http://localhost:8080/realms/course-whisperer
+#            authorization-uri: http://localhost:8080/realms/course-whisperer/protocol/openid-connect/auth
+#            token-uri: http://localhost:8080/realms/course-whisperer/protocol/openid-connect/token
 
 springdoc:
   paths-to-match: /api/**

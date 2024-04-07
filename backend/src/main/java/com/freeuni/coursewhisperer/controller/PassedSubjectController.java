@@ -25,14 +25,14 @@ public class PassedSubjectController extends AbstractController<PassedSubjectEnt
         this.passedSubjectMapper = passedSubjectMapper;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create-subject")
     public ResponseEntity<PassedSubjectDTO> createPassedSubject(@RequestBody @Valid PassedSubjectDTO passedSubjectDTO) {
         var res = passedSubjectMapper.modelToDto(passedSubjectService.
                 createPassedSubject(passedSubjectMapper.dtoToModel(passedSubjectDTO)));
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/retrieve-subjects")
     public ResponseEntity<List<PassedSubjectDTO>> getPassedSubjects(@RequestParam String username) {
         var res = passedSubjectService.getPassedSubjects(username).stream().map(passedSubjectMapper::modelToDto).toList();
         return ResponseEntity.ok(res);
