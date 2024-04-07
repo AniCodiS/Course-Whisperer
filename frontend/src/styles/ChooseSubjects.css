@@ -1,0 +1,48 @@
+.choose-subjects-container {
+    margin: 20px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-field {
+    margin-right: 20px;
+}
+
+.search-field label {
+    margin-right: 5px;
+}
+
+.search-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.subjects-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.subject-item {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.subject-item h3 {
+    margin-bottom: 10px;
+}
+
+.subject-item p {
+    margin: 5px 0;
+}
+
