@@ -13,20 +13,20 @@ spring:
     password: mypassword
     enabled: true
 
-  security:
-    oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: clientid
-            authorization-grant-type: authorization_code
-            scope: openid
-            client-secret: KL9spAwc2iVyWV6lLfAcS6W9sC1pITYW
-        provider:
-          keycloak:
-            issuer-uri: http://localhost:8080/realms/course-whisperer
-            authorization-uri: http://localhost:8080/realms/course-whisperer/protocol/openid-connect/auth
-            token-uri: http://localhost:8080/realms/course-whisperer/protocol/openid-connect/token
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          keycloak:
+#            client-id: clientid
+#            authorization-grant-type: authorization_code
+#            scope: openid
+#            client-secret: KL9spAwc2iVyWV6lLfAcS6W9sC1pITYW
+#        provider:
+#          keycloak:
+#            issuer-uri: http://localhost:8080/realms/course-whisperer
+#            authorization-uri: http://localhost:8080/realms/course-whisperer/protocol/openid-connect/auth
+#            token-uri: http://localhost:8080/realms/course-whisperer/protocol/openid-connect/token
 
 springdoc:
   paths-to-match: /api/**
