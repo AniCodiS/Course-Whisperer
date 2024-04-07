@@ -1,0 +1,22 @@
+/* Leaderboard.css */
+
+.leaderboard-container {
+    margin: 20px;
+}
+
+.users-list {
+    display: flex;
+    justify-content: space-around;
+}
+
+.column {
+    flex: 1;
+}
+
+.header {
+    font-weight: bold;
+}
+
+.column p {
+    margin: 5px 0;
+}
