@@ -1,0 +1,38 @@
+.student-forum-container {
+    margin: 20px;
+}
+
+.posts-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.post-item {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.post-item h3 {
+    margin-bottom: 10px;
+}
+
+.post-item p {
+    margin: 5px 0;
+}
+
+.comments-section {
+    margin-top: 20px;
+}
+
+.comment-item {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+

@@ -47,7 +47,13 @@ public class PersonalInformationService {
         return personalInformationDTOs;
     }
 
-    public PersonalInformationResponse getPersonalInformationByEmail(String email) {
+    public PersonalInformationResponse getPersonalInformation(String username) {
+        String email;
+        if (userRepository.existsByUsername(username)) {
+            email = userRepository.findByUsername(username).getEmail();
+        } else {
+            throw ExceptionFactory.UserNotFound();
+        }
         if (personalInformationRepository.existsByEmail(email)) {
             return personalInformationResponseMapper.modelToDto(personalInformationResponseMapper.entityToModel(personalInformationRepository.findByEmail(email)));
         }
@@ -78,7 +84,13 @@ public class PersonalInformationService {
         return createdPersonalInformationDTO;
     }
 
-    public PersonalInformationResponse updatePersonalInformation(String email, UpdatePersonalInformationDTO updatePersonalInformationDTO) {
+    public PersonalInformationResponse updatePersonalInformation(String username, UpdatePersonalInformationDTO updatePersonalInformationDTO) {
+        String email;
+        if (userRepository.existsByUsername(username)) {
+            email = userRepository.findByUsername(username).getEmail();
+        } else {
+            throw ExceptionFactory.UserNotFound();
+        }
         if (personalInformationRepository.existsByEmail(email)) {
             UserEntity user = userRepository.findByEmail(email);
             PersonalInformationEntity personalInformationEntity = updateMapper.modelToEntity(updateMapper.dtoToModel(updatePersonalInformationDTO));
@@ -106,16 +118,17 @@ public class PersonalInformationService {
                 personalInformationEntity.setFaculty(personalInformationRepository.findByEmail(email).getFaculty());
             }
             return personalInformationResponseMapper.modelToDto(personalInformationResponseMapper.entityToModel(personalInformationRepository.save(personalInformationEntity)));
+        } else {
+            throw ExceptionFactory.PersonalInformationNotFound();
         }
-        // TODO: throw exception
-        return null;
     }
 
     @Transactional
-    public void deletePersonalInformation(String email) {
-        if (personalInformationRepository.existsByEmail(email)) {
-            personalInformationRepository.deleteByEmail(email);
+    public void deletePersonalInformation(String username) {
+        if (userRepository.existsByUsername(username)) {
+            userRepository.deleteByUsername(username);
+        } else {
+            throw ExceptionFactory.UserNotFound();
         }
-        // TODO: throw exception
     }
 }

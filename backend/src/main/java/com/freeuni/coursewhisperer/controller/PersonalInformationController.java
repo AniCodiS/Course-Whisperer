@@ -6,17 +6,11 @@ import com.freeuni.coursewhisperer.data.api.dto.UpdatePersonalInformationDTO;
 import com.freeuni.coursewhisperer.exception.CourseWhispererException;
 import com.freeuni.coursewhisperer.service.PersonalInformationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/personal-information")
 public class PersonalInformationController {
@@ -36,10 +30,10 @@ public class PersonalInformationController {
         }
     }
 
-    @GetMapping("/get/{email}")
-    public ResponseEntity<PersonalInformationResponse> getPersonalInformationByUsername(@PathVariable String email) {
+    @GetMapping("/get/{username}")
+    public ResponseEntity<PersonalInformationResponse> getPersonalInformationByUsername(@PathVariable String username) {
         try {
-            return ResponseEntity.ok().body(personalInformationService.getPersonalInformationByEmail(email));
+            return ResponseEntity.ok().body(personalInformationService.getPersonalInformation(username));
         } catch (CourseWhispererException e) {
             return ResponseEntity.status(e.getStatus()).body(new PersonalInformationResponse(e.getErrorDescription()));
         }
@@ -54,19 +48,19 @@ public class PersonalInformationController {
         }
     }
 
-    @PutMapping("/update/{email}")
-    public ResponseEntity<PersonalInformationResponse> updatePersonalInformation(@PathVariable String email, @RequestBody UpdatePersonalInformationDTO updatePersonalInformationDTO) {
+    @PutMapping("/update/{username}")
+    public ResponseEntity<PersonalInformationResponse> updatePersonalInformation(@PathVariable String username, @RequestBody UpdatePersonalInformationDTO updatePersonalInformationDTO) {
         try {
-            return ResponseEntity.ok().body(personalInformationService.updatePersonalInformation(email, updatePersonalInformationDTO));
+            return ResponseEntity.ok().body(personalInformationService.updatePersonalInformation(username, updatePersonalInformationDTO));
         } catch (CourseWhispererException e) {
             return ResponseEntity.status(e.getStatus()).body(new PersonalInformationResponse(e.getErrorDescription()));
         }
     }
 
-    @DeleteMapping("/delete/{email}")
-    public ResponseEntity<String> deletePersonalInformation(@PathVariable String email) {
+    @DeleteMapping("/delete/{username}")
+    public ResponseEntity<String> deletePersonalInformation(@PathVariable String username) {
         try {
-            personalInformationService.deletePersonalInformation(email);
+            personalInformationService.deletePersonalInformation(username);
         } catch (CourseWhispererException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getErrorDescription());
         }
