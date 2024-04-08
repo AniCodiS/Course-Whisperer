@@ -5,6 +5,6 @@ CREATE TABLE passed_subject
     modified_at TIMESTAMP WITHOUT TIME ZONE,
     username    VARCHAR(255),
     subject     VARCHAR(255),
-    grade       VARCHAR(255),
+    grade       SMALLINT,
     grade_score INTEGER
 );

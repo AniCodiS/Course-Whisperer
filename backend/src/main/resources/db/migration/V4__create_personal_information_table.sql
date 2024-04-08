@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS "personal_information"
 (
-    id         SERIAL PRIMARY KEY,
+    id         BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     username   VARCHAR(255)        NOT NULL,
     first_name VARCHAR(255)        NOT NULL,
     last_name  VARCHAR(255)        NOT NULL,
