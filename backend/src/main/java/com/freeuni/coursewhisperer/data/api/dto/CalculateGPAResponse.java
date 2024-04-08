@@ -10,8 +10,10 @@ public class CalculateGPAResponse {
     private String errorMessage;
 
     public CalculateGPAResponse(Double aDouble) {
+        gpa = aDouble;
     }
 
     public CalculateGPAResponse(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

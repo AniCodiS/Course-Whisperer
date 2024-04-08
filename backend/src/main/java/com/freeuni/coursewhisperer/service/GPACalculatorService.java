@@ -2,13 +2,21 @@ package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.common.Course;
 import com.freeuni.coursewhisperer.data.api.dto.CalculateGPADTO;
+import com.freeuni.coursewhisperer.data.entity.SubjectEntity;
 import com.freeuni.coursewhisperer.exception.ExceptionFactory;
+import com.freeuni.coursewhisperer.repository.SubjectRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class GPACalculatorService {
+
+    private SubjectRepository subjectRepository;
+
+    public GPACalculatorService(SubjectRepository subjectRepository) {
+        this.subjectRepository = subjectRepository;
+    }
 
     // Coefficients for grades
     private static final double COEFFICIENT_A = 4.0;
@@ -27,15 +35,16 @@ public class GPACalculatorService {
         int totalCreditHours = 0;
         // Iterate through each course
         for (Course course : courses) {
-            totalGradePoints += calculateCourseGradePoints(course);
-            totalCreditHours += course.getCreditHours();
+            SubjectEntity subject = subjectRepository.findByName(course.getSubjectName());
+            int creditHours = subject.getCreditScore();
+            String grade = course.getGrade();
+            totalGradePoints += calculateCourseGradePoints(creditHours, grade);
+            totalCreditHours += creditHours;
         }
         return totalCreditHours > 0 ? totalGradePoints / totalCreditHours : 0.0;
     }
 
-    public Double calculateCourseGradePoints(Course c) {
-        int creditHours = c.getCreditHours();
-        String grade = c.getGrade();
+    public Double calculateCourseGradePoints(int creditHours, String grade) {
         return switch (grade) {
             case "A" -> COEFFICIENT_A * creditHours;
             case "B" -> COEFFICIENT_B * creditHours;

@@ -11,5 +11,5 @@ import lombok.Setter;
 @Getter
 public class Course {
     String grade;
-    int creditHours;
+    String subjectName;
 }

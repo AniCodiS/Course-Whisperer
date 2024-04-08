@@ -18,7 +18,7 @@ public class GPACalculatorController {
         this.gpaCalculatorService = gpaCalculatorService;
     }
 
-    @GetMapping("/calculate")
+    @PostMapping("/calculate")
     public ResponseEntity<CalculateGPAResponse> calculateGPA(@RequestBody CalculateGPADTO calculateGPADTO) {
         try {
             return ResponseEntity.ok(new CalculateGPAResponse(gpaCalculatorService.calculateGPA(calculateGPADTO)));

@@ -1,20 +1,28 @@
-// GPACalculator.js
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/GPACalculator.css'; // Import CSS file for GPA Calculator page
 
 const GPACalculator = () => {
-    // Hardcoded data for subjects
-    const subjects = [
-        { id: 1, name: 'Mathematics', creditScore: 3 },
-        { id: 2, name: 'Physics', creditScore: 4 },
-        { id: 3, name: 'Computer Science', creditScore: 3 },
-        { id: 4, name: 'English', creditScore: 2 },
-        // Add more subjects as needed
-    ];
-
+    const [subjects, setSubjects] = useState([]);
     const [selectedSubject, setSelectedSubject] = useState('');
     const [grade, setGrade] = useState('');
+    const [subjectList, setSubjectList] = useState([]);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchSubjects = async () => {
+            try {
+                const response = await axios.get('http://localhost:8081/api/subject/all');
+                setSubjects(response.data);
+            } catch (error) {
+                console.error('Error fetching subjects:', error);
+            }
+        };
+
+        fetchSubjects();
+    }, []);
 
     const handleSubjectChange = event => {
         setSelectedSubject(event.target.value);
@@ -24,11 +32,31 @@ const GPACalculator = () => {
         setGrade(event.target.value);
     };
 
-    const calculateGPA = () => {
-        // Calculate GPA logic here
-        // For simplicity, let's just log the selected subject and grade
-        console.log('Selected Subject:', selectedSubject);
-        console.log('Grade:', grade);
+    const handleAddSubject = () => {
+        if (selectedSubject && grade) {
+            const subjectToAdd = subjects.find(subject => subject.name === selectedSubject);
+            const subjectWithGrade = { ...subjectToAdd, grade };
+            setSubjectList([...subjectList, subjectWithGrade]);
+        }
+    };
+
+    const calculateGPA = async () => {
+        try {
+            // Assuming subjects and grades are arrays containing corresponding data
+            const courses = subjects.map((subject, index) => ({
+                grade: grades[index], // Assuming grades and subjects arrays have the same length
+                subjectName: subject
+            }));
+
+            const calculateGPADTO = {
+                courses: courses
+            };
+
+            const response = await axios.post('http://localhost:8081/api/gpa-calculator/calculate', calculateGPADTO);
+            console.log('GPA Calculation Result:', response.data);
+        } catch (error) {
+            console.error('Error calculating GPA:', error);
+        }
     };
 
     // Possible grades
@@ -43,7 +71,7 @@ const GPACalculator = () => {
                     <select id="subject" value={selectedSubject} onChange={handleSubjectChange}>
                         <option value="">Select Subject</option>
                         {subjects.map(subject => (
-                            <option key={subject.id} value={subject.name}>{subject.name}</option>
+                            <option key={subject.code} value={subject.name}>{subject.name}</option>
                         ))}
                     </select>
                 </div>
@@ -57,7 +85,19 @@ const GPACalculator = () => {
                     </select>
                 </div>
             </div>
-            <button className="calculate-button" onClick={calculateGPA}>Calculate</button>
+            <button className="add-button" onClick={handleAddSubject}>Add Subject</button>
+            <div className="subject-list">
+                <h3>Selected Subjects</h3>
+                <ul>
+                    {subjectList.map((subject, index) => (
+                        <li key={index}>{subject.name} - Grade: {subject.grade}</li>
+                    ))}
+                </ul>
+            </div>
+            <button className="calculate-button" onClick={calculateGPA}>Calculate GPA</button>
+            <div className="auth-footer">
+                <Link to="/">Back to Home</Link>
+            </div>
         </div>
     );
 };
