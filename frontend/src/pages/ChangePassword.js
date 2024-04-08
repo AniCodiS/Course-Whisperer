@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/Auth.css';
 
 const ChangePassword = () => {
@@ -9,6 +10,9 @@ const ChangePassword = () => {
         confirmPassword: ''
     });
 
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(false);
+
     const navigate = useNavigate();
 
     const handleInputChange = event => {
@@ -16,12 +20,32 @@ const ChangePassword = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
-        // Here you can add logic to handle form submission
-        console.log('Form submitted:', formData);
-        // Redirect to home page or dashboard after successful password change
-        navigate('/');
+
+        if (formData.newPassword !== formData.confirmPassword) {
+            setError('New password and confirm password do not match.');
+            return;
+        }
+
+        try {
+            // TODO[AO] change aniodiss to logged in user's username
+            await axios.put(`http://localhost:8081/api/user/aniodiss/change-password`, {
+                oldPassword: formData.oldPassword,
+                newPassword: formData.newPassword,
+                confirmNewPassword: formData.confirmPassword
+            });
+            setSuccess(true);
+            setError(null);
+            navigate('/');
+        } catch (error) {
+            if (error.response.status === 400) {
+                setError('Incorrect old password. Please try again.');
+            } else {
+                setError(error.response.data);
+            }
+            setSuccess(false);
+        }
     };
 
     return (
@@ -54,6 +78,8 @@ const ChangePassword = () => {
                 />
                 <button type="submit">Change Password</button>
             </form>
+            {error && <p className="error-message">{error}</p>}
+            {success && <p className="success-message">Password changed successfully.</p>}
             <div className="auth-footer">
                 <Link to="/">Back to Home</Link>
             </div>
