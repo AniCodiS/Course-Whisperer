@@ -33,6 +33,10 @@ public class SubjectService {
         this.subjectMapper = subjectMapper;
     }
 
+    public List<Subject> getAllSubjects() {
+        return subjectRepository.findAll().stream().map(subjectMapper::entityToModel).toList();
+    }
+
     public List<Subject> search(String name, String code, ESchool schoolName,
                                 Integer creditScore, Long lecturer, ESemester semester) {
         return subjectRepository.search(name, code, schoolName, creditScore, lecturer, semester).

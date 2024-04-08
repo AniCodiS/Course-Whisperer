@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/subject")
 public class SubjectController {
@@ -20,6 +21,12 @@ public class SubjectController {
     public SubjectController(SubjectService subjectService, SubjectMapper subjectMapper) {
         this.subjectService = subjectService;
         this.subjectMapper = subjectMapper;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<SubjectDTO>> getAllSubjects() {
+        var res = subjectService.getAllSubjects().stream().map(subjectMapper::modelToDto).toList();
+        return ResponseEntity.ok(res);
     }
 
     @PostMapping("/create")
