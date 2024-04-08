@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS "study_groups"
 (
-    id                   SERIAL PRIMARY KEY,
+    id                   BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     subject_name         VARCHAR(255),
     creator_username     VARCHAR(255) NOT NULL,
     meeting_time         TIMESTAMP,

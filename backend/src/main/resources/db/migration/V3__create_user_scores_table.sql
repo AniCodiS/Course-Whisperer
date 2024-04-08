@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS user_scores
 (
-    id       SERIAL PRIMARY KEY,
+    id       BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     username VARCHAR(255),
     score    INT,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
