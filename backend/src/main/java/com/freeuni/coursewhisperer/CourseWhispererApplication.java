@@ -9,7 +9,4 @@ public class CourseWhispererApplication {
     public static void main(String[] args) {
         SpringApplication.run(CourseWhispererApplication.class, args);
     }
-
-    //test
-
 }
