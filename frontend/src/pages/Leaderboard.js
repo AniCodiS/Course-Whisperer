@@ -23,21 +23,17 @@ const Leaderboard = () => {
             <h2>Leaderboard</h2>
             <div className="users-list">
                 <div className="column">
-                    <p className="header">Place</p>
+                    <div className="header-values">
+                        <div className="header-item">Place</div>
+                        <div className="header-item">Username</div>
+                        <div className="header-item">Score</div>
+                    </div>
                     {users.map((user, index) => (
-                        <p key={user.username}>{index + 1}</p>
-                    ))}
-                </div>
-                <div className="column">
-                    <p className="header">Username</p>
-                    {users.map((user) => (
-                        <p key={user.username}>{user.username}</p>
-                    ))}
-                </div>
-                <div className="column">
-                    <p className="header">Score</p>
-                    {users.map((user) => (
-                        <p key={user.username}>{user.score}</p>
+                        <div key={user.username} className="header-values">
+                            <div className="value">{index + 1}</div>
+                            <div className="value">{user.username}</div>
+                            <div className="value">{user.score}</div>
+                        </div>
                     ))}
                 </div>
             </div>

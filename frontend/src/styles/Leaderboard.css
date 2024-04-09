@@ -1,22 +1,35 @@
-/* Leaderboard.css */
-
 .leaderboard-container {
     margin: 20px;
 }
 
 .users-list {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
 }
 
 .column {
-    flex: 1;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(100% - 40px);
+    margin-bottom: 20px;
 }
 
-.header {
+.header-item {
     font-weight: bold;
+    font-size: 1.2rem;
+    color: #333;
 }
 
-.column p {
-    margin: 5px 0;
+.header-values {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.value {
+    font-size: 1.2rem;
+    color: #333;
 }
