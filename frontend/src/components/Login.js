@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/Auth.css';
 
 const Login = () => {
@@ -7,7 +8,6 @@ const Login = () => {
         username: '',
         password: ''
     });
-
     const navigate = useNavigate();
 
     const handleInputChange = event => {
@@ -15,12 +15,24 @@ const Login = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
-        // Here you can add logic to handle form submission
-        console.log('Form submitted:', formData);
-        // Redirect to home page or dashboard after successful login
-        navigate('/');
+        try {
+            const response = await axios.get('http://localhost:8081/api/user/login', {
+                params: {
+                    username: formData.username,
+                    password: formData.password
+                }
+            });
+
+            if (response.status === 200) {
+                navigate('/homepage');
+            } else {
+                console.error('Login failed:', response.data);
+            }
+        } catch (error) {
+            console.error('Error logging in:', error);
+        }
     };
 
     return (
