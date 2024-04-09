@@ -57,9 +57,9 @@ public class StudyGroupService {
         }
         studyGroupDTO.setCurrentMemberCount(0);
         studyGroupDTO.setMaxMemberCount(10);
-        studyGroupDTO.setCreatorUsername("bla");
+        studyGroupDTO.setCreatorUsername(studyGroupDTO.getCreatorUsername());
         StudyGroupEntity studyGroupEntity = mapper.modelToEntity(mapper.dtoToModel(studyGroupDTO));
-        studyGroupEntity.setCreatorUsername("bla");
+        studyGroupEntity.setCreatorUsername(studyGroupDTO.getCreatorUsername());
         studyGroupEntity.setCurrentMemberCount(0);
         studyGroupEntity.setMaxMemberCount(10);
         StudyGroupEntity savedStudyGroupEntity = studyGroupRepository.save(studyGroupEntity);

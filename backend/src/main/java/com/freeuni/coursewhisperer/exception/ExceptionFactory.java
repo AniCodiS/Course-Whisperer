@@ -62,6 +62,10 @@ public final class ExceptionFactory {
         return notFound("study.group.members.not.found", "There are no study group members present");
     }
 
+    public static CourseWhispererException StudyGroupMemberNotFound() {
+        return conflict("study.group.member.not.found", "Study group member not found");
+    }
+
     public static CourseWhispererException StudyGroupWithNameNotFound() {
         return notFound("study.group.with.name.not.found", "Study group with this name not found");
     }

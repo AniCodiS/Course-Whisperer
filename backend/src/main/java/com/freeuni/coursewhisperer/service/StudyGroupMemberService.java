@@ -86,7 +86,7 @@ public class StudyGroupMemberService {
             studyGroup.setCurrentMemberCount(studyGroup.getCurrentMemberCount() - 1);
             studyGroupRepository.save(studyGroup);
         } else {
-            // TODO: throw exception
+            throw ExceptionFactory.StudyGroupMemberNotFound();
         }
     }
 }
