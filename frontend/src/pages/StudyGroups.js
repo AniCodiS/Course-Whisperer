@@ -43,10 +43,10 @@ const StudyGroups = () => {
 
     const handleJoinGroup = async (groupName) => {
         try {
-            const username = localStorage.getItem('username'); // Retrieve username from localStorage
+            const username = localStorage.getItem('username');
             await axios.post('http://localhost:8081/api/study-group-member/create', {
                 groupName: groupName,
-                memberUsername: username // Use retrieved username
+                memberUsername: username
             });
             fetchStudyGroups();
         } catch (error) {
@@ -56,14 +56,14 @@ const StudyGroups = () => {
 
     const handleLeaveGroup = async (groupName) => {
         try {
-            const username = localStorage.getItem('username'); // Retrieve username from localStorage
+            const username = localStorage.getItem('username');
             await axios.delete('http://localhost:8081/api/study-group-member/delete', {
                 data: {
                     groupName: groupName,
-                    memberUsername: username // Use retrieved username
+                    memberUsername: username
                 }
             });
-            fetchStudyGroups(); // Fetch study groups again after leaving
+            fetchStudyGroups();
         } catch (error) {
             console.error('Error leaving study group:', error);
         }
@@ -71,34 +71,43 @@ const StudyGroups = () => {
 
     return (
         <div className="study-groups-container">
-            <h2>Study Groups</h2>
-            <form onSubmit={handleCreateGroup}>
-                <label htmlFor="newGroupName">Group Name:</label>
-                <input
-                    type="text"
-                    id="newGroupName"
-                    value={newGroupName}
-                    onChange={event => setNewGroupName(event.target.value)}
-                />
-                <label htmlFor="newGroupTiming">Meeting Time:</label>
-                <input
-                    type="text"
-                    id="newGroupTiming"
-                    value={newGroupTiming}
-                    onChange={event => setNewGroupTiming(event.target.value)}
-                />
-                <label htmlFor="newGroupSubject">Subject:</label>
-                <input
-                    type="text"
-                    id="newGroupSubject"
-                    value={newGroupSubject}
-                    onChange={event => setNewGroupSubject(event.target.value)}
-                />
-                <button type="submit">Create Group</button>
-            </form>
+            <div className="create-group">
+                <h3>Create Group</h3>
+                <form onSubmit={handleCreateGroup}>
+                    <div className="input-group">
+                        <label htmlFor="newGroupName">Group Name:</label>
+                        <input
+                            type="text"
+                            id="newGroupName"
+                            value={newGroupName}
+                            onChange={event => setNewGroupName(event.target.value)}
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="newGroupTiming">Meeting Time:</label>
+                        <input
+                            type="text"
+                            id="newGroupTiming"
+                            value={newGroupTiming}
+                            onChange={event => setNewGroupTiming(event.target.value)}
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="newGroupSubject">Subject:</label>
+                        <input
+                            type="text"
+                            id="newGroupSubject"
+                            value={newGroupSubject}
+                            onChange={event => setNewGroupSubject(event.target.value)}
+                        />
+                    </div>
+                    <button type="submit">Create Group</button>
+                </form>
+            </div>
             <div className="groups-list">
+                <h2>Study Groups</h2>
                 {studyGroups.map(group => (
-                    <div key={group.id}>
+                    <div key={group.id} className="group-item">
                         <h3>{group.groupName}</h3>
                         <p>Subject: {group.subjectName}</p>
                         <p>Meeting Time: {group.meetingTime}</p>
