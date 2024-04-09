@@ -8,6 +8,7 @@ const GPACalculator = () => {
     const [selectedSubject, setSelectedSubject] = useState('');
     const [grade, setGrade] = useState('');
     const [subjectList, setSubjectList] = useState([]);
+    const [gpaResult, setGpaResult] = useState(null); // State to hold the GPA result
 
     const navigate = useNavigate();
 
@@ -42,10 +43,9 @@ const GPACalculator = () => {
 
     const calculateGPA = async () => {
         try {
-            // Assuming subjects and grades are arrays containing corresponding data
-            const courses = subjects.map((subject, index) => ({
-                grade: grades[index], // Assuming grades and subjects arrays have the same length
-                subjectName: subject
+            const courses = subjectList.map(subject => ({
+                grade: subject.grade,
+                subjectName: subject.name
             }));
 
             const calculateGPADTO = {
@@ -53,9 +53,16 @@ const GPACalculator = () => {
             };
 
             const response = await axios.post('http://localhost:8081/api/gpa-calculator/calculate', calculateGPADTO);
-            console.log('GPA Calculation Result:', response.data);
+
+            if (response.data.errorMessage) {
+                console.error('Error calculating GPA:', response.data.errorMessage);
+            } else {
+                console.log('GPA Calculation Result:', response.data.gpa);
+                setGpaResult(response.data.gpa); // Set the GPA result in the state
+            }
         } catch (error) {
             console.error('Error calculating GPA:', error);
+            // Handle error message display on UI if needed
         }
     };
 
@@ -95,6 +102,12 @@ const GPACalculator = () => {
                 </ul>
             </div>
             <button className="calculate-button" onClick={calculateGPA}>Calculate GPA</button>
+            {/* Render GPA result */}
+            {gpaResult !== null && (
+                <div>
+                    <h3>GPA Result: {gpaResult}</h3>
+                </div>
+            )}
             <div className="auth-footer">
                 <Link to="/">Back to Home</Link>
             </div>
