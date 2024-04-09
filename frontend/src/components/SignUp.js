@@ -1,7 +1,6 @@
-// src/SignUp.js
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/Auth.css';
 
 const SignUp = () => {
@@ -9,11 +8,12 @@ const SignUp = () => {
         firstName: '',
         lastName: '',
         email: '',
+        year: '',
+        faculty: '',
         username: '',
         password: '',
         confirmPassword: ''
     });
-
     const navigate = useNavigate();
 
     const handleInputChange = event => {
@@ -21,12 +21,30 @@ const SignUp = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
-        // Here you can add logic to handle form submission
-        console.log('Sign up form submitted:', formData);
-        // Redirect to home page or dashboard after successful signup
-        navigate('/');
+        try {
+            // Create user
+            const userResponse = await axios.post('http://localhost:8081/api/user/create', {
+                email: formData.email,
+                username: formData.username,
+                password: formData.password
+            });
+
+            // Create personal information
+            await axios.post('http://localhost:8081/api/personal-information/create', {
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                email: formData.email,
+                year: formData.year,
+                faculty: formData.faculty
+            });
+
+            // Redirect to login page after successful signup
+            navigate('/');
+        } catch (error) {
+            console.error('Error signing up:', error);
+        }
     };
 
     return (
@@ -55,6 +73,22 @@ const SignUp = () => {
                     id="email"
                     name="email"
                     value={formData.email}
+                    onChange={handleInputChange}
+                />
+                <label htmlFor="year">Year:</label>
+                <input
+                    type="text"
+                    id="year"
+                    name="year"
+                    value={formData.year}
+                    onChange={handleInputChange}
+                />
+                <label htmlFor="faculty">Faculty:</label>
+                <input
+                    type="text"
+                    id="faculty"
+                    name="faculty"
+                    value={formData.faculty}
                     onChange={handleInputChange}
                 />
                 <label htmlFor="username">Username:</label>
