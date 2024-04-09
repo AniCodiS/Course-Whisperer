@@ -48,6 +48,10 @@ public class StudyGroupMemberService {
     public StudyGroupMemberResponse createStudyGroupMember(StudyGroupMemberDTO studyGroupMemberDTO) {
         String studyGroupName = studyGroupMemberDTO.getGroupName();
         String memberUsername = studyGroupMemberDTO.getMemberUsername();
+        StudyGroupMemberEntity member = studyGroupMemberRepository.findByStudyGroupGroupNameAndMemberUsername(studyGroupName, memberUsername);
+        if (member != null) {
+            throw ExceptionFactory.StudyGroupMemberAlreadyExists();
+        }
         if (studyGroupRepository.findByGroupName(studyGroupName) == null) {
             throw ExceptionFactory.StudyGroupWithNameNotFound();
         }

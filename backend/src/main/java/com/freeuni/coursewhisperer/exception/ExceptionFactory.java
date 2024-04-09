@@ -102,6 +102,10 @@ public final class ExceptionFactory {
         return conflict("user.score.already.exists", "User score with this id already exists");
     }
 
+    public static CourseWhispererException StudyGroupMemberAlreadyExists() {
+        return conflict("group.member.already.exists", "User is already a member of this study group");
+    }
+
     public static CourseWhispererException commentIsNotYours() {
         return badRequest("comment.is.not.yours", "Cannot update comment that is not done by you");
     }

@@ -9,17 +9,17 @@ const StudyGroups = () => {
     const [newGroupSubject, setNewGroupSubject] = useState('');
 
     useEffect(() => {
-        const fetchStudyGroups = async () => {
-            try {
-                const response = await axios.get('http://localhost:8081/api/study-group/all');
-                setStudyGroups(response.data);
-            } catch (error) {
-                console.error('Error fetching study groups:', error);
-            }
-        };
-
         fetchStudyGroups();
     }, []);
+
+    const fetchStudyGroups = async () => {
+        try {
+            const response = await axios.get('http://localhost:8081/api/study-group/all');
+            setStudyGroups(response.data);
+        } catch (error) {
+            console.error('Error fetching study groups:', error);
+        }
+    };
 
     const handleCreateGroup = async event => {
         event.preventDefault();
@@ -29,7 +29,6 @@ const StudyGroups = () => {
                 meetingTime: newGroupTiming,
                 groupName: newGroupName
             });
-            // Update studyGroups state with the new study group
             setStudyGroups([...studyGroups, response.data]);
             setNewGroupName('');
             setNewGroupTiming('');
@@ -39,7 +38,31 @@ const StudyGroups = () => {
         }
     };
 
-    // Rest of the component code...
+    const handleJoinGroup = async (groupName) => {
+        try {
+            await axios.post('http://localhost:8081/api/study-group-member/create', {
+                groupName: groupName,
+                memberUsername: 'aniodiss' // TODO[AO] Replace 'username' with actual username
+            });
+            fetchStudyGroups();
+        } catch (error) {
+            console.error('Error joining study group:', error);
+        }
+    };
+
+    const handleLeaveGroup = async (groupName) => {
+        try {
+            await axios.delete('http://localhost:8081/api/study-group-member/delete', {
+                data: {
+                    groupName: groupName,
+                    memberUsername: 'aniodiss' // TODO[AO] Replace 'username' with actual username
+                }
+            });
+            fetchStudyGroups(); // Fetch study groups again after leaving
+        } catch (error) {
+            console.error('Error leaving study group:', error);
+        }
+    };
 
     return (
         <div className="study-groups-container">
@@ -74,6 +97,8 @@ const StudyGroups = () => {
                         <h3>{group.groupName}</h3>
                         <p>Subject: {group.subjectName}</p>
                         <p>Meeting Time: {group.meetingTime}</p>
+                        <button onClick={() => handleJoinGroup(group.groupName)}>Join</button>
+                        <button onClick={() => handleLeaveGroup(group.groupName)}>Leave</button>
                     </div>
                 ))}
             </div>
