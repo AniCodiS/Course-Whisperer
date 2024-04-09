@@ -1,24 +1,74 @@
 .personal-info-container {
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .error-message {
     color: red;
+    font-size: 16px;
 }
 
-.personal-info {
-    font-size: 18px;
-    margin-bottom: 10px;
+.bubble-grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5vw;
+    height: 75vh;
 }
 
-.personal-info label {
+.bubble-row {
+    display: flex;
+    justify-content: center;
+    gap: 5vw;
+}
+
+.info-rectangle {
+    background-color: #1e90ff;
+    border-radius: 10px;
+    width: 30vw;
+    height: 15vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.info-rectangle:hover {
+    transform: scale(1.1);
+}
+
+.info-label {
     font-weight: bold;
+    margin-bottom: 5px;
+    color: #fff;
+    z-index: 2;
+    transition: opacity 0.3s ease;
 }
 
-.personal-info p {
-    margin: 5px 0;
+.info-value {
+    font-size: 18px;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.info-rectangle:hover .info-label {
+    opacity: 0;
+}
+
+.info-rectangle:hover .info-value {
+    opacity: 1;
 }

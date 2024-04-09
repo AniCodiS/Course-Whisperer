@@ -9,10 +9,8 @@ const PersonalInformation = () => {
     useEffect(() => {
         const fetchPersonalInfo = async () => {
             try {
-                // Retrieve the username from localStorage
                 const username = localStorage.getItem('username');
 
-                // Make API call to fetch personal information for the logged-in user
                 const response = await axios.get(`http://localhost:8081/api/personal-information/get/${username}`);
                 setPersonalInfo(response.data);
             } catch (error) {
@@ -26,14 +24,31 @@ const PersonalInformation = () => {
     return (
         <div className="personal-info-container">
             {error && <p className="error-message">Error: {error}</p>}
-            {personalInfo && (
-                <div className="personal-info">
-                    <h2>{personalInfo.firstName} {personalInfo.lastName}</h2>
-                    <p><strong>Faculty:</strong> {personalInfo.faculty}</p>
-                    <p><strong>Email:</strong> {personalInfo.email}</p>
-                    <p><strong>Year:</strong> {personalInfo.year}</p>
+            <div className="bubble-grid">
+                <div className="bubble-row">
+                    <Rectangle label="Name" value={personalInfo ? `${personalInfo.firstName} ${personalInfo.lastName}` : ''} />
+                    <Rectangle label="Email" value={personalInfo ? personalInfo.email : ''} />
                 </div>
-            )}
+                <div className="bubble-row">
+                    <Rectangle label="Faculty" value={personalInfo ? personalInfo.faculty : ''} />
+                    <Rectangle label="Year" value={personalInfo ? personalInfo.year : ''} />
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const Rectangle = ({ label, value }) => {
+    const [hovered, setHovered] = useState(false);
+
+    return (
+        <div
+            className={`info-rectangle ${hovered ? 'hovered' : ''}`}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+        >
+            <div className={`info-label ${hovered ? 'hidden' : ''}`}>{label}</div>
+            <div className={`info-value ${hovered ? 'visible' : ''}`}>{value}</div>
         </div>
     );
 };
