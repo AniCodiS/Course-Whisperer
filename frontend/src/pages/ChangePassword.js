@@ -12,8 +12,9 @@ const ChangePassword = () => {
 
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
-
     const navigate = useNavigate();
+
+    const username = localStorage.getItem('username');
 
     const handleInputChange = event => {
         const { name, value } = event.target;
@@ -29,8 +30,7 @@ const ChangePassword = () => {
         }
 
         try {
-            // TODO[AO] change aniodiss to logged in user's username
-            await axios.put(`http://localhost:8081/api/user/aniodiss/change-password`, {
+            await axios.put(`http://localhost:8081/api/user/${username}/change-password`, {
                 oldPassword: formData.oldPassword,
                 newPassword: formData.newPassword,
                 confirmNewPassword: formData.confirmPassword

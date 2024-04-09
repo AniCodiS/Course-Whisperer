@@ -15,6 +15,13 @@ const Login = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+    const handleLoginSuccess = username => {
+        // Store username in localStorage
+        localStorage.setItem('username', username);
+        // Redirect to homepage
+        navigate('/homepage');
+    };
+
     const handleSubmit = async event => {
         event.preventDefault();
         try {
@@ -26,7 +33,8 @@ const Login = () => {
             });
 
             if (response.status === 200) {
-                navigate('/homepage');
+                // If login is successful, pass the username to handleLoginSuccess function
+                handleLoginSuccess(formData.username);
             } else {
                 console.error('Login failed:', response.data);
             }

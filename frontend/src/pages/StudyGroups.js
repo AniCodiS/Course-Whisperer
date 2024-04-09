@@ -24,10 +24,13 @@ const StudyGroups = () => {
     const handleCreateGroup = async event => {
         event.preventDefault();
         try {
+            const username = localStorage.getItem('username');
+
             const response = await axios.post('http://localhost:8081/api/study-group/create', {
                 subjectName: newGroupSubject,
                 meetingTime: newGroupTiming,
-                groupName: newGroupName
+                groupName: newGroupName,
+                creatorUsername: username
             });
             setStudyGroups([...studyGroups, response.data]);
             setNewGroupName('');
@@ -40,9 +43,10 @@ const StudyGroups = () => {
 
     const handleJoinGroup = async (groupName) => {
         try {
+            const username = localStorage.getItem('username'); // Retrieve username from localStorage
             await axios.post('http://localhost:8081/api/study-group-member/create', {
                 groupName: groupName,
-                memberUsername: 'aniodiss' // TODO[AO] Replace 'username' with actual username
+                memberUsername: username // Use retrieved username
             });
             fetchStudyGroups();
         } catch (error) {
@@ -52,10 +56,11 @@ const StudyGroups = () => {
 
     const handleLeaveGroup = async (groupName) => {
         try {
+            const username = localStorage.getItem('username'); // Retrieve username from localStorage
             await axios.delete('http://localhost:8081/api/study-group-member/delete', {
                 data: {
                     groupName: groupName,
-                    memberUsername: 'aniodiss' // TODO[AO] Replace 'username' with actual username
+                    memberUsername: username // Use retrieved username
                 }
             });
             fetchStudyGroups(); // Fetch study groups again after leaving

@@ -9,8 +9,11 @@ const PersonalInformation = () => {
     useEffect(() => {
         const fetchPersonalInfo = async () => {
             try {
-                // Replace 'username' with the actual username you want to retrieve information for
-                const response = await axios.get('http://localhost:8081/api/personal-information/get/aniodiss');
+                // Retrieve the username from localStorage
+                const username = localStorage.getItem('username');
+
+                // Make API call to fetch personal information for the logged-in user
+                const response = await axios.get(`http://localhost:8081/api/personal-information/get/${username}`);
                 setPersonalInfo(response.data);
             } catch (error) {
                 setError(error.message);
