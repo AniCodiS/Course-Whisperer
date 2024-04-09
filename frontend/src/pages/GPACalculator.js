@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import '../styles/GPACalculator.css'; // Import CSS file for GPA Calculator page
+import '../styles/GPACalculator.css';
 
 const GPACalculator = () => {
     const [subjects, setSubjects] = useState([]);
     const [selectedSubject, setSelectedSubject] = useState('');
     const [grade, setGrade] = useState('');
     const [subjectList, setSubjectList] = useState([]);
-    const [gpaResult, setGpaResult] = useState(null); // State to hold the GPA result
-
-    const navigate = useNavigate();
+    const [gpaResult, setGpaResult] = useState(null);
 
     useEffect(() => {
         const fetchSubjects = async () => {
@@ -58,16 +56,12 @@ const GPACalculator = () => {
                 console.error('Error calculating GPA:', response.data.errorMessage);
             } else {
                 console.log('GPA Calculation Result:', response.data.gpa);
-                setGpaResult(response.data.gpa); // Set the GPA result in the state
+                setGpaResult(response.data.gpa);
             }
         } catch (error) {
             console.error('Error calculating GPA:', error);
-            // Handle error message display on UI if needed
         }
     };
-
-    // Possible grades
-    const grades = ['A', 'B', 'C', 'D', 'E', 'F'];
 
     return (
         <div className="gpa-calculator-container">
@@ -86,7 +80,7 @@ const GPACalculator = () => {
                     <label htmlFor="grade">Grade:</label>
                     <select id="grade" value={grade} onChange={handleGradeChange}>
                         <option value="">Select Grade</option>
-                        {grades.map((grade, index) => (
+                        {['A', 'B', 'C', 'D', 'E', 'F'].map((grade, index) => (
                             <option key={index} value={grade}>{grade}</option>
                         ))}
                     </select>
@@ -102,14 +96,13 @@ const GPACalculator = () => {
                 </ul>
             </div>
             <button className="calculate-button" onClick={calculateGPA}>Calculate GPA</button>
-            {/* Render GPA result */}
             {gpaResult !== null && (
                 <div>
                     <h3>GPA Result: {gpaResult}</h3>
                 </div>
             )}
             <div className="auth-footer">
-                <Link to="/">Back to Home</Link>
+                <Link to="/homepage">Back to Home</Link>
             </div>
         </div>
     );
