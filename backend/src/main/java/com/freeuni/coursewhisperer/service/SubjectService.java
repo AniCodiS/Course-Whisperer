@@ -5,11 +5,13 @@ import com.freeuni.coursewhisperer.data.enums.ESemester;
 import com.freeuni.coursewhisperer.data.mapper.SubjectMapper;
 import com.freeuni.coursewhisperer.data.model.Prerequisite;
 import com.freeuni.coursewhisperer.data.model.Subject;
+import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.SubjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,15 +23,17 @@ public class SubjectService {
     private final SubjectRepository subjectRepository;
     private final PassedSubjectService passedSubjectService;
     private final PrerequisiteService prerequisiteService;
+    private final LecturerService lecturerService;
     private final SubjectMapper subjectMapper;
 
     public SubjectService(SubjectRepository subjectRepository,
                           PassedSubjectService passedSubjectService,
                           PrerequisiteService prerequisiteService,
-                          SubjectMapper subjectMapper) {
+                          LecturerService lecturerService, SubjectMapper subjectMapper) {
         this.subjectRepository = subjectRepository;
         this.passedSubjectService = passedSubjectService;
         this.prerequisiteService = prerequisiteService;
+        this.lecturerService = lecturerService;
         this.subjectMapper = subjectMapper;
     }
 
@@ -64,12 +68,20 @@ public class SubjectService {
     }
 
     public Subject createSubject(Subject subject) {
+        var lecturers =  Arrays.asList(subject.getLecturer().replace(" ", "").split(","));
+        if (lecturerService.search(lecturers).size() < lecturers.size()) {
+            throw ExceptionFactory.parametersAreNotValid();
+        }
         return subjectMapper.entityToModel(subjectRepository.save(subjectMapper.modelToEntity(subject)));
-
     }
 
     public Subject updateSubject(String code, Subject subject) {
-        var entity = subjectMapper.modelToEntity(subject);
+        var entity = subjectRepository.findByCode(code);
+        entity.setName(subject.getName() != null ? subject.getName() : entity.getName());
+        entity.setSchoolName(subject.getSchoolName() != null ? subject.getSchoolName() : entity.getSchoolName());
+        entity.setCreditScore(subject.getCreditScore() != null ? subject.getCreditScore() : entity.getCreditScore());
+        entity.setLecturer(subject.getLecturer() != null ? subject.getLecturer() : entity.getLecturer());
+        entity.setSemester(subject.getSemester() != null ? subject.getSemester() : entity.getSemester());
         return subjectMapper.entityToModel(subjectRepository.save(entity));
 
     }

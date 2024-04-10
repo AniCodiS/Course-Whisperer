@@ -114,7 +114,11 @@ public final class ExceptionFactory {
         return badRequest("comment.is.not.yours", "Cannot update comment that is not done by you");
     }
 
-    public static CourseWhispererException resourseIsNotYours() {
+    public static CourseWhispererException parametersAreNotValid() {
+        return badRequest("parameters.are.not.valid", "The parameters you passed are not valid");
+    }
+
+    public static CourseWhispererException resourceIsNotYours() {
         return badRequest("resource.is.not.yours", "You are trying to access to the resource that does not belong to you");
     }
 
