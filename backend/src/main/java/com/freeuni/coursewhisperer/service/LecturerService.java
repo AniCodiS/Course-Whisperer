@@ -1,11 +1,12 @@
 package com.freeuni.coursewhisperer.service;
 
-import com.freeuni.coursewhisperer.data.api.dto.LecturerResponse;
-import com.freeuni.coursewhisperer.data.entity.LecturerEntity;
-import com.freeuni.coursewhisperer.data.mapper.LecturerResponseMapper;
-import com.freeuni.coursewhisperer.data.mapper.LecturerMapper;
 import com.freeuni.coursewhisperer.data.api.dto.CreatedLecturerDTO;
 import com.freeuni.coursewhisperer.data.api.dto.LecturerDTO;
+import com.freeuni.coursewhisperer.data.api.dto.LecturerResponse;
+import com.freeuni.coursewhisperer.data.entity.LecturerEntity;
+import com.freeuni.coursewhisperer.data.mapper.LecturerMapper;
+import com.freeuni.coursewhisperer.data.mapper.LecturerResponseMapper;
+import com.freeuni.coursewhisperer.data.model.Lecturer;
 import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.LecturerRepository;
 import jakarta.transaction.Transactional;
@@ -44,6 +45,10 @@ public class LecturerService {
             return lecturerDTOResponseMapper.modelToDto(lecturerDTOResponseMapper.entityToModel(lecturerRepository.findByEmail(email)));
         }
         throw ExceptionFactory.LecturerNotFound();
+    }
+
+    public List<Lecturer> search(List<String> emails) {
+        return lecturerRepository.searchByEmails(emails).stream().map(mapper::entityToModel).toList();
     }
 
     public CreatedLecturerDTO createLecturer(LecturerDTO lecturer) {
