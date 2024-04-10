@@ -5,7 +5,6 @@ import com.freeuni.coursewhisperer.data.enums.ESchool;
 import com.freeuni.coursewhisperer.data.enums.ESemester;
 import com.freeuni.coursewhisperer.data.mapper.SubjectMapper;
 import com.freeuni.coursewhisperer.service.SubjectService;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +29,7 @@ public class SubjectController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<SubjectDTO> createSubject(@RequestBody @Valid SubjectDTO subjectDTO) {
+    public ResponseEntity<SubjectDTO> createSubject(@RequestBody SubjectDTO subjectDTO) {
         var res = subjectMapper.modelToDto(subjectService.createSubject(subjectMapper.dtoToModel(subjectDTO)));
         return ResponseEntity.ok(res);
     }
@@ -57,11 +56,10 @@ public class SubjectController {
 
     @PutMapping("/{code}")
     public ResponseEntity<SubjectDTO> updateSubject(@PathVariable String code,
-                                                    @RequestBody @Valid SubjectDTO subjectDTO) {
+                                                    @RequestBody SubjectDTO subjectDTO) {
         var res = subjectMapper.modelToDto(subjectService.updateSubject(code, subjectMapper.dtoToModel(subjectDTO)));
         return ResponseEntity.ok(res);
     }
-//    AppData\Roaming\JetBrains\IntelliJIdea2023.1\node\node-v18.15.0-win-x64\node.exe
 
     @DeleteMapping("/remove/{code}")
     public ResponseEntity<Void> deleteSubject(@PathVariable String code) {
