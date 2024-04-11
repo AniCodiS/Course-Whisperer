@@ -3,13 +3,11 @@ package com.freeuni.coursewhisperer.controller;
 import com.freeuni.coursewhisperer.data.api.dto.PrerequisiteDTO;
 import com.freeuni.coursewhisperer.data.mapper.PrerequisiteMapper;
 import com.freeuni.coursewhisperer.service.PrerequisiteService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/prerequisites")
 public class PrerequisiteController {

@@ -29,17 +29,17 @@ public class PostService {
         return postRepository.getPosts().stream().map(postMapper::entityToModel).toList();
     }
 
-    public void createPost(Post post) {
-        var postEntity = postMapper.modelToEntity(post);
-        postRepository.save(postEntity);
-    }
-
     public List<Post> searchPosts(String username, String subject, EPostType type) {
         var res = postRepository.searchPosts(username, subject, type);
         return res.stream().map(postMapper::entityToModel).toList();
     }
 
-    public Post updatePost(String username, Long id, String content) {
+    public synchronized void createPost(Post post) {
+        var postEntity = postMapper.modelToEntity(post);
+        postRepository.save(postEntity);
+    }
+
+    public synchronized Post updatePost(String username, Long id, String content) {
         var postEntity = postRepository.findById(id).get(); // TODO exception
         postEntity.setContent(content);
         return postMapper.entityToModel(postRepository.save(postEntity));
@@ -55,7 +55,7 @@ public class PostService {
         return postMapper.entityToModel(postRepository.save(postEntity));
     }
 
-    public void deletePost(String username, Long id) { // TODO exception
+    public synchronized void deletePost(String username, Long id) { // TODO exception
         commentService.getComments(id).forEach(comment -> {
             commentService.deleteComment(username, comment.getId());
         });
