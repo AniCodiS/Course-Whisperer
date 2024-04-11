@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @Validated
 @RestController
 @RequestMapping("/api/post")
@@ -57,8 +58,8 @@ public class PostController {
 
     @PutMapping("/vote/{id}")
     public ResponseEntity<PostDTO> updatePost(@PathVariable Long id,
-                                              @RequestParam(required = false) EPostVote vote) {
-        var res = postMapper.modelToDto(postService.updatePost(id, vote));
+                                              @RequestParam String vote) {
+        var res = postMapper.modelToDto(postService.updatePost(id, EPostVote.valueOf(vote)));
         return ResponseEntity.ok(res);
     }
 

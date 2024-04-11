@@ -22,7 +22,7 @@ public class CommentService extends AbstractService<CommentEntity, Long, Comment
         this.commentMapper = commentMapper;
     }
 
-    public void createComment(Comment comment) {
+    public synchronized void createComment(Comment comment) {
         var entity = commentMapper.modelToEntity(comment);
         commentRepository.save(entity);
     }
@@ -31,7 +31,7 @@ public class CommentService extends AbstractService<CommentEntity, Long, Comment
         return commentRepository.getAllByPostId(postId).stream().map(commentMapper::entityToModel).toList();
     }
 
-    public Comment updateComment(Long id, Comment comment) {
+    public synchronized Comment updateComment(Long id, Comment comment) {
         var entity = commentRepository.findById(id).get();
         if (!entity.getUsername().equals(comment.getUsername())) {
             throw ExceptionFactory.commentIsNotYours();
@@ -40,7 +40,7 @@ public class CommentService extends AbstractService<CommentEntity, Long, Comment
         return commentMapper.entityToModel(commentRepository.save(entity));
     }
 
-    public void deleteComment(String username, Long id) {
+    public synchronized void deleteComment(String username, Long id) {
         var entity = commentRepository.findById(id).get();
         if (!entity.getUsername().equals(username)) {
             throw ExceptionFactory.commentIsNotYours();

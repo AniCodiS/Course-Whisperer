@@ -67,7 +67,7 @@ public class SubjectService {
         return subjects;
     }
 
-    public Subject createSubject(Subject subject) {
+    public synchronized Subject createSubject(Subject subject) {
         var lecturers =  Arrays.asList(subject.getLecturer().replace(" ", "").split(","));
         if (lecturerService.search(lecturers).size() < lecturers.size()) {
             throw ExceptionFactory.parametersAreNotValid();
@@ -75,7 +75,7 @@ public class SubjectService {
         return subjectMapper.entityToModel(subjectRepository.save(subjectMapper.modelToEntity(subject)));
     }
 
-    public Subject updateSubject(String code, Subject subject) {
+    public synchronized Subject updateSubject(String code, Subject subject) {
         var entity = subjectRepository.findByCode(code);
         entity.setName(subject.getName() != null ? subject.getName() : entity.getName());
         entity.setSchoolName(subject.getSchoolName() != null ? subject.getSchoolName() : entity.getSchoolName());
@@ -86,7 +86,7 @@ public class SubjectService {
 
     }
 
-    public void deleteSubject(String code) {
+    public synchronized void deleteSubject(String code) {
         var entity = subjectRepository.findByCode(code);
         subjectRepository.delete(entity);
     }
