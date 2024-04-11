@@ -36,7 +36,7 @@ public class PassedSubjectService extends AbstractService<PassedSubjectEntity, L
             throw ExceptionFactory.resourceNotFound(PassedSubjectEntity.class, id.toString());
         }
         if (!entity.get().getUsername().equals(username)) {
-            throw ExceptionFactory.resourseIsNotYours();
+            throw ExceptionFactory.resourceIsNotYours();
         }
         passedSubjectRepository.delete(entity.get());
     }
@@ -47,7 +47,7 @@ public class PassedSubjectService extends AbstractService<PassedSubjectEntity, L
             throw ExceptionFactory.resourceNotFound(PassedSubjectEntity.class, id.toString());
         }
         if (!entity.get().getUsername().equals(passedSubject.getUsername())) {
-            throw ExceptionFactory.resourseIsNotYours();
+            throw ExceptionFactory.resourceIsNotYours();
         }
         var newEntity = passedSubjectMapper.modelToEntity(passedSubject);
         newEntity.setId(entity.get().getId());
