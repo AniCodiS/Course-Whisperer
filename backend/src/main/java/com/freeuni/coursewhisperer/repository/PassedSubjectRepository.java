@@ -13,5 +13,5 @@ public interface PassedSubjectRepository extends AbstractRepository<PassedSubjec
 
     Optional<PassedSubjectEntity> findById(Long id);
 
-    List<PassedSubjectEntity> findByUsername(String username);
+    List<PassedSubjectEntity> findByUsernameOrderByGradeScoreAsc(String username);
 }

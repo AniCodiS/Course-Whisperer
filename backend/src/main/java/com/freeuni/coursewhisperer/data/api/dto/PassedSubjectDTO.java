@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class PassedSubjectDTO {
+    private Long id;
     private String username;
     private String subject;
     private Integer gradeScore;
