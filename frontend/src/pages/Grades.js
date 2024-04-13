@@ -16,36 +16,48 @@ const Grades = () => {
                     username
                 }
             })
-
             setGrades(response.data)
         }
-
         getGrades();
 
     }, [])
 
     useEffect(() => {
-        const pressHandler = (e) => {
+        const pressHandler = async (e) => {
             if (e.key === "Enter" && subject && gradeScore) {
-                setGrades(prev => [{
+                const response = await axios.post('http://localhost:8081/api/passedSubject/create-subject', {
+                    username,
                     subject,
-                    grade: "",
                     gradeScore
-                }, ...prev])
+                })
+                setGrades(prev => [response.data, ...prev])
                 setSubject("")
                 setGradeScore("")
             }
         }
 
         window.addEventListener("keydown", pressHandler)
-
         return () => {
             window.removeEventListener("keydown", pressHandler)
         }
     }, [subject, gradeScore])
 
+    const handleDeleteRow = async (id, username) => {
+        try {
+            await axios.delete(`http://localhost:8081/api/passedSubject/remove/${id}`, {
+                params: {
+                    username: username
+                }
+            });
+            setGrades(prevGrades => prevGrades.filter(grade => grade.id !== id));
+        } catch (error) {
+            console.error('Error deleting row:', error);
+        }
+    };
+
     return (<div style={{
         overflowY: 'auto',
+        maxHeight: 'calc(100vh - 20px)',
         display: "flex",
         flexDirection: "column",
         padding: 32,
@@ -61,20 +73,34 @@ const Grades = () => {
                        onChange={(event) => setGradeScore(event.target.value)}/>
             </div>
         </div>
-        <table style={{width: '100%', borderCollapse: 'collapse'}}>
+        <table style={{borderCollapse: 'collapse'}}>
             <thead>
             <tr style={{backgroundColor: "#2DAA944F", color: 'darkgreen'}}>
                 <th style={styles.headerCell}>Subject</th>
                 <th style={styles.headerCell}>Grade</th>
                 <th style={styles.headerCell}>Grade Score</th>
+                <th style={styles.headerCell}>Action</th>
             </tr>
             </thead>
             <tbody>
-            {grades.map((grade, index) => (
-                <tr key={index}>
+            {grades.map((grade) => (
+                <tr key={grade.id}>
                     <td style={styles.cell}>{grade.subject}</td>
                     <td style={styles.cell}>{grade.grade}</td>
                     <td style={styles.cell}>{grade.gradeScore}</td>
+                    <td style={styles.cell}>
+                        <button onClick={() => handleDeleteRow(grade.id, username)} style={{
+                            backgroundColor: '#2DAA944F',
+                            border: "none",
+                            borderRadius: 32,
+                            padding: "10px 24px",
+                            textAlign: "center",
+                            fontSize: 14,
+                            color: 'white',
+                            cursor: 'pointer',
+                        }}> Delete
+                        </button>
+                    </td>
                 </tr>
             ))}
             </tbody>
