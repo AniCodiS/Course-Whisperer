@@ -122,8 +122,6 @@ const StudentForum = () => {
             {showAddPost &&
                 <div style={{
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
                     flexDirection: "column",
                     backgroundColor: '#2DAA944F',
                     outline: "none",
@@ -134,21 +132,37 @@ const StudentForum = () => {
                     paddingRight: 24,
                     borderRadius: 10,
                     fontSize: 10,
-                    color: '#2DAA94'
+                    color: '#2DAA94',
+                    textAlign: "center"
                 }}>
-                    <div>
-                        <input style={{borderWidth: 1, borderRadius: 4, outline: 'none', borderColor: 'forestgreen'}}
+                    <div style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
+                        <input style={{
+                            flex: 1,
+                            borderWidth: 2,
+                            borderRadius: 4,
+                            outline: 'none',
+                            borderColor: 'forestgreen'
+                        }}
                                type="text" value={subject} onChange={e => setSubject(e.target.value)}
                                placeholder="Enter your subject here"/>
+
                         <select style={{
-                            borderRadius: 4, borderColor: 'forestgreen',
-                            fontSize: 14, outline: 'none'
+                            flex: 1,
+                            marginLeft: 10,
+                            borderWidth: 2,
+                            borderRadius: 4,
+                            borderColor: 'forestgreen',
+                            fontSize: 14,
+                            outline: 'none'
                         }} value={postType} onChange={(e) => setPostType(e.target.value)}>
                             {postTypes.map(type => (
                                 <option value={type.value}>{type.name}</option>
                             ))}
                         </select>
+
                         <button style={{
+                            flex: 1,
+                            marginLeft: 10,
                             backgroundColor: '#2DAA94',
                             outline: "none",
                             border: "none",
@@ -166,8 +180,14 @@ const StudentForum = () => {
                         </button>
                     </div>
                     <textarea style={{
-                        borderRadius: 4, borderColor: 'forestgreen',
-                        fontSize: 14, boxShadow: 'none', outline: 'none'
+                        marginTop: 10,
+                        width: "100%",
+                        borderWidth: 2,
+                        borderRadius: 4,
+                        borderColor: 'forestgreen',
+                        fontSize: 14,
+                        boxShadow: 'none',
+                        outline: 'none'
                     }} type="textarea" value={content} onChange={e => setContent(e.target.value)}
                               placeholder="Enter your text"/>
                 </div>
