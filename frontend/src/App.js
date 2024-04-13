@@ -8,7 +8,7 @@ import Grades from './pages/Grades';
 import ChooseSubjects from './pages/ChooseSubjects';
 import GPACalculator from './pages/GPACalculator';
 import StudyGroups from './pages/StudyGroups';
-import StudentForum from './pages/StudentForum';
+import StudentForum from './pages/StudentForum/StudentForum';
 import Leaderboard from './pages/Leaderboard';
 import ChangePassword from "./pages/ChangePassword";
 
