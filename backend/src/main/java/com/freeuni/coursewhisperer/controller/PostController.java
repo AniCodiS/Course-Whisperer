@@ -29,9 +29,9 @@ public class PostController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<Void> addPost(@RequestBody @Valid PostDTO postDTO) {
-        postService.createPost(postMapper.dtoToModel(postDTO));
-        return ResponseEntity.ok().build();
+    public ResponseEntity<PostDTO> addPost(@RequestBody @Valid PostDTO postDTO) {
+        var res = postService.createPost(postMapper.dtoToModel(postDTO));
+        return ResponseEntity.ok(res);
     }
 
     @GetMapping("/all")

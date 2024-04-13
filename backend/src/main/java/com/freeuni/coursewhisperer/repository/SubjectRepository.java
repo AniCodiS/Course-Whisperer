@@ -16,11 +16,11 @@ public interface SubjectRepository extends JpaRepository<SubjectEntity, String> 
     SubjectEntity findByCode(String code);
 
     @Query("select s from SubjectEntity s where " +
-            "(:name is null or s.name = :name) and " +
+            "(:name is null or s.name like concat('%',  cast(:name as text), '%')) and " +
             "(:code is null or s.code = :code) and " +
             "(:schoolName is null or s.schoolName = :schoolName) and " +
             "(:creditScore is null or s.creditScore = :creditScore) and " +
-            "(:lecturer is null or s.lecturer = :lecturer) and " +
+            "(:lecturer is null or s.lecturer like concat('%',  cast(:lecturer as text), '%')) and " +
             "(:semester is null or s.semester = :semester)")
     List<SubjectEntity> search(String name, String code, ESchool schoolName,
                                Integer creditScore, Long lecturer, ESemester semester);

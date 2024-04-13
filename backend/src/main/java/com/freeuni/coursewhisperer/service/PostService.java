@@ -1,5 +1,6 @@
 package com.freeuni.coursewhisperer.service;
 
+import com.freeuni.coursewhisperer.data.api.dto.PostDTO;
 import com.freeuni.coursewhisperer.data.enums.EPostType;
 import com.freeuni.coursewhisperer.data.enums.EPostVote;
 import com.freeuni.coursewhisperer.data.mapper.PostMapper;
@@ -34,9 +35,12 @@ public class PostService {
         return res.stream().map(postMapper::entityToModel).toList();
     }
 
-    public synchronized void createPost(Post post) {
+    public synchronized PostDTO createPost(Post post) {
+        post.setUpVote(0);
+        post.setDownVote(0);
         var postEntity = postMapper.modelToEntity(post);
-        postRepository.save(postEntity);
+        var res = postRepository.save(postEntity);
+        return postMapper.modelToDto(postMapper.entityToModel(res));
     }
 
     public synchronized Post updatePost(String username, Long id, String content) {
