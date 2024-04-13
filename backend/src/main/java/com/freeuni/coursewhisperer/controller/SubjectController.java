@@ -35,13 +35,13 @@ public class SubjectController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<SubjectDTO>> getSubjects(@RequestParam(required = false) String name,
+    public ResponseEntity<List<SubjectDTO>> getSubjects(@RequestParam(required = false) String subjectName,
                                                         @RequestParam(required = false) String code,
                                                         @RequestParam(required = false) ESchool schoolName,
                                                         @RequestParam(required = false) Integer creditScore,
                                                         @RequestParam(required = false) Long lecturer,
                                                         @RequestParam(required = false) ESemester semester) {
-        var res = subjectService.search(name, code, schoolName, creditScore, lecturer, semester).stream().map(subjectMapper::modelToDto).toList();
+        var res = subjectService.search(subjectName.equals("") ? null : subjectName, code, schoolName, creditScore, lecturer, semester).stream().map(subjectMapper::modelToDto).toList();
         return ResponseEntity.ok(res);
     }
 
