@@ -55,7 +55,7 @@ public class PassedSubjectService extends AbstractService<PassedSubjectEntity, L
     }
 
     public List<PassedSubject> getPassedSubjects(String username) {
-        return passedSubjectRepository.findByUsername(username).stream().map(passedSubjectMapper::entityToModel).toList();
+        return passedSubjectRepository.findByUsernameOrderByGradeScoreAsc(username).stream().map(passedSubjectMapper::entityToModel).toList();
     }
 
     public PassedSubject createPassedSubject(PassedSubject passedSubject) {
