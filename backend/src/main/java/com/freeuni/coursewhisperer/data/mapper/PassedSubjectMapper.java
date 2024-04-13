@@ -23,5 +23,4 @@ public interface PassedSubjectMapper extends AbstractMapper<PassedSubjectEntity,
 
     @Named(value = "dtoToModel")
     PassedSubject modelToDto(PassedSubjectDTO passedSubjectDTO);
-
 }
