@@ -56,9 +56,9 @@ public class SubjectService {
 
         List<Subject> subjects = new ArrayList<>();
 
-        subjectRepository.search(null, null, schoolName, creditScore, null, semester).
-                stream().map(subjectMapper::entityToModel).forEach(subject -> {
-                            if (!passedSubjects.contains(subject.getCode()) &&
+        subjectRepository.search(null, null, schoolName, creditScore, null, semester).stream().
+                map(subjectMapper::entityToModel).forEach(subject -> {
+                            if (!passedSubjects.contains(subject.getCode()) && prerequisites.get(subject) != null &&
                                     new HashSet<>(passedSubjects).containsAll(prerequisites.get(subject))) {
                                 subjects.add(subject);
                             }
@@ -68,7 +68,7 @@ public class SubjectService {
     }
 
     public synchronized Subject createSubject(Subject subject) {
-        var lecturers =  Arrays.asList(subject.getLecturer().replace(" ", "").split(","));
+        var lecturers = Arrays.asList(subject.getLecturer().replace(" ", "").split(","));
         if (lecturerService.search(lecturers).size() < lecturers.size()) {
             throw ExceptionFactory.parametersAreNotValid();
         }
