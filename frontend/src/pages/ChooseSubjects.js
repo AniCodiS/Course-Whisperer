@@ -1,54 +1,122 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../styles/ChooseSubjects.css';
+import axios from "axios";
 
 const ChooseSubjects = () => {
-    // hardcoded data for subjects
-    const subjectsData = [
-        {subjectName: 'Mathematics', creditScore: 3, semester: 'Spring 2023', avgRating: 4.5},
-        {subjectName: 'Physics', creditScore: 4, semester: 'Fall 2022', avgRating: 4.2},
-        {subjectName: 'Computer Science', creditScore: 3, semester: 'Spring 2022', avgRating: 4.8},
-        {subjectName: 'English', creditScore: 2, semester: 'Fall 2021', avgRating: 4.0},
-    ];
+    const [subjects, setSubjects] = useState([]);
+    const [subjectName, setSubjectName] = useState("");
+    const [schoolName, setSchoolName] = useState("");
+    const [lecturer, setLecturer] = useState("");
+    const [semester, setSemester] = useState("");
+    const [creditScore, setCreditScore] = useState("");
 
-    return (
-        <div className="choose-subjects-container">
-            <h2>Choose Subjects</h2>
-            <div className="search-bar">
-                <div className="search-field">
-                    <label htmlFor="subjectTitle">Choose Subject Title:</label>
-                    <input type="text" id="subjectTitle"/>
-                </div>
-                <div className="search-field">
-                    <label htmlFor="schoolName">School Name:</label>
-                    <input type="text" id="schoolName"/>
-                </div>
-                <div className="search-field">
-                    <label htmlFor="creditScore">Credit Score:</label>
-                    <input type="number" id="creditScore"/>
-                </div>
-                <div className="search-field">
-                    <label htmlFor="semester">Choose Semester:</label>
-                    <select id="semester">
-                        <option value="">Select</option>
-                        <option value="Spring 2023">Spring 2023</option>
-                        <option value="Fall 2022">Fall 2022</option>
-                        {/* Add more options as needed */}
-                    </select>
-                </div>
-                <button className="search-button">Search Subject</button>
-            </div>
-            <div className="subjects-list">
-                {subjectsData.map((subject, index) => (
-                    <div key={index} className="subject-item">
-                        <h3>{subject.subjectName}</h3>
-                        <p><strong>Credit Score:</strong> {subject.creditScore}</p>
-                        <p><strong>Semester:</strong> {subject.semester}</p>
-                        <p><strong>AVG Rating:</strong> {subject.avgRating}</p>
-                    </div>
-                ))}
+    const username = localStorage.getItem("username")
+
+    useEffect(() => {
+        const getSubjects = async () => {
+            const response = await axios.get('http://localhost:8081/api/subject/all', {
+                params: {
+                    username
+                }
+            })
+            setSubjects(response.data)
+        }
+        getSubjects();
+
+    }, [])
+
+    useEffect(() => {
+        const pressHandler = async (e) => {
+            if (e.key === "Enter") {
+                try {
+                    const response = await axios.get('http://localhost:8081/api/subject/search', {
+                        params: {
+                            subjectName,
+                            schoolName,
+                            creditScore,
+                            lecturer,
+                            semester
+                        }
+                    });
+
+                    setSubjects(response.data);
+                    setSubjectName("");
+                    setSchoolName("");
+                    setLecturer("");
+                    setSemester("");
+                    setCreditScore("");
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                }
+            }
+        };
+
+        window.addEventListener("keydown", pressHandler);
+        return () => {
+            window.removeEventListener("keydown", pressHandler);
+        };
+    }, [subjectName, schoolName, creditScore, lecturer, semester]);
+
+
+
+    return (<div className="container">
+        <div style={{display: "flex", flex: 1, justifyContent: "space-between", alignItems: "center"}}>
+            <span style={{fontSize: 24, fontWeight: "500", color: "#506C68"}}>Subjects</span>
+            <div style={{display: "flex", gap: 20}}>
+                <input className="input-field" placeholder="Subject Name" value={subjectName}
+                       onChange={(event) => setSubjectName(event.target.value)}/>
+                <input className="input-field" placeholder="School Name" value={schoolName}
+                       onChange={(event) => setSchoolName(event.target.value)}/>
+                <input className="input-field" placeholder="Lecturer" value={lecturer}
+                       onChange={(event) => setLecturer(event.target.value)}/>
+                <input className="input-field" placeholder="Semester" value={semester}
+                       onChange={(event) => setSemester(event.target.value)}/>
+                <input className="input-field" placeholder="Credit Score" value={creditScore}
+                       onChange={(event) => setCreditScore(event.target.value)}/>
             </div>
         </div>
-    );
+        <table style={{borderCollapse: 'collapse'}}>
+            <thead>
+            <tr style={{backgroundColor: "#2DAA944F", color: 'darkgreen'}}>
+                <th style={styles.headerCell}>Subject Code</th>
+                <th style={styles.headerCell}>Subject Name</th>
+                <th style={styles.headerCell}>School Name</th>
+                <th style={styles.headerCell}>Credit Score</th>
+                <th style={styles.headerCell}>Lecturers</th>
+                <th style={styles.headerCell}>Semester</th>
+            </tr>
+            </thead>
+            <tbody>
+            {subjects.map((subject) => (
+                <tr key={subject.code}>
+                    <td style={styles.cell}>{subject.code}</td>
+                    <td style={styles.cell}>{subject.name}</td>
+                    <td style={styles.cell}>{subject.schoolName}</td>
+                    <td style={styles.cell}>{subject.creditScore}</td>
+                    <td style={styles.cell}>{subject.lecturer}</td>
+                    <td style={styles.cell}>{subject.semester}</td>
+                </tr>
+            ))}
+            </tbody>
+        </table>
+    </div>)
+};
+
+const styles = {
+    headerCell: {
+        padding: '12px',
+        textAlign: 'center',
+        borderBottom: '1px solid #506C68',
+        borderBottomWidth: 0.5,
+        borderBottomColor: "#506C68",
+    },
+    cell: {
+        padding: '12px',
+        textAlign: 'center',
+        borderBottom: '1px solid #506C68',
+        borderBottomWidth: 0.5,
+        borderBottomColor: "#506C68",
+    },
 };
 
 export default ChooseSubjects;
