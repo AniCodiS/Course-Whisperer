@@ -57,49 +57,76 @@ const ChooseSubjects = () => {
         };
     }, [subjectName, schoolName, creditScore, lecturer, semester]);
 
+    const handleChoice = async (username) => {
+        try {
+            const response = await axios.get(`http://localhost:8081/api/subject/choose`, {
+                params: {
+                    username: username,
+                    schoolName,
+                    creditScore,
+                    semester
+                }
+            });
+            setSubjects(response.data)
+        } catch (error) {
+            console.error('Error choosing subject:', error);
+        }
+    };
 
 
-    return (<div className="container">
-        <div style={{display: "flex", flex: 1, justifyContent: "space-between", alignItems: "center"}}>
-            <span style={{fontSize: 24, fontWeight: "500", color: "#506C68"}}>Subjects</span>
-            <div style={{display: "flex", gap: 20}}>
-                <input className="input-field" placeholder="Subject Name" value={subjectName}
-                       onChange={(event) => setSubjectName(event.target.value)}/>
-                <input className="input-field" placeholder="School Name" value={schoolName}
-                       onChange={(event) => setSchoolName(event.target.value)}/>
-                <input className="input-field" placeholder="Lecturer" value={lecturer}
-                       onChange={(event) => setLecturer(event.target.value)}/>
-                <input className="input-field" placeholder="Semester" value={semester}
-                       onChange={(event) => setSemester(event.target.value)}/>
-                <input className="input-field" placeholder="Credit Score" value={creditScore}
-                       onChange={(event) => setCreditScore(event.target.value)}/>
+    return (
+        <div className="container">
+            <div style={{display: "flex", flex: 1, justifyContent: "space-between", alignItems: "center"}}>
+                <span style={{fontSize: 24, fontWeight: "500", color: "#506C68"}}>Subjects</span>
+                <div style={{display: "flex", gap: 20}}>
+                    <input className="input-field" placeholder="Subject Name" value={subjectName}
+                           onChange={(event) => setSubjectName(event.target.value)}/>
+                    <input className="input-field" placeholder="School Name" value={schoolName}
+                           onChange={(event) => setSchoolName(event.target.value)}/>
+                    <input className="input-field" placeholder="Lecturer" value={lecturer}
+                           onChange={(event) => setLecturer(event.target.value)}/>
+                    <input className="input-field" placeholder="Semester" value={semester}
+                           onChange={(event) => setSemester(event.target.value)}/>
+                    <input className="input-field" placeholder="Credit Score" value={creditScore}
+                           onChange={(event) => setCreditScore(event.target.value)}/>
+                    <button onClick={() => handleChoice(username)} style={{
+                        backgroundColor: '#2DAA944F',
+                        border: "none",
+                        borderRadius: 32,
+                        padding: "10px 24px",
+                        textAlign: "center",
+                        fontSize: 14,
+                        color: 'white',
+                        cursor: 'pointer',
+                    }}> Choose
+                    </button>
+                </div>
             </div>
-        </div>
-        <table style={{borderCollapse: 'collapse'}}>
-            <thead>
-            <tr style={{backgroundColor: "#2DAA944F", color: 'darkgreen'}}>
-                <th style={styles.headerCell}>Subject Code</th>
-                <th style={styles.headerCell}>Subject Name</th>
-                <th style={styles.headerCell}>School Name</th>
-                <th style={styles.headerCell}>Credit Score</th>
-                <th style={styles.headerCell}>Lecturers</th>
-                <th style={styles.headerCell}>Semester</th>
-            </tr>
-            </thead>
-            <tbody>
-            {subjects.map((subject) => (
-                <tr key={subject.code}>
-                    <td style={styles.cell}>{subject.code}</td>
-                    <td style={styles.cell}>{subject.name}</td>
-                    <td style={styles.cell}>{subject.schoolName}</td>
-                    <td style={styles.cell}>{subject.creditScore}</td>
-                    <td style={styles.cell}>{subject.lecturer}</td>
-                    <td style={styles.cell}>{subject.semester}</td>
+            <table style={{borderCollapse: 'collapse'}}>
+                <thead>
+                <tr style={{backgroundColor: "#2DAA944F", color: 'darkgreen'}}>
+                    <th style={styles.headerCell}>Subject Code</th>
+                    <th style={styles.headerCell}>Subject Name</th>
+                    <th style={styles.headerCell}>School Name</th>
+                    <th style={styles.headerCell}>Credit Score</th>
+                    <th style={styles.headerCell}>Lecturers</th>
+                    <th style={styles.headerCell}>Semester</th>
                 </tr>
-            ))}
-            </tbody>
-        </table>
-    </div>)
+                </thead>
+                <tbody>
+                {subjects.map((subject) => (
+                    <tr key={subject.code}>
+                        <td style={styles.cell}>{subject.code}</td>
+                        <td style={styles.cell}>{subject.name}</td>
+                        <td style={styles.cell}>{subject.schoolName}</td>
+                        <td style={styles.cell}>{subject.creditScore}</td>
+                        <td style={styles.cell}>{subject.lecturer}</td>
+                        <td style={styles.cell}>{subject.semester}</td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+        </div>)
 };
 
 const styles = {
