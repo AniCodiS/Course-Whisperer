@@ -42,7 +42,7 @@ public class SubjectService {
     }
 
     public List<Subject> search(String name, String code, ESchool schoolName,
-                                Integer creditScore, Long lecturer, ESemester semester) {
+                                Integer creditScore, String lecturer, ESemester semester) {
         return subjectRepository.search(name, code, schoolName, creditScore, lecturer, semester).
                 stream().map(subjectMapper::entityToModel).toList();
     }
@@ -58,8 +58,8 @@ public class SubjectService {
 
         subjectRepository.search(null, null, schoolName, creditScore, null, semester).stream().
                 map(subjectMapper::entityToModel).forEach(subject -> {
-                            if (!passedSubjects.contains(subject.getCode()) && prerequisites.get(subject) != null &&
-                                    new HashSet<>(passedSubjects).containsAll(prerequisites.get(subject))) {
+                            if (!passedSubjects.contains(subject.getCode()) && (prerequisites.get(subject) == null ||
+                                    new HashSet<>(passedSubjects).containsAll(prerequisites.get(subject)))) {
                                 subjects.add(subject);
                             }
                         }

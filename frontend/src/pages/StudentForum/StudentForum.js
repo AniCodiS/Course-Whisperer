@@ -32,6 +32,7 @@ const StudentForum = () => {
     }, []);
 
     const postTypes = [
+        {name: '', value: ''},
         {name: 'Post', value: 'POST'},
         {name: 'Lecture Link', value: 'LECTURELINK'},
         {name: 'Text Book Link', value: 'TEXTBOOKLINK'},
@@ -65,6 +66,25 @@ const StudentForum = () => {
         setShowAddPost(prev => !prev);
     }
 
+    const [filterObj, setFilterObj] = useState(
+        {
+            subject: '',
+            type: '',
+        }
+    );
+
+    const handleFilterButton = () => {
+        axios.get('http://localhost:8081/api/post/search', {
+            params: {
+                subject: filterObj.subject,
+                type: filterObj.type,
+                username
+            }
+        }).then((response) => {
+            setPosts(response.data);
+        });
+    }
+
 
     return (
         <div style={{
@@ -86,7 +106,45 @@ const StudentForum = () => {
                     <span style={{fontSize: 24, fontWeight: "500", color: "#506C68"}}>Student Forum</span>
                     <span style={{fontSize: 16, color: '#2DAA94'}}>Share Your Knowledge Here</span>
                 </div>
-                <div style={{display: "flex", gap: 8}}>
+                <div style={{display: "flex", gap: 10}}>
+                    <input style={{
+                        borderRadius: 5,
+                        borderColor: 'forestgreen',
+                        outline: 'none',
+                        border: 'none',
+                        background: '#2DAA944F',
+                    }} placeholder="Enter Subject Name" type="text" value={filterObj.subject}
+                           onChange={(e) => setFilterObj({type: filterObj.type, subject: e.target.value})}/>
+                    <select style={{
+                        borderRadius: 5,
+                        borderWidth: 3,
+                        borderColor: 'forestgreen',
+                        fontSize: 14,
+                        outline: 'none',
+                        border: 'none',
+                        backgroundColor: '#2DAA944F',
+                    }}
+                            value={filterObj.type}
+                            onChange={(e) => setFilterObj({type: e.target.value, subject: filterObj.subject})}>
+                        {postTypes.map(type => (
+                            <option value={type.value}>{type.name}</option>
+                        ))}
+                    </select>
+                    <button onClick={handleFilterButton} style={{
+                        backgroundColor: '#2DAA944F',
+                        outline: "none",
+                        border: "none",
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        paddingLeft: 24,
+                        paddingRight: 24,
+                        borderRadius: 32,
+                        textAlign: "center",
+                        fontSize: 10,
+                        color: '#2DAA94',
+                        cursor: "pointer"
+                    }}> Filter
+                    </button>
                     <button onClick={handleAddPost} style={{
                         backgroundColor: '#2DAA94',
                         outline: "none",
@@ -102,26 +160,13 @@ const StudentForum = () => {
                         cursor: "pointer"
                     }}>+ Add new
                     </button>
-                    <button style={{
-                        backgroundColor: '#2DAA944F',
-                        outline: "none",
-                        border: "none",
-                        paddingTop: 10,
-                        paddingBottom: 10,
-                        paddingLeft: 24,
-                        paddingRight: 24,
-                        borderRadius: 32,
-                        textAlign: "center",
-                        fontSize: 10,
-                        color: '#2DAA94',
-                        cursor: "pointer"
-                    }}>Filter
-                    </button>
                 </div>
             </div>
             {showAddPost &&
                 <div style={{
                     display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
                     flexDirection: "column",
                     backgroundColor: '#2DAA944F',
                     outline: "none",
@@ -261,7 +306,8 @@ const StudentForum = () => {
                         <span>{a.content}</span>
                         <button style={{
                             fontSize: 10,
-                            color: '#FFF', backgroundColor: '#2DAA94',
+                            color: '#FFF',
+                            backgroundColor: '#2DAA94',
                             outline: "none",
                             border: "none",
                             paddingTop: 10,
@@ -271,7 +317,7 @@ const StudentForum = () => {
                             borderRadius: 32,
                             textAlign: "center",
                             cursor: "pointer"
-                        }}>comments
+                        }}>
                         </button>
                     </>
                 ))}

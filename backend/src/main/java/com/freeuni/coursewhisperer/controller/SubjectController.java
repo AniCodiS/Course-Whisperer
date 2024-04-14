@@ -39,7 +39,7 @@ public class SubjectController {
                                                         @RequestParam(required = false) String code,
                                                         @RequestParam(required = false) ESchool schoolName,
                                                         @RequestParam(required = false) Integer creditScore,
-                                                        @RequestParam(required = false) Long lecturer,
+                                                        @RequestParam(required = false)  String lecturer,
                                                         @RequestParam(required = false) ESemester semester) {
         var res = subjectService.search(subjectName.equals("") ? null : subjectName, code, schoolName, creditScore, lecturer, semester).stream().map(subjectMapper::modelToDto).toList();
         return ResponseEntity.ok(res);

@@ -23,5 +23,5 @@ public interface SubjectRepository extends JpaRepository<SubjectEntity, String> 
             "(:lecturer is null or s.lecturer like concat('%',  cast(:lecturer as text), '%')) and " +
             "(:semester is null or s.semester = :semester)")
     List<SubjectEntity> search(String name, String code, ESchool schoolName,
-                               Integer creditScore, Long lecturer, ESemester semester);
+                               Integer creditScore, String lecturer, ESemester semester);
 }
