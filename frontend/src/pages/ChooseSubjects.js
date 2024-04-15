@@ -111,9 +111,23 @@ const ChooseSubjects = () => {
         }
     };
 
+    const routeChange = () => {
+        window.location.href = 'http://localhost:3000/homepage';
+    }
 
     return (
         <div className="container">
+            <button style={{
+                maxWidth: 200,
+                borderRadius: 32,
+                padding: "10px 24px",
+                textAlign: "center",
+                fontSize: 14,
+                color: 'darkgreen',
+                backgroundColor: '#2DAA944F',
+                cursor: 'pointer',
+            }} onClick={routeChange}>Go to Homepage
+            </button>
             <div style={{display: "flex", flex: 1, justifyContent: "space-between", alignItems: "center"}}>
                 <span style={{marginRight: "10px", fontSize: 24, fontWeight: "500", color: "#506C68"}}>Subjects</span>
                 <div style={{display: "flex", gap: 20}}>
@@ -188,7 +202,8 @@ const ChooseSubjects = () => {
                 </tbody>
             </table>
         </div>
-    );
+    )
+        ;
 };
 
 const styles = {
