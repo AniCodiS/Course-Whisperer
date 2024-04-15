@@ -14,6 +14,13 @@ const ChooseSubjects = () => {
         height: window.innerHeight,
     });
 
+    const semesterTypes = [
+        {name: 'Semester', value: ''},
+        {name: 'ODD', value: 'ODD'},
+        {name: 'EVEN', value: 'EVEN'},
+        {name: 'BOTH', value: 'BOTH'}
+    ];
+
     const username = localStorage.getItem("username");
 
     const handleResize = () => {
@@ -116,8 +123,20 @@ const ChooseSubjects = () => {
                            onChange={(event) => setSchoolName(event.target.value)}/>
                     <input className="input-field" placeholder="Lecturer" value={lecturer}
                            onChange={(event) => setLecturer(event.target.value)}/>
-                    <input className="input-field" placeholder="Semester" value={semester}
-                           onChange={(event) => setSemester(event.target.value)}/>
+                    <select style={{
+                        padding: 12,
+                        borderRadius: 24,
+                        border: "1px solid #2DAA944F",
+                        fontSize: 14,
+                        outline: 'none',
+                        backgroundColor: 'white',
+                    }}
+                            value={semester}
+                            onChange={(e) => setSemester(e.target.value)}>
+                        {semesterTypes.map(type => (
+                            <option key={type.value} value={type.value}>{type.name}</option>
+                        ))}
+                    </select>
                     <input className="input-field" placeholder="Credit Score" value={creditScore}
                            onChange={(event) => setCreditScore(event.target.value)}/>
                     <button onClick={() => handleSearch()} style={{
