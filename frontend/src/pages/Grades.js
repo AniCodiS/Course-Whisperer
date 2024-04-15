@@ -11,12 +11,16 @@ const Grades = () => {
 
     useEffect(() => {
         const getGrades = async () => {
-            const response = await axios.get('http://localhost:8081/api/passedSubject/retrieve-subjects', {
-                params: {
-                    username
-                }
-            })
-            setGrades(response.data)
+            try {
+                const response = await axios.get('http://localhost:8081/api/passedSubject/retrieve-subjects', {
+                    params: {
+                        username
+                    }
+                })
+                setGrades(response.data)
+            } catch (error) {
+                alert(error.response.data.messageDescription);
+            }
         }
         getGrades();
 
@@ -25,14 +29,18 @@ const Grades = () => {
     useEffect(() => {
         const pressHandler = async (e) => {
             if (e.key === "Enter" && subject && gradeScore) {
-                const response = await axios.post('http://localhost:8081/api/passedSubject/create-subject', {
-                    username,
-                    subject,
-                    gradeScore
-                })
-                setGrades(prev => [response.data, ...prev])
-                setSubject("")
-                setGradeScore("")
+                try {
+                    const response = await axios.post('http://localhost:8081/api/passedSubject/create-subject', {
+                        username,
+                        subject,
+                        gradeScore
+                    })
+                    setGrades(prev => [response.data, ...prev])
+                    setSubject("")
+                    setGradeScore("")
+                } catch (error) {
+                    alert(error.response.data.messageDescription);
+                }
             }
         }
 
