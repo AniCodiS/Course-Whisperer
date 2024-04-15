@@ -8,6 +8,8 @@ import com.freeuni.coursewhisperer.data.model.PassedSubject;
 import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.PassedSubjectRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,16 +20,19 @@ public class PassedSubjectService extends AbstractService<PassedSubjectEntity, L
 
     private final PassedSubjectRepository passedSubjectRepository;
     private final PassedSubjectMapper passedSubjectMapper;
+    private final CacheManager cacheManager;
+
 
     public PassedSubjectService(PassedSubjectRepository passedSubjectRepository,
-                                PassedSubjectMapper passedSubjectMapper) {
+                                PassedSubjectMapper passedSubjectMapper, CacheManager cacheManager) {
         super(passedSubjectRepository, passedSubjectMapper, PassedSubjectEntity.class);
         this.passedSubjectRepository = passedSubjectRepository;
         this.passedSubjectMapper = passedSubjectMapper;
+        this.cacheManager = cacheManager;
     }
 
-    public List<String> getPassesSubjects(String username) {
-        return passedSubjectRepository.findByUsernameAndGrade(username, EGrade.F);
+    public List<PassedSubject> getPassesSubjects(String username) {
+        return passedSubjectMapper.entityToModel(passedSubjectRepository.findByUsernameAndGrade(username, EGrade.F));
     }
 
     public void deletePassedSubject(String username, Long id) {
@@ -55,10 +60,39 @@ public class PassedSubjectService extends AbstractService<PassedSubjectEntity, L
     }
 
     public List<PassedSubject> getPassedSubjects(String username) {
-        return passedSubjectRepository.findByUsernameOrderByGradeScoreAsc(username).stream().map(passedSubjectMapper::entityToModel).toList();
+        var cache = cacheManager.getCache("subjects");
+        if (cache == null) {
+            throw ExceptionFactory.resourceNotFound(Cache.class, "subjects");
+        }
+        var lst = passedSubjectRepository.findByUsernameOrderByGradeScoreAsc(username);
+        lst.forEach(
+                subject -> subject.setSubject(cache.get(subject.getSubject()).get().toString())
+        );
+        return lst.stream().map(passedSubjectMapper::entityToModel).toList();
     }
 
     public PassedSubject createPassedSubject(PassedSubject passedSubject) {
+        var cache = cacheManager.getCache("subjects");
+        if (cache.get(passedSubject.getSubject()) == null) {
+            throw ExceptionFactory.resourceNotFound(PassedSubject.class, passedSubject.getSubject());
+        }
+        passedSubject.setGrade(convertToEGrade(passedSubject.getGradeScore()));
         return passedSubjectMapper.entityToModel(passedSubjectRepository.save(passedSubjectMapper.modelToEntity(passedSubject)));
+    }
+
+    private EGrade convertToEGrade(Integer numericalGrade) {
+        if (numericalGrade >= 91) {
+            return EGrade.A;
+        } else if (numericalGrade >= 81) {
+            return EGrade.B;
+        } else if (numericalGrade >= 71) {
+            return EGrade.C;
+        } else if (numericalGrade >= 61) {
+            return EGrade.D;
+        } else if (numericalGrade >= 51) {
+            return EGrade.E;
+        } else {
+            return EGrade.F;
+        }
     }
 }

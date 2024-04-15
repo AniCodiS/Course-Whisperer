@@ -3,11 +3,16 @@ package com.freeuni.coursewhisperer.service;
 import com.freeuni.coursewhisperer.data.enums.ESchool;
 import com.freeuni.coursewhisperer.data.enums.ESemester;
 import com.freeuni.coursewhisperer.data.mapper.SubjectMapper;
+import com.freeuni.coursewhisperer.data.model.PassedSubject;
 import com.freeuni.coursewhisperer.data.model.Prerequisite;
 import com.freeuni.coursewhisperer.data.model.Subject;
 import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.SubjectRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@CacheConfig(cacheNames = "subjects")
 public class SubjectService {
 
     private final SubjectRepository subjectRepository;
@@ -25,16 +31,41 @@ public class SubjectService {
     private final PrerequisiteService prerequisiteService;
     private final LecturerService lecturerService;
     private final SubjectMapper subjectMapper;
+    private final CacheManager cacheManager;
+
 
     public SubjectService(SubjectRepository subjectRepository,
                           PassedSubjectService passedSubjectService,
                           PrerequisiteService prerequisiteService,
-                          LecturerService lecturerService, SubjectMapper subjectMapper) {
+                          LecturerService lecturerService, SubjectMapper subjectMapper,
+                          CacheManager cacheManager) {
         this.subjectRepository = subjectRepository;
         this.passedSubjectService = passedSubjectService;
         this.prerequisiteService = prerequisiteService;
         this.lecturerService = lecturerService;
         this.subjectMapper = subjectMapper;
+        this.cacheManager = cacheManager;
+    }
+
+    @PostConstruct
+    private void initCache() {
+        updateSubjects();
+    }
+
+    public void updateSubjects() {
+        var cache = cacheManager.getCache("subjects");
+        if (cache == null) {
+            log.error("Subjects cache could not be found");
+            return;
+        }
+        cache.clear();
+        getAllSubjects().forEach(subject -> {
+            try {
+                cache.put(subject.getCode(), subject.getName());
+            } catch (Exception e) {
+                log.warn("Could not fill dictionary cache for {}", subject.getCode());
+            }
+        });
     }
 
     public List<Subject> getAllSubjects() {
@@ -48,7 +79,7 @@ public class SubjectService {
     }
 
     public List<Subject> chooseSubject(String username, ESchool schoolName, Integer creditScore, ESemester semester) {
-        var passedSubjects = passedSubjectService.getPassesSubjects(username);
+        var passedSubjects = passedSubjectService.getPassesSubjects(username).stream().map(PassedSubject::getSubject).toList();
         var prerequisites = prerequisiteService.getAllPrerequisites().stream().collect(Collectors.groupingBy(
                 Prerequisite::getSubject,
                 Collectors.mapping(Prerequisite::getPrerequisite, Collectors.toList())
@@ -58,8 +89,9 @@ public class SubjectService {
 
         subjectRepository.search(null, null, schoolName, creditScore, null, semester).stream().
                 map(subjectMapper::entityToModel).forEach(subject -> {
-                            if (!passedSubjects.contains(subject.getCode()) && (prerequisites.get(subject) == null ||
-                                    new HashSet<>(passedSubjects).containsAll(prerequisites.get(subject)))) {
+                            if (!passedSubjects.contains(subject.getCode()) && (prerequisites.get(subject.getCode()) == null ||
+                                    prerequisites.get(subject.getCode()).isEmpty() ||
+                                    new HashSet<>(passedSubjects).containsAll(prerequisites.get(subject.getCode())))) {
                                 subjects.add(subject);
                             }
                         }
@@ -67,6 +99,7 @@ public class SubjectService {
         return subjects;
     }
 
+    @Cacheable(value = "subjects", key = "#subject.code")
     public synchronized Subject createSubject(Subject subject) {
         var lecturers = Arrays.asList(subject.getLecturer().replace(" ", "").split(","));
         if (lecturerService.search(lecturers).size() < lecturers.size()) {
