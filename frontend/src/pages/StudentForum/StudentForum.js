@@ -113,7 +113,7 @@ const StudentForum = () => {
                         outline: 'none',
                         border: 'none',
                         background: '#2DAA944F',
-                    }} placeholder="Enter Subject Name" type="text" value={filterObj.subject}
+                    }} placeholder=" Enter Subject Name" type="text" value={filterObj.subject}
                            onChange={(e) => setFilterObj({type: filterObj.type, subject: e.target.value})}/>
                     <select style={{
                         borderRadius: 5,
@@ -189,7 +189,7 @@ const StudentForum = () => {
                             borderColor: 'forestgreen'
                         }}
                                type="text" value={subject} onChange={e => setSubject(e.target.value)}
-                               placeholder="Enter your subject here"/>
+                               placeholder=" Enter your subject here"/>
 
                         <select style={{
                             flex: 1,
@@ -231,10 +231,12 @@ const StudentForum = () => {
                         borderRadius: 4,
                         borderColor: 'forestgreen',
                         fontSize: 14,
+                        resize: "vertical",
+                        minHeight: 100,
                         boxShadow: 'none',
                         outline: 'none'
                     }} type="textarea" value={content} onChange={e => setContent(e.target.value)}
-                              placeholder="Enter your text"/>
+                              placeholder=" Enter your text"/>
                 </div>
             }
 
