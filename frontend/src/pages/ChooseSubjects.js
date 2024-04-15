@@ -9,45 +9,72 @@ const ChooseSubjects = () => {
     const [lecturer, setLecturer] = useState("");
     const [semester, setSemester] = useState("");
     const [creditScore, setCreditScore] = useState("");
+    const [windowSize, setWindowSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight,
+    });
 
-    const username = localStorage.getItem("username")
+    const username = localStorage.getItem("username");
+
+    const handleResize = () => {
+        setWindowSize({
+            width: window.innerWidth,
+            height: window.innerHeight,
+        });
+    };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
 
     useEffect(() => {
         const getSubjects = async () => {
-            const response = await axios.get('http://localhost:8081/api/subject/all', {
-                params: {
-                    username
-                }
-            })
-            setSubjects(response.data)
+            try {
+                const response = await axios.get('http://localhost:8081/api/subject/all', {
+                    params: {
+                        username
+                    }
+                })
+                setSubjects(response.data)
+            } catch (error) {
+                alert(error.response.data.messageDescription);
+            }
         }
         getSubjects();
 
     }, [])
 
+    const searchData = async () => {
+        try {
+            const response = await axios.get('http://localhost:8081/api/subject/search', {
+                params: {
+                    subjectName,
+                    schoolName,
+                    creditScore,
+                    lecturer,
+                    semester
+                }
+            });
+
+            setSubjects(response.data);
+            setSubjectName("");
+            setSchoolName("");
+            setLecturer("");
+            setSemester("");
+            setCreditScore("");
+        } catch (error) {
+            alert(error.response.data.messageDescription);
+        }
+    };
+
     useEffect(() => {
         const pressHandler = async (e) => {
             if (e.key === "Enter") {
-                try {
-                    const response = await axios.get('http://localhost:8081/api/subject/search', {
-                        params: {
-                            subjectName,
-                            schoolName,
-                            creditScore,
-                            lecturer,
-                            semester
-                        }
-                    });
-
-                    setSubjects(response.data);
-                    setSubjectName("");
-                    setSchoolName("");
-                    setLecturer("");
-                    setSemester("");
-                    setCreditScore("");
-                } catch (error) {
-                    console.error("Error fetching data:", error);
-                }
+                await searchData();
             }
         };
 
@@ -56,6 +83,10 @@ const ChooseSubjects = () => {
             window.removeEventListener("keydown", pressHandler);
         };
     }, [subjectName, schoolName, creditScore, lecturer, semester]);
+
+    const handleSearch = async () => {
+        await searchData();
+    };
 
     const handleChoice = async (username) => {
         try {
@@ -67,9 +98,9 @@ const ChooseSubjects = () => {
                     semester
                 }
             });
-            setSubjects(response.data)
+            setSubjects(response.data);
         } catch (error) {
-            console.error('Error choosing subject:', error);
+            alert(error.response.data.messageDescription);
         }
     };
 
@@ -77,7 +108,7 @@ const ChooseSubjects = () => {
     return (
         <div className="container">
             <div style={{display: "flex", flex: 1, justifyContent: "space-between", alignItems: "center"}}>
-                <span style={{fontSize: 24, fontWeight: "500", color: "#506C68"}}>Subjects</span>
+                <span style={{marginRight: "10px", fontSize: 24, fontWeight: "500", color: "#506C68"}}>Subjects</span>
                 <div style={{display: "flex", gap: 20}}>
                     <input className="input-field" placeholder="Subject Name" value={subjectName}
                            onChange={(event) => setSubjectName(event.target.value)}/>
@@ -89,6 +120,17 @@ const ChooseSubjects = () => {
                            onChange={(event) => setSemester(event.target.value)}/>
                     <input className="input-field" placeholder="Credit Score" value={creditScore}
                            onChange={(event) => setCreditScore(event.target.value)}/>
+                    <button onClick={() => handleSearch()} style={{
+                        backgroundColor: '#2DAA944F',
+                        border: "none",
+                        borderRadius: 32,
+                        padding: "10px 24px",
+                        textAlign: "center",
+                        fontSize: 14,
+                        color: 'white',
+                        cursor: 'pointer',
+                    }}> Search
+                    </button>
                     <button onClick={() => handleChoice(username)} style={{
                         backgroundColor: '#2DAA944F',
                         border: "none",
@@ -102,7 +144,7 @@ const ChooseSubjects = () => {
                     </button>
                 </div>
             </div>
-            <table style={{borderCollapse: 'collapse'}}>
+            <table className="table">
                 <thead>
                 <tr style={{backgroundColor: "#2DAA944F", color: 'darkgreen'}}>
                     <th style={styles.headerCell}>Subject Code</th>
@@ -126,7 +168,8 @@ const ChooseSubjects = () => {
                 ))}
                 </tbody>
             </table>
-        </div>)
+        </div>
+    );
 };
 
 const styles = {

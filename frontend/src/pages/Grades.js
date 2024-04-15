@@ -59,7 +59,7 @@ const Grades = () => {
             });
             setGrades(prevGrades => prevGrades.filter(grade => grade.id !== id));
         } catch (error) {
-            console.error('Error deleting row:', error);
+            alert(error.response.data.messageDescription);
         }
     };
 
