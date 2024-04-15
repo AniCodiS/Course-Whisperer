@@ -2,9 +2,7 @@ package com.freeuni.coursewhisperer.data.entity;
 
 import com.freeuni.coursewhisperer.data.entity.common.AbstractIdTimestampEntity;
 import com.freeuni.coursewhisperer.data.enums.EGrade;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -22,6 +20,7 @@ public class PassedSubjectEntity extends AbstractIdTimestampEntity {
     @Column(name = "subject")
     private String subject;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "grade")
     private EGrade grade;
 

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface PassedSubjectRepository extends AbstractRepository<PassedSubjectEntity, Long> {
     @Query("select s from PassedSubjectEntity s where s.username = :username and s.grade != :grade")
-    List<String> findByUsernameAndGrade(String username, EGrade grade);
+    List<PassedSubjectEntity> findByUsernameAndGrade(String username, EGrade grade);
 
     Optional<PassedSubjectEntity> findById(Long id);
 

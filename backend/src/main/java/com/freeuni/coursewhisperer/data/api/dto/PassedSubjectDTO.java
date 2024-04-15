@@ -9,5 +9,6 @@ public class PassedSubjectDTO {
     private Long id;
     private String username;
     private String subject;
+    private String grade;
     private Integer gradeScore;
 }
