@@ -63,57 +63,73 @@ const Grades = () => {
         }
     };
 
-    return (<div style={{
-        overflowY: 'auto',
-        maxHeight: 'calc(100vh - 20px)',
-        display: "flex",
-        flexDirection: "column",
-        padding: 32,
-        gap: 24
-    }}>
-        <div style={{display: "flex", flex: 1, justifyContent: "space-between", alignItems: "center"}}>
-            <span style={{fontSize: 24, fontWeight: "500", color: "#506C68"}}>Grades</span>
-            <div style={{display: "flex", gap: 20}}>
-                <input style={{padding: 12, outline: "none", borderRadius: 24, borderColor: "#2DAA944F"}}
-                       placeholder="Subject" value={subject} onChange={(event) => setSubject(event.target.value)}/>
-                <input style={{padding: 12, outline: "none", borderRadius: 24, borderColor: '#2DAA944F'}}
-                       placeholder="Grade Score" value={gradeScore}
-                       onChange={(event) => setGradeScore(event.target.value)}/>
+    const routeChange = () => {
+        window.location.href = 'http://localhost:3000/homepage';
+    }
+
+    return (
+        <div style={{
+            overflowY: 'auto',
+            maxHeight: 'calc(100vh - 20px)',
+            display: "flex",
+            flexDirection: "column",
+            padding: 32,
+            gap: 24
+        }}>
+            <button style={{
+                maxWidth: 200,
+                borderRadius: 32,
+                padding: "10px 24px",
+                textAlign: "center",
+                fontSize: 14,
+                color: 'darkgreen',
+                backgroundColor: '#2DAA944F',
+                cursor: 'pointer',
+            }} onClick={routeChange}>Go to Homepage
+            </button>
+            <div style={{display: "flex", flex: 1, justifyContent: "space-between", alignItems: "center"}}>
+                <span style={{fontSize: 24, fontWeight: "500", color: "#506C68"}}>Grades</span>
+                <div style={{display: "flex", gap: 20}}>
+                    <input style={{padding: 12, outline: "none", borderRadius: 24, borderColor: "#2DAA944F"}}
+                           placeholder="Subject" value={subject} onChange={(event) => setSubject(event.target.value)}/>
+                    <input style={{padding: 12, outline: "none", borderRadius: 24, borderColor: '#2DAA944F'}}
+                           placeholder="Grade Score" value={gradeScore}
+                           onChange={(event) => setGradeScore(event.target.value)}/>
+                </div>
             </div>
-        </div>
-        <table style={{borderCollapse: 'collapse'}}>
-            <thead>
-            <tr style={{backgroundColor: "#2DAA944F", color: 'darkgreen'}}>
-                <th style={styles.headerCell}>Subject</th>
-                <th style={styles.headerCell}>Grade</th>
-                <th style={styles.headerCell}>Grade Score</th>
-                <th style={styles.headerCell}>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            {grades.map((grade) => (
-                <tr key={grade.id}>
-                    <td style={styles.cell}>{grade.subject}</td>
-                    <td style={styles.cell}>{grade.grade}</td>
-                    <td style={styles.cell}>{grade.gradeScore}</td>
-                    <td style={styles.cell}>
-                        <button onClick={() => handleDeleteRow(grade.id, username)} style={{
-                            backgroundColor: '#2DAA944F',
-                            border: "none",
-                            borderRadius: 32,
-                            padding: "10px 24px",
-                            textAlign: "center",
-                            fontSize: 14,
-                            color: 'white',
-                            cursor: 'pointer',
-                        }}> Delete
-                        </button>
-                    </td>
+            <table style={{borderCollapse: 'collapse'}}>
+                <thead>
+                <tr style={{backgroundColor: "#2DAA944F", color: 'darkgreen'}}>
+                    <th style={styles.headerCell}>Subject</th>
+                    <th style={styles.headerCell}>Grade</th>
+                    <th style={styles.headerCell}>Grade Score</th>
+                    <th style={styles.headerCell}>Action</th>
                 </tr>
-            ))}
-            </tbody>
-        </table>
-    </div>)
+                </thead>
+                <tbody>
+                {grades.map((grade) => (
+                    <tr key={grade.id}>
+                        <td style={styles.cell}>{grade.subject}</td>
+                        <td style={styles.cell}>{grade.grade}</td>
+                        <td style={styles.cell}>{grade.gradeScore}</td>
+                        <td style={styles.cell}>
+                            <button onClick={() => handleDeleteRow(grade.id, username)} style={{
+                                backgroundColor: '#2DAA944F',
+                                border: "none",
+                                borderRadius: 32,
+                                padding: "10px 24px",
+                                textAlign: "center",
+                                fontSize: 14,
+                                color: 'white',
+                                cursor: 'pointer',
+                            }}> Delete
+                            </button>
+                        </td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+        </div>)
 };
 
 const styles = {
