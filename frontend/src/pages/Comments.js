@@ -1,14 +1,13 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import axios from 'axios';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
 
-const Comments = ({postId}) => {
+const Comments = ({postId, isOpen}) => {
     const username = localStorage.getItem("username");
     const [comments, setComments] = useState([]);
     const [content, setContent] = useState('');
-    const [showComments, setShowComments] = useState(false);
 
     const getComments = async () => {
         try {
@@ -38,7 +37,6 @@ const Comments = ({postId}) => {
     };
 
     const deleteComment = async (id) => {
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", id);
         try {
             await axios.delete(`http://localhost:8081/api/comment/remove/${id}`, {
                 params: {
@@ -51,34 +49,16 @@ const Comments = ({postId}) => {
         }
     };
 
-    const handleToggleComments = () => {
-        setShowComments(prevShowComments => !prevShowComments);
-    };
 
     useEffect(() => {
-        if (showComments) {
+        if (isOpen) {
             getComments();
         }
-    }, [showComments]);
+    }, [isOpen]);
 
     return (
         <>
-            <button onClick={handleToggleComments} style={{
-                fontSize: 10,
-                color: '#FFF',
-                backgroundColor: '#2DAA94',
-                outline: "none",
-                border: "none",
-                paddingTop: 10,
-                paddingBottom: 10,
-                paddingLeft: 24,
-                paddingRight: 24,
-                borderRadius: 32,
-                textAlign: "center",
-                cursor: "pointer"
-            }}> Comments
-            </button>
-            {showComments &&
+            {isOpen &&
                 <div style={{
                     display: "flex",
                     alignItems: "center",
@@ -96,7 +76,6 @@ const Comments = ({postId}) => {
                     fontSize: 10,
                     color: '#2DAA94',
                     textAlign: "center",
-                    minHeight: 150,
                     maxHeight: 200,
                     overflowY: 'auto',
                     overflowX: 'hidden'
@@ -126,7 +105,7 @@ const Comments = ({postId}) => {
                                             alignItems: 'center',
                                             marginLeft: '8px',
                                             marginBottom: '8px',
-                                            width: '10%',
+                                            width: '5%',
                                             display: 'flex',
                                             justifyContent: 'center',
                                             border: 'none'
@@ -143,9 +122,21 @@ const Comments = ({postId}) => {
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             placeholder="Add a comment..."
-                            style={{marginRight: '8px'}} // Add some spacing between input and button
+                            style={{
+                                marginRight: '8px',
+                                fontSize: '16px',
+                                borderRadius: 4
+                            }}
                         />
-                        <button style={{cursor: 'pointer'}} onClick={addComment}>Add Comment</button>
+                        <button style={{
+                            cursor: 'pointer',
+                            backgroundColor: '#2DAA94',
+                            border: "none",
+                            color: "#FFF",
+                            borderRadius: 10,
+                            fontSize: "16px"
+                        }} onClick={addComment}> Add
+                        </button>
                     </div>
                 </div>
             }
@@ -162,7 +153,7 @@ const trashIconStyle = {
     alignItems: 'center',
     justifyContent: 'center',
     border: 'none',
-    cursor: 'pointer'
+    cursor: 'pointer',
 };
 
 export default Comments;

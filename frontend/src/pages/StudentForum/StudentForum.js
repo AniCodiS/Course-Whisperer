@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import axios from 'axios';
 import Comments from "../Comments";
 
@@ -6,6 +6,9 @@ const StudentForum = () => {
     const username = localStorage.getItem("username");
     const [posts, setPosts] = useState([]);
     const [showAddPost, setShowAddPost] = useState(false);
+    const [showComments, setShowComments] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
+
     const getPosts = () => {
         return axios.get('http://localhost:8081/api/post/all').then((data) => {
             setPosts(data.data);
@@ -114,6 +117,21 @@ const StudentForum = () => {
         window.location.href = 'http://localhost:3000/homepage';
     }
 
+    const handleToggleComments = (item) => {
+        if (selectedId === null) {
+            setSelectedId(item.id)
+            setShowComments(prevShowComments => !prevShowComments);
+        }
+        else  if (selectedId !== null && selectedId === item.id){
+            setShowComments(false);
+            setSelectedId(null)
+        }
+        else{
+            setShowComments(true);
+            setSelectedId(item.id)
+        }
+    };
+
     return (
         <div style={{
             // paddingLeft: 100,
@@ -132,7 +150,7 @@ const StudentForum = () => {
                 textAlign: "center",
                 fontSize: 14,
                 color: 'darkgreen',
-                backgroundColor: '#2DAA944F',
+                backgroundColor: '#2DAA9424',
                 cursor: 'pointer',
             }} onClick={routeChange}>Go to Homepage
             </button>
@@ -153,7 +171,7 @@ const StudentForum = () => {
                         borderWidth: 2,
                         borderColor: "#1E7742",
                         outline: 'none',
-                        background: '#2DAA944F',
+                        background: '#2DAA9424',
                     }} placeholder=" Enter Subject Name" type="text" value={filterObj.subject}
                            onChange={(e) => setFilterObj({type: filterObj.type, subject: e.target.value})}/>
                     <select style={{
@@ -162,7 +180,7 @@ const StudentForum = () => {
                         borderColor: "#1E7742",
                         fontSize: 14,
                         outline: 'none',
-                        backgroundColor: '#2DAA944F',
+                        backgroundColor: '#2DAA9424',
                     }}
                             value={filterObj.type}
                             onChange={(e) => setFilterObj({type: e.target.value, subject: filterObj.subject})}>
@@ -171,7 +189,7 @@ const StudentForum = () => {
                         ))}
                     </select>
                     <button onClick={handleFilterButton} style={{
-                        backgroundColor: '#2DAA944F',
+                        backgroundColor: '#2DAA9424',
                         outline: "none",
                         borderRadius: 32,
                         borderColor: "#1E7742",
@@ -208,7 +226,7 @@ const StudentForum = () => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     flexDirection: "column",
-                    backgroundColor: '#2DAA944F',
+                    backgroundColor: '#2DAA9424',
                     outline: "none",
                     border: "none",
                     paddingTop: 10,
@@ -294,7 +312,7 @@ const StudentForum = () => {
                         marginBottom: 16,
                         display: "flex",
                         flexDirection: "column",
-                        backgroundColor: '#2DAA944F',
+                        backgroundColor: '#2DAA9424',
                         borderRadius: 10
                     }}>
                         <div
@@ -319,16 +337,67 @@ const StudentForum = () => {
                                     }}>{a.subject} - {a.type.charAt(0) + a.type.substring(1).toLowerCase()}</span></div>
                             </div>
                             <div style={{display: "flex", gap: 8}}>
+                                {
+                                    username === a.username &&
+                                    <button onClick={() => deletePost(a.id, username)} style={{
+                                        backgroundColor: '#2DAA944F',
+                                        outline: "none",
+                                        border: "none",
+                                        paddingTop: 10,
+                                        paddingBottom: 10,
+                                        paddingLeft: 24,
+                                        paddingRight: 24,
+                                        borderRadius: 32,
+                                        textAlign: "center",
+                                        cursor: "pointer",
+                                        fontSize: 10,
+                                        color: 'white',
+                                    }}> Delete
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                        <span style={{
+                            wordWrap: "break-word",
+                            color: "black",
+                            fontSize: 16,
+                            fontWeight: 'normal',
+                            padding: '10px',
+                            margin: "5px"
+                        }}> {a.content}
+                        </span>
+                        <div style={{display: "flex", alignItems: 'center', justifyContent:'space-between'}}>
+                            <button onClick={() => handleToggleComments(a)} style={{
+                                fontSize: 15,
+                                color: '#2DAA94',
+                                outline: "none",
+                                border: "none",
+                                paddingTop: 10,
+                                paddingBottom: 10,
+                                paddingLeft: 12,
+                                paddingRight: 24,
+                                borderRadius: 32,
+                                textAlign: "left",
+                                cursor: "pointer",
+                                backgroundColor: "transparent",
+                                width: "7%",
+                                display: "inline-block",
+                                verticalAlign: "middle",
+                                textDecoration: "none"
+
+                            }}> Comments
+                            </button>
+                            <div style={{textAlign: "right", width: 'auto'}}>
                                 <button onClick={() => vote(a.id, "UPVOTE")} style={{
                                     backgroundColor: '#2DAA944F',
                                     outline: "none",
                                     border: "none",
+                                    margin: 10,
                                     paddingTop: 10,
                                     paddingBottom: 10,
                                     paddingLeft: 24,
                                     paddingRight: 24,
                                     borderRadius: 32,
-                                    textAlign: "center",
                                     fontSize: 10,
                                     color: 'white',
                                     cursor: 'pointer',
@@ -348,35 +417,10 @@ const StudentForum = () => {
                                     color: 'white',
                                 }}> Downvote {a.downVote}
                                 </button>
-                                {
-                                    username === a.username &&
-                                    <button onClick={() => deletePost(a.id, username)} style={{
-                                        backgroundColor: '#2DAA944F',
-                                        outline: "none",
-                                        border: "none",
-                                        paddingTop: 10,
-                                        paddingBottom: 10,
-                                        paddingLeft: 24,
-                                        paddingRight: 24,
-                                        borderRadius: 32,
-                                        textAlign: "center",
-                                        fontSize: 10,
-                                        color: 'white',
-                                    }}> Delete
-                                    </button>
-                                }
                             </div>
+
                         </div>
-                        <span style={{
-                            wordWrap: "break-word",
-                            color: "black",
-                            fontSize: 16,
-                            fontWeight: 'normal',
-                            padding: '10px',
-                            margin: "5px"
-                        }}> {a.content}
-                        </span>
-                        <Comments postId={a.id}/>
+                        <Comments postId={selectedId} isOpen={showComments && (a.id === selectedId)} />
                     </div>
                 ))}
             </div>

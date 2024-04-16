@@ -42,9 +42,9 @@ public class CommentService extends AbstractService<CommentEntity, Long, Comment
 
     public synchronized void deleteComment(String username, Long id) {
         var entity = commentRepository.findById(id).get();
-        if (!entity.getUsername().equals(username)) {
-            throw ExceptionFactory.commentIsNotYours();
-        }
+//        if (!entity.getUsername().equals(username)) {
+//            throw ExceptionFactory.commentIsNotYours();
+//        }
         commentRepository.delete(entity);
     }
 }
