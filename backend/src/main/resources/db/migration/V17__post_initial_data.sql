@@ -18,5 +18,4 @@ VALUES
     ('2024-04-16 10:55:00', '2024-04-16 10:55:00', 'williammartin', 'Geography', 'Impact of climate change on global geography.', 17, 3, 'POST'),
     ('2024-04-16 11:00:00', '2024-04-16 11:00:00', 'avathompson', 'Philosophy', 'Discussion on existentialist philosophy.', 14, 2, 'OTHER'),
     ('2024-04-16 11:05:00', '2024-04-16 11:05:00', 'liammoore', 'Economics', 'Debate on Keynesian vs. Neoclassical economics.', 18, 4, 'OTHER'),
-    ('2024-04-16 11:10:00', '2024-04-16 11:10:00', 'emma.wilson', 'Sociology', 'Exploring social stratification theories.', 20, 5, 'OTHER'),
-    ('2024-04-16 11:15:00', '2024-04-16 11:15:00', 'williamjones', 'Anthropology', 'Discussion on cultural relativism.', 16, 3, 'POST');
+    ('2024-04-16 11:10:00', '2024-04-16 11:10:00', 'emma.wilson', 'Sociology', 'Exploring social stratification theories.', 20, 5, 'OTHER');
