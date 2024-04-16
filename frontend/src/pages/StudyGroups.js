@@ -136,7 +136,7 @@ const StudyGroups = () => {
                     <div key={group.id} className="group-item">
                         <h3>{group.groupName}</h3>
                         <p>Subject: {group.subjectName}</p>
-                        <p>Meeting Time: {group.meetingTime}</p>
+                        <p>Meeting Time: {new Date(group.meetingTime).toLocaleString()}</p>
                         <button onClick={() => handleJoinGroup(group.groupName)}>Join</button>
                         <button onClick={() => handleLeaveGroup(group.groupName)}>Leave</button>
                     </div>
