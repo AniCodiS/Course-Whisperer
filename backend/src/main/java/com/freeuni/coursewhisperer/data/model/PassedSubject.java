@@ -10,6 +10,7 @@ public class PassedSubject {
     private Long id;
     private String username;
     private String subject;
+    private String subjectName;
     private EGrade grade;
     private Integer gradeScore;
 }

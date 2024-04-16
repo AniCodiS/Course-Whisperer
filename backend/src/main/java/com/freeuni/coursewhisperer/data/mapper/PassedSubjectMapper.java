@@ -13,7 +13,6 @@ public interface PassedSubjectMapper extends AbstractMapper<PassedSubjectEntity,
     PassedSubject entityToModel(PassedSubjectEntity passedSubjectEntity);
 
     @Override
-
     @Named(value = "modelToEntity")
     PassedSubjectEntity modelToEntity(PassedSubject passedSubject);
 
