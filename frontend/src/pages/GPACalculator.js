@@ -63,6 +63,10 @@ const GPACalculator = () => {
         }
     };
 
+    const routeChange = () => {
+        window.location.href = 'http://localhost:3000/homepage';
+    }
+
     return (
         <div className="gpa-calculator-container">
             <h2>GPA Calculator</h2>
@@ -96,14 +100,25 @@ const GPACalculator = () => {
                 </ul>
             </div>
             <button className="calculate-button" onClick={calculateGPA}>Calculate GPA</button>
+            <button style={{
+                position: 'fixed',
+                top: '20px',
+                left: '20px',
+                maxWidth: 200,
+                borderRadius: 32,
+                padding: "10px 24px",
+                textAlign: "center",
+                fontSize: 14,
+                color: 'white',
+                backgroundColor: '#1e90ff',
+                cursor: 'pointer',
+            }} onClick={routeChange}>Go to Homepage
+            </button>
             {gpaResult !== null && (
                 <div>
                     <h3>GPA Result: {gpaResult}</h3>
                 </div>
             )}
-            <div className="auth-footer">
-                <Link to="/homepage">Back to Home</Link>
-            </div>
         </div>
     );
 };

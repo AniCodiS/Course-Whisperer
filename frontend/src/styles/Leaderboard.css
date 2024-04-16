@@ -2,6 +2,13 @@
     margin: 20px;
 }
 
+.leaderboard-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px; /* Adjust height as needed */
+}
+
 .users-list {
     display: flex;
     flex-direction: column;
