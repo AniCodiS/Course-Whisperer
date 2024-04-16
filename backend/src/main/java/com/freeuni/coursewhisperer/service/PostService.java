@@ -54,12 +54,28 @@ public class PostService {
         return postMapper.entityToModel(postRepository.save(postEntity));
     }
 
-    public synchronized Post updatePost(Long id, EPostVote vote) {
+    public synchronized Post updatePost(String username, Long id, EPostVote vote) {
         var postEntity = postRepository.findById(id).get();
         if (vote == EPostVote.UPVOTE) {
-            postEntity.setUpVote(postEntity.getUpVote() + 1);
+            if (postEntity.getUpVoters() != null && postEntity.getUpVoters().contains(username)) {
+                postEntity.setUpVote(postEntity.getUpVote() - 1);
+                postEntity.setUpVoters(postEntity.getUpVoters().replace("," + username, ""));
+            } else {
+                postEntity.setUpVote(postEntity.getUpVote() + 1);
+                postEntity.setUpVoters(
+                        postEntity.getUpVoters() == null ? "," + username :
+                                postEntity.getUpVoters() + "," + username);
+            }
         } else {
-            postEntity.setDownVote(postEntity.getDownVote() + 1);
+            if (postEntity.getUpVoters() != null  && postEntity.getDownVoters().contains(username)) {
+                postEntity.setDownVote(postEntity.getDownVote() - 1);
+                postEntity.setDownVoters(postEntity.getDownVoters().replace("," + username, ""));
+            } else {
+                postEntity.setDownVote(postEntity.getUpVote() + 1);
+                postEntity.setDownVoters(
+                        postEntity.getDownVoters() == null ? "," + username :
+                                postEntity.getDownVoters() + "," + username);
+            }
         }
         return postMapper.entityToModel(postRepository.save(postEntity));
     }
