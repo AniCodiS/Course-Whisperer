@@ -21,11 +21,34 @@ const ChangePassword = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+    const validatePassword = () => {
+        const { newPassword } = formData;
+        const regexUpperCase = /[A-Z]/;
+        const regexLowerCase = /[a-z]/;
+        const regexSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
+        if (
+            newPassword.length < 8 ||
+            !regexUpperCase.test(newPassword) ||
+            !regexLowerCase.test(newPassword) ||
+            !regexSpecialChar.test(newPassword)
+        ) {
+            setError('New password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.');
+            return false;
+        }
+        setError('');
+        return true;
+    };
+
     const handleSubmit = async event => {
         event.preventDefault();
 
         if (formData.newPassword !== formData.confirmPassword) {
             setError('New password and confirm password do not match.');
+            return;
+        }
+
+        if (!validatePassword()) {
+            setError('Invalid new password. Please try again.');
             return;
         }
 
