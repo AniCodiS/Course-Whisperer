@@ -1,0 +1,23 @@
+INSERT INTO "comment" (created_at, modified_at, username, post_id, content)
+VALUES
+    ('2024-04-16 11:20:00', '2024-04-16 11:20:00', 'janedoe', 1, 'That''s an interesting question! Have you looked into the Fundamental Theorem of Calculus?'),
+    ('2024-04-16 11:25:00', '2024-04-16 11:25:00', 'marksmith', 2, 'Quantum entanglement is such a fascinating topic. Have you read about the EPR paradox?'),
+    ('2024-04-16 11:30:00', '2024-04-16 11:30:00', 'emilyjones', 3, 'I love analyzing Shakespearean sonnets! Which one are you focusing on?'),
+    ('2024-04-16 11:35:00', '2024-04-16 11:35:00', 'samwilson', 4, 'Machine learning algorithms are revolutionizing various fields. Which algorithm interests you the most?'),
+    ('2024-04-16 11:40:00', '2024-04-16 11:40:00', 'alexmartinez', 5, 'CBT has proven to be effective in treating various mental health disorders.'),
+    ('2024-04-16 11:45:00', '2024-04-16 11:45:00', 'gracebrown', 6, 'The Industrial Revolution indeed had a profound impact on society. What aspect are you interested in?'),
+    ('2024-04-16 11:50:00', '2024-04-16 11:50:00', 'lucaswilson', 7, 'Genetic engineering is advancing rapidly. What recent discoveries have caught your attention?'),
+    ('2024-04-16 11:55:00', '2024-04-16 11:55:00', 'miasmith', 8, 'The periodic table is a fascinating concept. Do you have a favorite element?'),
+    ('2024-04-16 12:00:00', '2024-04-16 12:00:00', 'sophiejohnson', 9, 'Global supply chain management faces numerous challenges, especially with recent global events.'),
+    ('2024-04-16 12:05:00', '2024-04-16 12:05:00', 'evanmiller', 10, 'Renaissance art techniques are intricate and beautiful. Which artist''s work do you admire the most?'),
+    ('2024-04-16 12:10:00', '2024-04-16 12:10:00', 'noahclark', 11, 'Jazz music has a rich history. Do you have a favorite jazz musician?'),
+    ('2024-04-16 12:15:00', '2024-04-16 12:15:00', 'lilyrobinson', 12, 'Sustainable energy solutions are crucial for mitigating climate change. What solutions do you think are most viable?'),
+    ('2024-04-16 12:20:00', '2024-04-16 12:20:00', 'jackanderson', 13, 'Understanding the immune system is essential, especially in the context of recent health crises.'),
+    ('2024-04-16 12:25:00', '2024-04-16 12:25:00', 'miamartin', 14, 'Constitutional law amendments have significant implications for society. What amendment are you discussing?'),
+    ('2024-04-16 12:30:00', '2024-04-16 12:30:00', 'ryanwilliams', 15, 'Linguistic diversity is a fascinating topic. Have you studied any endangered languages?'),
+    ('2024-04-16 12:35:00', '2024-04-16 12:35:00', 'zoeclark', 16, 'Climate change is reshaping our world. What geographical changes concern you the most?'),
+    ('2024-04-16 12:40:00', '2024-04-16 12:40:00', 'chloemiller', 17, 'Existentialist philosophy delves into the meaning of existence. Which philosopher''s work do you resonate with?'),
+    ('2024-04-16 12:45:00', '2024-04-16 12:45:00', 'davidbrown', 18, 'The Keynesian vs. Neoclassical debate has been ongoing for decades. What''s your perspective?'),
+    ('2024-04-16 12:50:00', '2024-04-16 12:50:00', 'mollywilson', 19, 'Social stratification is a complex phenomenon. Do you believe it can be eliminated?'),
+    ('2024-04-16 12:55:00', '2024-04-16 12:55:00', 'ethanmiller', 20, 'Cultural relativism challenges our understanding of morality and ethics.'),
+    ('2024-04-16 13:00:00', '2024-04-16 13:00:00', 'ellajackson', 1, 'I agree! The Fundamental Theorem of Calculus is fundamental to understanding calculus.');
