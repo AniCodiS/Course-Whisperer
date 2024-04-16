@@ -8,6 +8,11 @@
     margin: 0 auto;
 }
 
+.gpa-calculator-title {
+    height: 80px;
+    color: grey;
+}
+
 .input-fields {
     display: flex;
     flex-wrap: wrap;

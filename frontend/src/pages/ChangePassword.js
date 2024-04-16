@@ -21,11 +21,39 @@ const ChangePassword = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+    const validatePassword = () => {
+        const { newPassword } = formData;
+        const regexUpperCase = /[A-Z]/;
+        const regexLowerCase = /[a-z]/;
+        const regexSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
+        if (
+            newPassword.length < 8 ||
+            !regexUpperCase.test(newPassword) ||
+            !regexLowerCase.test(newPassword) ||
+            !regexSpecialChar.test(newPassword)
+        ) {
+            setError('New password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.');
+            return false;
+        }
+        setError('');
+        return true;
+    };
+
     const handleSubmit = async event => {
         event.preventDefault();
 
+        if (formData.newPassword === formData.oldPassword) {
+            setError('New password cannot be the same as the old password.');
+            return;
+        }
+
         if (formData.newPassword !== formData.confirmPassword) {
             setError('New password and confirm password do not match.');
+            return;
+        }
+
+        if (!validatePassword()) {
+            setError('Invalid new password. Please try again.');
             return;
         }
 
@@ -47,6 +75,10 @@ const ChangePassword = () => {
             setSuccess(false);
         }
     };
+
+    const routeChange = () => {
+        window.location.href = 'http://localhost:3000/homepage';
+    }
 
     return (
         <div className="auth-container">
@@ -80,9 +112,20 @@ const ChangePassword = () => {
             </form>
             {error && <p className="error-message">{error}</p>}
             {success && <p className="success-message">Password changed successfully.</p>}
-            <div className="auth-footer">
-                <Link to="/">Back to Home</Link>
-            </div>
+            <button style={{
+                position: 'fixed',
+                top: '20px',
+                left: '20px',
+                maxWidth: 200,
+                borderRadius: 32,
+                padding: "10px 24px",
+                textAlign: "center",
+                fontSize: 14,
+                color: 'white',
+                backgroundColor: '#1e90ff',
+                cursor: 'pointer',
+            }} onClick={routeChange}>Go to Homepage
+            </button>
         </div>
     );
 };

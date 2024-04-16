@@ -56,6 +56,9 @@ public class UserService {
     }
 
     public UserResponse createUser(UserDTO userDTO) {
+        if (!isValidPassword(userDTO.getPassword())) {
+            throw ExceptionFactory.NotValidPassword();
+        }
         String newUsername = userDTO.getUsername();
         String newEmail = userDTO.getEmail();
         if (userRepository.existsByUsername(newUsername)) {
@@ -70,6 +73,43 @@ public class UserService {
         userResponse.setUsername(createdUser.getUsername());
         userResponse.setPassword(createdUser.getPassword());
         return userResponse;
+    }
+
+    private boolean isValidPassword(String password) {
+        if (password.length() < 8) {
+            return false;
+        }
+
+        boolean hasUppercase = false;
+        boolean hasLowercase = false;
+        boolean hasDigit = false;
+        boolean hasSpecialChar = false;
+
+        for (char ch : password.toCharArray()) {
+            if (Character.isUpperCase(ch)) {
+                hasUppercase = true;
+            } else if (Character.isLowerCase(ch)) {
+                hasLowercase = true;
+            } else if (Character.isDigit(ch)) {
+                hasDigit = true;
+            } else {
+                switch (ch) {
+                    case '!':
+                    case '@':
+                    case '#':
+                    case '$':
+                    case '%':
+                    case '^':
+                    case '&':
+                    case '*':
+                        hasSpecialChar = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return hasUppercase && hasLowercase && hasDigit && hasSpecialChar;
     }
 
     public UpdatedUserDTO updateUser(String username, UpdateUserDTO updateUserDTO) {

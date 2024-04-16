@@ -82,6 +82,10 @@ const StudyGroups = () => {
         fetchStudyGroups();
     };
 
+    const routeChange = () => {
+        window.location.href = 'http://localhost:3000/homepage';
+    }
+
     return (
         <div className="study-groups-container">
             <div className="create-group">
@@ -138,6 +142,20 @@ const StudyGroups = () => {
                     </div>
                 ))}
             </div>
+            <button style={{
+                position: 'fixed',
+                top: '20px',
+                left: '20px',
+                maxWidth: 200,
+                borderRadius: 32,
+                padding: "10px 24px",
+                textAlign: "center",
+                fontSize: 14,
+                color: 'white',
+                backgroundColor: '#1e90ff',
+                cursor: 'pointer',
+            }} onClick={routeChange}>Go to Homepage
+            </button>
         </div>
     );
 };

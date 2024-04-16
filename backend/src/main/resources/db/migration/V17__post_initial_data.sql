@@ -1,0 +1,22 @@
+INSERT INTO "post" (created_at, modified_at, username, subject, content, up_vote, down_vote, post_type)
+VALUES
+    ('2024-04-16 09:40:00', '2024-04-16 09:40:00', 'johndoe', 'Mathematics', 'What are some interesting theorems in calculus?', 10, 2, 'Question'),
+    ('2024-04-16 09:45:00', '2024-04-16 09:45:00', 'alicesmith', 'Physics', 'Exploring the concept of quantum entanglement.', 15, 3, 'Discussion'),
+    ('2024-04-16 09:50:00', '2024-04-16 09:50:00', 'bobjones', 'English Literature', 'Analysis of Shakespearean sonnets.', 8, 1, 'Discussion'),
+    ('2024-04-16 09:55:00', '2024-04-16 09:55:00', 'michaelwilson', 'Computer Science', 'Introduction to machine learning algorithms.', 20, 5, 'Discussion'),
+    ('2024-04-16 10:00:00', '2024-04-16 10:00:00', 'sarahmiller', 'Psychology', 'Discussion on cognitive behavioral therapy.', 12, 0, 'Discussion'),
+    ('2024-04-16 10:05:00', '2024-04-16 10:05:00', 'daviddavis', 'History', 'Impact of the Industrial Revolution on society.', 18, 4, 'Discussion'),
+    ('2024-04-16 10:10:00', '2024-04-16 10:10:00', 'jenniferanderson', 'Biology', 'Recent discoveries in genetic engineering.', 25, 6, 'Discussion'),
+    ('2024-04-16 10:15:00', '2024-04-16 10:15:00', 'williamjackson', 'Chemistry', 'Exploring the periodic table trends.', 14, 2, 'Discussion'),
+    ('2024-04-16 10:20:00', '2024-04-16 10:20:00', 'oliviathompson', 'Business Studies', 'Challenges in global supply chain management.', 10, 3, 'Discussion'),
+    ('2024-04-16 10:25:00', '2024-04-16 10:25:00', 'jameswhite', 'Art', 'Appreciating Renaissance art techniques.', 16, 1, 'Discussion'),
+    ('2024-04-16 10:30:00', '2024-04-16 10:30:00', 'emmataylor', 'Music', 'Evolution of jazz music in the 20th century.', 22, 4, 'Discussion'),
+    ('2024-04-16 10:35:00', '2024-04-16 10:35:00', 'noahthomas', 'Engineering', 'Discussion on sustainable energy solutions.', 19, 3, 'Discussion'),
+    ('2024-04-16 10:40:00', '2024-04-16 10:40:00', 'avamoore', 'Medicine', 'Understanding the human immune system.', 15, 2, 'Discussion'),
+    ('2024-04-16 10:45:00', '2024-04-16 10:45:00', 'liamjackson', 'Law', 'Debate on constitutional law amendments.', 13, 1, 'Discussion'),
+    ('2024-04-16 10:50:00', '2024-04-16 10:50:00', 'oliviawilliams', 'Languages', 'Exploring linguistic diversity worldwide.', 11, 2, 'Discussion'),
+    ('2024-04-16 10:55:00', '2024-04-16 10:55:00', 'williammartin', 'Geography', 'Impact of climate change on global geography.', 17, 3, 'Discussion'),
+    ('2024-04-16 11:00:00', '2024-04-16 11:00:00', 'avathompson', 'Philosophy', 'Discussion on existentialist philosophy.', 14, 2, 'Discussion'),
+    ('2024-04-16 11:05:00', '2024-04-16 11:05:00', 'liammoore', 'Economics', 'Debate on Keynesian vs. Neoclassical economics.', 18, 4, 'Discussion'),
+    ('2024-04-16 11:10:00', '2024-04-16 11:10:00', 'emma.wilson', 'Sociology', 'Exploring social stratification theories.', 20, 5, 'Discussion'),
+    ('2024-04-16 11:15:00', '2024-04-16 11:15:00', 'williamjones', 'Anthropology', 'Discussion on cultural relativism.', 16, 3, 'Discussion');
