@@ -1,5 +1,6 @@
 package com.freeuni.coursewhisperer.controller;
 
+import com.freeuni.coursewhisperer.data.api.dto.CommentDTO;
 import com.freeuni.coursewhisperer.data.api.dto.PostDTO;
 import com.freeuni.coursewhisperer.data.enums.EPostType;
 import com.freeuni.coursewhisperer.data.enums.EPostVote;
@@ -63,12 +64,12 @@ public class PostController {
         return ResponseEntity.ok(res);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> addComment(@PathVariable Long id,
-                                           @RequestParam String username,
-                                           @RequestParam String comment) {
-        postService.addComment(id, username, comment);
-        return ResponseEntity.ok().build();
+    @PutMapping("/{postId}")
+    public ResponseEntity<CommentDTO> addComment(@PathVariable Long postId,
+                                                 @RequestParam String username,
+                                                 @RequestParam String comment) {
+        var res = postService.addComment(postId, username, comment);
+        return ResponseEntity.ok(res);
     }
 
     @DeleteMapping("/delete/{id}")

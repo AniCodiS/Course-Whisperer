@@ -1,8 +1,10 @@
 package com.freeuni.coursewhisperer.service;
 
+import com.freeuni.coursewhisperer.data.api.dto.CommentDTO;
 import com.freeuni.coursewhisperer.data.api.dto.PostDTO;
 import com.freeuni.coursewhisperer.data.enums.EPostType;
 import com.freeuni.coursewhisperer.data.enums.EPostVote;
+import com.freeuni.coursewhisperer.data.mapper.CommentMapper;
 import com.freeuni.coursewhisperer.data.mapper.PostMapper;
 import com.freeuni.coursewhisperer.data.model.Comment;
 import com.freeuni.coursewhisperer.data.model.Post;
@@ -18,12 +20,15 @@ public class PostService {
     private final CommentService commentService;
     private final PostMapper postMapper;
 
+    private final CommentMapper commentMapper;
+
     public PostService(PostRepository postRepository,
                        CommentService commentService,
-                       PostMapper postMapper) {
+                       PostMapper postMapper, CommentMapper commentMapper) {
         this.postRepository = postRepository;
         this.commentService = commentService;
         this.postMapper = postMapper;
+        this.commentMapper = commentMapper;
     }
 
     public List<Post> getPosts() {
@@ -66,12 +71,12 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
-    public void addComment(Long id, String username, String comment) {
+    public synchronized CommentDTO addComment(Long id, String username, String comment) {
         var postEntity = postMapper.entityToModel(postRepository.findById(id).get());
-        commentService.createComment(Comment.builder()
+        return commentMapper.modelToDto(commentService.createComment(Comment.builder()
                 .post(postEntity.getId())
                 .username(username)
                 .content(comment)
-                .build());
+                .build()));
     }
 }

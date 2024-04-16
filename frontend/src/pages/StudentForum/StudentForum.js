@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Comments from "../Comments";
-
 
 const StudentForum = () => {
     const username = localStorage.getItem("username");
@@ -55,7 +54,7 @@ const StudentForum = () => {
                 subject,
                 type: postType,
                 content,
-            },).then((response) => {
+            }).then((response) => {
                 if (response.status === 200) {
                     setPosts([...posts, response.data]);
                     handleAddPost();
@@ -117,6 +116,8 @@ const StudentForum = () => {
 
     return (
         <div style={{
+            // paddingLeft: 100,
+            // paddingRight: 100,
             maxHeight: '100vh',
             overflowY: 'auto',
             padding: 32,
@@ -280,6 +281,8 @@ const StudentForum = () => {
             }
 
             <div style={{
+                // paddingLeft: 50,
+                // paddingRight: 50,
                 autoScroll: true,
                 backgroundColor: 'white',
                 display: "flex",
