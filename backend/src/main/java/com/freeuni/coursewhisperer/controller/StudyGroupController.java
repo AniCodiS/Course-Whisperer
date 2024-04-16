@@ -66,4 +66,13 @@ public class StudyGroupController {
         }
         return ResponseEntity.ok().body("Study Group deleted successfully");
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<StudyGroupResponse>> filterStudyGroupsBySubject(@RequestParam String subjectName) {
+        try {
+            return ResponseEntity.ok().body(studyGroupService.filterStudyGroupsBySubject(subjectName));
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(List.of(new StudyGroupResponse(e.getErrorDescription())));
+        }
+    }
 }

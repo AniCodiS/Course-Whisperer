@@ -7,6 +7,7 @@ const StudyGroups = () => {
     const [newGroupName, setNewGroupName] = useState('');
     const [newGroupTiming, setNewGroupTiming] = useState('');
     const [newGroupSubject, setNewGroupSubject] = useState('');
+    const [filterSubject, setFilterSubject] = useState('');
 
     useEffect(() => {
         fetchStudyGroups();
@@ -14,7 +15,11 @@ const StudyGroups = () => {
 
     const fetchStudyGroups = async () => {
         try {
-            const response = await axios.get('http://localhost:8081/api/study-group/all');
+            let url = 'http://localhost:8081/api/study-group/all';
+            if (filterSubject) {
+                url = `http://localhost:8081/api/study-group/filter?subjectName=${filterSubject}`;
+            }
+            const response = await axios.get(url);
             setStudyGroups(response.data);
         } catch (error) {
             console.error('Error fetching study groups:', error);
@@ -69,6 +74,14 @@ const StudyGroups = () => {
         }
     };
 
+    const handleFilterChange = event => {
+        setFilterSubject(event.target.value);
+    };
+
+    const handleSearch = () => {
+        fetchStudyGroups();
+    };
+
     return (
         <div className="study-groups-container">
             <div className="create-group">
@@ -103,6 +116,15 @@ const StudyGroups = () => {
                     </div>
                     <button type="submit">Create Group</button>
                 </form>
+            </div>
+            <div className="filter-section">
+                <input
+                    type="text"
+                    placeholder="Filter by subject name"
+                    value={filterSubject}
+                    onChange={handleFilterChange}
+                />
+                <button onClick={handleSearch}>Search</button>
             </div>
             <div className="groups-list">
                 <h2>Study Groups</h2>
