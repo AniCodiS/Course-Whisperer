@@ -27,6 +27,9 @@ const PersonalInformation = () => {
 
     return (
         <div className="personal-info-container">
+            <div className="personal-info-title">
+                <h2>Personal Information</h2>
+            </div>
             {error && <p className="error-message">Error: {error}</p>}
             <div className="bubble-grid">
                 <div className="bubble-row">

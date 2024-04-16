@@ -69,7 +69,9 @@ const GPACalculator = () => {
 
     return (
         <div className="gpa-calculator-container">
-            <h2>GPA Calculator</h2>
+            <div className="gpa-calculator-title">
+                <h2>GPA Calculator</h2>
+            </div>
             <div className="input-fields">
                 <div className="field">
                     <label htmlFor="subject">Subject:</label>
