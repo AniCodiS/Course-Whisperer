@@ -93,4 +93,21 @@ public class StudyGroupService {
             throw ExceptionFactory.StudyGroupNotFound();
         }
     }
+
+    public List<StudyGroupResponse> filterStudyGroupsBySubject(String subjectName) {
+        List<StudyGroupEntity> studyGroups = studyGroupRepository.findBySubjectName(subjectName);
+        if (studyGroups.isEmpty()) {
+            throw ExceptionFactory.NoStudyGroupsPresent();
+        }
+        List<StudyGroupResponse> studyGroupResponses = new ArrayList<>();
+        for (StudyGroupEntity studyGroup : studyGroups) {
+            StudyGroupResponse studyGroupResponse = studyGroupResponseMapper.modelToDto(studyGroupResponseMapper.entityToModel(studyGroup));
+            studyGroupResponse.setCurrentMemberCount(studyGroup.getCurrentMemberCount());
+            studyGroupResponse.setMaxMemberCount(studyGroup.getMaxMemberCount());
+            studyGroupResponse.setGroupName(studyGroup.getGroupName());
+            studyGroupResponse.setMeetingTime(studyGroup.getMeetingTime());
+            studyGroupResponses.add(studyGroupResponse);
+        }
+        return studyGroupResponses;
+    }
 }
