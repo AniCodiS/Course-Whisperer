@@ -5,6 +5,7 @@ import com.freeuni.coursewhisperer.data.entity.PassedSubjectEntity;
 import com.freeuni.coursewhisperer.data.enums.EGrade;
 import com.freeuni.coursewhisperer.data.mapper.PassedSubjectMapper;
 import com.freeuni.coursewhisperer.data.model.PassedSubject;
+import com.freeuni.coursewhisperer.data.model.Subject;
 import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.PassedSubjectRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -64,23 +65,36 @@ public class PassedSubjectService extends AbstractService<PassedSubjectEntity, L
         if (cache == null) {
             throw ExceptionFactory.resourceNotFound(Cache.class, "subjects");
         }
-        var lst = passedSubjectRepository.findByUsernameOrderByGradeScoreAsc(username);
+        var lst = passedSubjectRepository.findByUsernameOrderByGradeScoreAsc(username).stream().map(passedSubjectMapper::entityToModel).toList();
         lst.forEach(
-                subject -> subject.setSubject(cache.get(subject.getSubject()).get().toString())
+                subject -> subject.setSubjectName(((Subject) (cache.get(subject.getSubject()).get())).getName())
         );
-        return lst.stream().map(passedSubjectMapper::entityToModel).toList();
+        return lst;
     }
 
     public PassedSubject createPassedSubject(PassedSubject passedSubject) {
+        var lst = passedSubjectRepository.findByUsernameOrderByGradeScoreAsc(
+                passedSubject.getUsername()).stream().map(PassedSubjectEntity::getSubject).toList();
+
+        if (lst.contains(passedSubject.getSubject())) {
+            throw ExceptionFactory.resourceAlreadyExist();
+        }
+
         var cache = cacheManager.getCache("subjects");
         if (cache.get(passedSubject.getSubject()) == null) {
             throw ExceptionFactory.resourceNotFound(PassedSubject.class, passedSubject.getSubject());
         }
+
         passedSubject.setGrade(convertToEGrade(passedSubject.getGradeScore()));
-        return passedSubjectMapper.entityToModel(passedSubjectRepository.save(passedSubjectMapper.modelToEntity(passedSubject)));
+        var res = passedSubjectMapper.entityToModel(passedSubjectRepository.save(passedSubjectMapper.modelToEntity(passedSubject)));
+        res.setSubjectName(((Subject) (cache.get(res.getSubject()).get())).getName());
+        return res;
     }
 
     private EGrade convertToEGrade(Integer numericalGrade) {
+        if (numericalGrade > 100 || numericalGrade < 0) {
+            throw ExceptionFactory.numberIsNotValid();
+        }
         if (numericalGrade >= 91) {
             return EGrade.A;
         } else if (numericalGrade >= 81) {

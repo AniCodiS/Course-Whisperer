@@ -14,6 +14,18 @@ public final class ExceptionFactory {
         return badRequest("gpa.courses.empty", "Courses list is empty");
     }
 
+    public static CourseWhispererException commentIsEmpty() {
+        return badRequest("comment.is.empty", "Cannot add empty comment");
+    }
+
+    public static CourseWhispererException numberIsNotValid() {
+        return badRequest("number.is.not.valid", "The number you entered is not valid. Try again.");
+    }
+
+    public static CourseWhispererException resourceAlreadyExist() {
+        return badRequest("resource.already.exists", "The resource you are trying to add already exists.");
+    }
+
     public static CourseWhispererException NoLecturersPresent() {
         return badRequest("lecturers.empty", "There are no lecturers present");
     }

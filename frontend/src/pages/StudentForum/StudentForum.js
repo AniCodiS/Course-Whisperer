@@ -18,6 +18,7 @@ const StudentForum = () => {
         try {
             axios.put(`http://localhost:8081/api/post/vote/${id}`, null, {
                 params: {
+                    username,
                     vote: voteType
                 }
             }).then((response) => {
@@ -95,7 +96,6 @@ const StudentForum = () => {
                 params: {
                     subject: filterObj.subject,
                     type: filterObj.type,
-                    username
                 }
             }).then((response) => {
                 setPosts(response.data);

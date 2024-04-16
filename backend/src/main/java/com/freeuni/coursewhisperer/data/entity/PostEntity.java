@@ -27,9 +27,15 @@ public class PostEntity extends AbstractIdTimestampEntity {
     @Builder.Default()
     private Integer upVote = 0;
 
+    @Column(name = "up_voters")
+    private String upVoters = "";
+
     @Column(name = "down_vote")
     @Builder.Default()
     private Integer downVote = 0;
+
+    @Column(name = "down_voters")
+    private String downVoters = "";
 
     @Enumerated(EnumType.STRING)
     @Column(name = "post_type")

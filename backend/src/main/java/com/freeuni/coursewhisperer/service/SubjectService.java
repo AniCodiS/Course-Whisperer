@@ -61,7 +61,7 @@ public class SubjectService {
         cache.clear();
         getAllSubjects().forEach(subject -> {
             try {
-                cache.put(subject.getCode(), subject.getName());
+                cache.put(subject.getCode(), subject);
             } catch (Exception e) {
                 log.warn("Could not fill dictionary cache for {}", subject.getCode());
             }

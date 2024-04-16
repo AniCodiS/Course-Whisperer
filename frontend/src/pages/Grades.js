@@ -100,6 +100,7 @@ const Grades = () => {
             <table style={{borderCollapse: 'collapse'}}>
                 <thead>
                 <tr style={{backgroundColor: "#2DAA944F", color: 'darkgreen'}}>
+                    <th style={styles.headerCell}>Subject Code</th>
                     <th style={styles.headerCell}>Subject</th>
                     <th style={styles.headerCell}>Grade</th>
                     <th style={styles.headerCell}>Grade Score</th>
@@ -110,6 +111,7 @@ const Grades = () => {
                 {grades.map((grade) => (
                     <tr key={grade.id}>
                         <td style={styles.cell}>{grade.subject}</td>
+                        <td style={styles.cell}>{grade.subjectName}</td>
                         <td style={styles.cell}>{grade.grade}</td>
                         <td style={styles.cell}>{grade.gradeScore}</td>
                         <td style={styles.cell}>

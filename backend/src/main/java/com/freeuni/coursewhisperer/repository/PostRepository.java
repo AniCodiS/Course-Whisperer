@@ -15,7 +15,7 @@ public interface PostRepository extends AbstractRepository<PostEntity, Long> {
 
     @Query("select p from PostEntity p where " +
             "(:username is null or p.username =:username) and " +
-            "(:subject is null or p.subject like concat('%',  :subject, '%')) and " +
+            "(:subject is null or lower(p.subject) like lower( concat('%',  :subject, '%'))) and " +
             "(:type is null or p.type = :type) order by p.upVote desc ")
     List<PostEntity> searchPosts(String username, String subject, EPostType type);
 

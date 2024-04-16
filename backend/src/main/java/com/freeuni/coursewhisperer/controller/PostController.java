@@ -50,7 +50,7 @@ public class PostController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<PostDTO> updatePost(@PathVariable Long id,
+    public ResponseEntity<PostDTO> updatePostContent(@PathVariable Long id,
                                               @RequestParam String username,
                                               @RequestParam(required = false) String content) {
         var res = postMapper.modelToDto(postService.updatePost(username, id, content));
@@ -59,8 +59,9 @@ public class PostController {
 
     @PutMapping("/vote/{id}")
     public ResponseEntity<PostDTO> updatePost(@PathVariable Long id,
+                                              @RequestParam String username,
                                               @RequestParam String vote) {
-        var res = postMapper.modelToDto(postService.updatePost(id, EPostVote.valueOf(vote)));
+        var res = postMapper.modelToDto(postService.updatePost(username, id, EPostVote.valueOf(vote)));
         return ResponseEntity.ok(res);
     }
 

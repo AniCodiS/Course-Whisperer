@@ -7,6 +7,7 @@ import com.freeuni.coursewhisperer.data.model.Comment;
 import com.freeuni.coursewhisperer.exception.ExceptionFactory;
 import com.freeuni.coursewhisperer.repository.CommentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -23,6 +24,9 @@ public class CommentService extends AbstractService<CommentEntity, Long, Comment
     }
 
     public synchronized Comment createComment(Comment comment) {
+        if (!StringUtils.hasText(comment.getContent())) {
+            throw ExceptionFactory.commentIsEmpty();
+        }
         var entity = commentMapper.modelToEntity(comment);
         return commentMapper.entityToModel(commentRepository.save(entity));
     }

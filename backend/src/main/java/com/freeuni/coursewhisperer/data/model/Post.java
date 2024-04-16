@@ -12,6 +12,8 @@ public class Post {
     private String subject;
     private String content;
     private Integer upVote;
+    private String upVoters;
+    private String downVoters;
     private Integer downVote;
     private EPostType type;
 }
