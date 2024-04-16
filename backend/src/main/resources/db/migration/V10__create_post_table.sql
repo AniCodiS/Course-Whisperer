@@ -10,3 +10,9 @@ CREATE TABLE post
     down_vote   INTEGER DEFAULT 0,
     post_type   VARCHAR(255)
 );
+
+alter table post
+    add up_voters varchar(255);
+
+alter table post
+    add down_voters varchar(255);
