@@ -82,6 +82,10 @@ public final class ExceptionFactory {
         return conflict("username.already.exists", "User with this username already exists");
     }
 
+    public static CourseWhispererException NotValidPassword() {
+        return notFound("password.not.valid", "Password is not valid");
+    }
+
     public static CourseWhispererException EmailAlreadyExists() {
         return conflict("email.already.exists", "User with this email already exists");
     }
