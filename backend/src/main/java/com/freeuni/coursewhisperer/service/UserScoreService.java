@@ -1,12 +1,15 @@
 package com.freeuni.coursewhisperer.service;
 
 import com.freeuni.coursewhisperer.data.api.dto.UserScoreResponse;
+import com.freeuni.coursewhisperer.data.entity.PostEntity;
+import com.freeuni.coursewhisperer.data.enums.EPostVote;
 import com.freeuni.coursewhisperer.data.mapper.UserScoreMapper;
 import com.freeuni.coursewhisperer.data.api.dto.CreatedUserScoreDTO;
 import com.freeuni.coursewhisperer.data.api.dto.UserScoreDTO;
 import com.freeuni.coursewhisperer.data.entity.UserScoreEntity;
 import com.freeuni.coursewhisperer.data.mapper.UserScoreResponseMapper;
 import com.freeuni.coursewhisperer.exception.ExceptionFactory;
+import com.freeuni.coursewhisperer.repository.PostRepository;
 import com.freeuni.coursewhisperer.repository.UserRepository;
 import com.freeuni.coursewhisperer.repository.UserScoreRepository;
 import jakarta.transaction.Transactional;
@@ -22,13 +25,16 @@ public class UserScoreService {
 
     private final UserRepository userRepository;
 
+    private final PostRepository postRepository;
+
     private final UserScoreMapper mapper;
 
     private final UserScoreResponseMapper responseMapper;
 
-    public UserScoreService(UserScoreRepository userScoreRepository, UserRepository userRepository, UserScoreMapper mapper, UserScoreResponseMapper responseMapper) {
+    public UserScoreService(UserScoreRepository userScoreRepository, UserRepository userRepository, PostRepository postRepository, UserScoreMapper mapper, UserScoreResponseMapper responseMapper) {
         this.userScoreRepository = userScoreRepository;
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
         this.mapper = mapper;
         this.responseMapper = responseMapper;
     }
@@ -74,6 +80,20 @@ public class UserScoreService {
             return responseMapper.modelToDto(responseMapper.entityToModel(userScoreRepository.save(userScoreEntity)));
         }
         throw ExceptionFactory.UserScoreNotFound();
+    }
+
+    public void updateUserScore(Long id, String vote) {
+        EPostVote voteType = EPostVote.valueOf(vote);
+        if (postRepository.findById(id).isPresent()) {
+            PostEntity post = postRepository.findById(id).get();
+            UserScoreEntity userScore = userScoreRepository.findByUsername(post.getUsername());
+            if (voteType == EPostVote.UPVOTE) {
+                userScore.setScore(userScore.getScore() + 1);
+            } else {
+                userScore.setScore(userScore.getScore() - 1);
+            }
+            userScoreRepository.save(userScore);
+        }
     }
 
     @Transactional

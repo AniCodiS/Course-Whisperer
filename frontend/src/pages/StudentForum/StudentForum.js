@@ -30,6 +30,11 @@ const StudentForum = () => {
                 console.log(tempPosts);
                 setPosts(tempPosts);
             });
+            axios.put(`http://localhost:8081/api/user-score/update/${id}`, null, {
+                params: {
+                    vote: voteType
+                }
+            });
         } catch (error) {
             alert(error.response.data.messageDescription);
         }

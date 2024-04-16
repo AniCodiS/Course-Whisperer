@@ -1,6 +1,7 @@
 package com.freeuni.coursewhisperer.controller;
 
 import com.freeuni.coursewhisperer.data.api.dto.CreatedUserScoreDTO;
+import com.freeuni.coursewhisperer.data.api.dto.PostDTO;
 import com.freeuni.coursewhisperer.data.api.dto.UserScoreDTO;
 import com.freeuni.coursewhisperer.data.api.dto.UserScoreResponse;
 import com.freeuni.coursewhisperer.exception.CourseWhispererException;
@@ -48,15 +49,6 @@ public class UserScoreController {
         }
     }
 
-    @PutMapping("update/{username}")
-    public ResponseEntity<UserScoreResponse> updateUserScore(@PathVariable String username, @RequestBody UserScoreDTO userScore) {
-        try {
-            return ResponseEntity.ok().body(userScoreService.updateUserScore(username, userScore));
-        } catch (CourseWhispererException e) {
-            return ResponseEntity.status(e.getStatus()).body(new UserScoreResponse(e.getErrorDescription()));
-        }
-    }
-
     @DeleteMapping("/delete/{username}")
     public ResponseEntity<String> deleteUserScore(@PathVariable String username) {
         try {
@@ -65,5 +57,16 @@ public class UserScoreController {
             return ResponseEntity.status(e.getStatus()).body(e.getErrorDescription());
         }
         return ResponseEntity.ok().body("User score deleted successfully");
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateUserScore(@PathVariable Long id,
+                                                  @RequestParam String vote) {
+        try {
+            userScoreService.updateUserScore(id, vote);
+        } catch (CourseWhispererException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getErrorDescription());
+        }
+        return ResponseEntity.ok().body("User score updated successfully");
     }
 }
