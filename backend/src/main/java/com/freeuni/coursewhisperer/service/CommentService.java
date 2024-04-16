@@ -22,9 +22,9 @@ public class CommentService extends AbstractService<CommentEntity, Long, Comment
         this.commentMapper = commentMapper;
     }
 
-    public synchronized void createComment(Comment comment) {
+    public synchronized Comment createComment(Comment comment) {
         var entity = commentMapper.modelToEntity(comment);
-        commentRepository.save(entity);
+        return commentMapper.entityToModel(commentRepository.save(entity));
     }
 
     public List<Comment> getComments(Long postId) {
