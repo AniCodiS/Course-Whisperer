@@ -1,0 +1,22 @@
+INSERT INTO "personal_information" (username, first_name, last_name, year, faculty, email, created_at, modified_at)
+VALUES
+    ('johndoe', 'John', 'Doe', 1990, 'Engineering', 'john.doe@example.com', '2024-04-16 08:20:00', '2024-04-16 08:20:00'),
+    ('alicesmith', 'Alice', 'Smith', 1992, 'Medicine', 'alice.smith@example.com', '2024-04-16 08:21:00', '2024-04-16 08:21:00'),
+    ('bobjones', 'Bob', 'Jones', 1985, 'Business', 'bob.jones@example.com', '2024-04-16 08:22:00', '2024-04-16 08:22:00'),
+    ('emilybrown', 'Emily', 'Brown', 1988, 'Law', 'emily.brown@example.com', '2024-04-16 08:23:00', '2024-04-16 08:23:00'),
+    ('michaelwilson', 'Michael', 'Wilson', 1991, 'Computer Science', 'michael.wilson@example.com', '2024-04-16 08:24:00', '2024-04-16 08:24:00'),
+    ('sarahmiller', 'Sarah', 'Miller', 1987, 'Psychology', 'sarah.miller@example.com', '2024-04-16 08:25:00', '2024-04-16 08:25:00'),
+    ('daviddavis', 'David', 'Davis', 1993, 'Engineering', 'david.davis@example.com', '2024-04-16 08:26:00', '2024-04-16 08:26:00'),
+    ('jenniferanderson', 'Jennifer', 'Anderson', 1994, 'Medicine', 'jennifer.anderson@example.com', '2024-04-16 08:27:00', '2024-04-16 08:27:00'),
+    ('williamjackson', 'William', 'Jackson', 1989, 'Law', 'william.jackson@example.com', '2024-04-16 08:28:00', '2024-04-16 08:28:00'),
+    ('oliviathompson', 'Olivia', 'Thompson', 1990, 'Business', 'olivia.thompson@example.com', '2024-04-16 08:29:00', '2024-04-16 08:29:00'),
+    ('jameswhite', 'James', 'White', 1986, 'Computer Science', 'james.white@example.com', '2024-04-16 08:30:00', '2024-04-16 08:30:00'),
+    ('emmataylor', 'Emma', 'Taylor', 1995, 'Psychology', 'emma.taylor@example.com', '2024-04-16 08:31:00', '2024-04-16 08:31:00'),
+    ('noahthomas', 'Noah', 'Thomas', 1993, 'Engineering', 'noah.thomas@example.com', '2024-04-16 08:32:00', '2024-04-16 08:32:00'),
+    ('avamoore', 'Ava', 'Moore', 1991, 'Medicine', 'ava.moore@example.com', '2024-04-16 08:33:00', '2024-04-16 08:33:00'),
+    ('liamjackson', 'Liam', 'Jackson', 1992, 'Law', 'liam.jackson@example.com', '2024-04-16 08:34:00', '2024-04-16 08:34:00'),
+    ('oliviawilliams', 'Olivia', 'Williams', 1988, 'Business', 'olivia.williams@example.com', '2024-04-16 08:35:00', '2024-04-16 08:35:00'),
+    ('williammartin', 'William', 'Martin', 1994, 'Computer Science', 'william.martin@example.com', '2024-04-16 08:36:00', '2024-04-16 08:36:00'),
+    ('avathompson', 'Ava', 'Thompson', 1990, 'Psychology', 'ava.thompson@example.com', '2024-04-16 08:37:00', '2024-04-16 08:37:00'),
+    ('liammoore', 'Liam', 'Moore', 1987, 'Engineering', 'liam.moore@example.com', '2024-04-16 08:38:00', '2024-04-16 08:38:00'),
+    ('emmawilson', 'Emma', 'Wilson', 1989, 'Medicine', 'emma.wilson@example.com', '2024-04-16 08:39:00', '2024-04-16 08:39:00');
